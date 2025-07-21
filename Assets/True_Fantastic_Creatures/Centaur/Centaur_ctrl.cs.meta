@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 55a00096c0b077240bed967845837081
+timeCreated: 1522148363
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 115204
+  packageName: Fantastic Creature #5 Centaur
+  packageVersion: 1.0
+  assetPath: Assets/True_Fantastic_Creatures/Centaur/Centaur_ctrl.cs
+  uploadId: 237902
