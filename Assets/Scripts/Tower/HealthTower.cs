@@ -28,6 +28,8 @@ public class TowerHealth : MonoBehaviour
         tower_currentHealth -= damageAmount;
         tower_currentHealth = Mathf.Clamp(tower_currentHealth, 0, tower_maxHealth);
 
+        Debug.Log($"Башня получила урон {damageAmount} Текущее здороье {tower_currentHealth}");
+
         //Debug.Log($"Башня {gameObject.name} получила {damageAmount} урона. Осталось здоровья: {tower_currentHealth}");
 
         if (tower_currentHealth <= 0)

@@ -7,7 +7,8 @@ public class CentaurStateManager : MonoBehaviour
     [SerializeField] public Animator centaur_animator;
     [SerializeField] public NavMeshAgent centaur_navMeshAgent;
     [SerializeField] public List<Transform> centaur_tower_enemy = new List<Transform>();
-    
+    [SerializeField] public Collider centaur_damageCollider;
+
     [SerializeField] public float centaur_walkSpeed;
     [SerializeField] public float centaur_agroDistance;
     [SerializeField] public float attackDistance;

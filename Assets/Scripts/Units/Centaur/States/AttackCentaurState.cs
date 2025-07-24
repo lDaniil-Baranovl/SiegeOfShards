@@ -8,21 +8,21 @@ public class AttackCentaurState : CentaurBaseState
     {
         manager.centaur_navMeshAgent.isStopped = true;
 
-        usedSpecialAttack = false;
+        DamageCentaur attackScript = manager.centaur_damageCollider.GetComponent<DamageCentaur>();
 
         if (manager.centaur_runTime >= 3f)
         {
-            // Быстрая/особая атака после длинного бега
             manager.centaur_animator.SetTrigger("SpecialAttackCentaur");
-            usedSpecialAttack = true;
+            if (attackScript != null)
+                attackScript.SetSpecialAttack(true);
         }
         else
         {
-            // Обычная атака
             manager.centaur_animator.SetBool("IsAttackingCentaur", true);
+            if (attackScript != null)
+                attackScript.SetSpecialAttack(false);
         }
 
-        // Сбросим беговой таймер
         manager.centaur_runTime = 0f;
     }
 
