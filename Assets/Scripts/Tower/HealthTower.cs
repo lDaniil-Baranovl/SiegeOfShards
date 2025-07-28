@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class TowerHealth : MonoBehaviour
+public class HealthTower : MonoBehaviour
 {
     [Header("Настройки здоровья башни")]
     public int tower_maxHealth = 1000;
-    private int tower_currentHealth;
+    public int tower_currentHealth;
 
     [Header("Объект Башни")]
     public GameObject tower;

@@ -120,4 +120,16 @@ public class CentaurStateManager : MonoBehaviour
 
         return closest;
     }
+    
+    void OnOffDamagerCen(int isOff)
+    {
+        if (isOff == 0)
+        {
+            centaur_damageCollider.enabled = false;
+        }
+        else
+        {
+            centaur_damageCollider.enabled = true;
+        }
+    }
 }
