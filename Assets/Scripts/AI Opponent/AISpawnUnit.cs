@@ -5,15 +5,16 @@ using System.Collections.Generic;
 public class RandomSpawner : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    public GameObject[] prefabsToSpawn; // Массив префабов для спавна
+    public GameObject[] prefabsToSpawn; // Префабы для спавна
     public Vector3 spawnAreaCenter;     // Центр зоны спавна
-    public Vector3 spawnAreaSize;       // Размеры зоны спавна
-    public float minSpawnDelay = 1f;    // Минимальная задержка между спавнами
-    public float maxSpawnDelay = 5f;    // Максимальная задержка между спавнами
-    public int maxObjects = 50;         // Максимальное количество объектов
+    public Vector3 spawnAreaSize;       // Размеры зоны
+    public float minSpawnDelay = 1f;    // Минимальная задержка
+    public float maxSpawnDelay = 5f;    // Максимальная задержка
+    public int maxObjects = 50;         // Лимит объектов
+    public string unitTag = "EnemyUnit"; // Тег для юнитов
 
-    private List<GameObject> spawnedObjects = new List<GameObject>(); // Список активных объектов
-    private bool isSpawning = true;     // Флаг для остановки спавна
+    private List<GameObject> spawnedObjects = new List<GameObject>();
+    private bool isSpawning = true;
 
     private void Start()
     {
@@ -22,20 +23,17 @@ public class RandomSpawner : MonoBehaviour
 
     private IEnumerator SpawnObjects()
     {
-        while (isSpawning) // Бесконечный цикл (можно остановить через isSpawning = false)
+        while (isSpawning)
         {
-            // Если достигнут лимит объектов — ждем
             if (spawnedObjects.Count >= maxObjects)
             {
                 yield return new WaitForSeconds(1f);
                 continue;
             }
 
-            // Случайная задержка перед спавном
             float delay = Random.Range(minSpawnDelay, maxSpawnDelay);
             yield return new WaitForSeconds(delay);
 
-            // Выбираем случайный префаб
             if (prefabsToSpawn.Length == 0)
             {
                 Debug.LogError("No prefabs assigned!");
@@ -43,55 +41,46 @@ public class RandomSpawner : MonoBehaviour
             }
 
             GameObject randomPrefab = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
+            Vector3 randomPosition = GetRandomPosition();
 
-            // Генерируем случайную позицию
-            Vector3 randomPosition = new Vector3(
-                Random.Range(spawnAreaCenter.x - spawnAreaSize.x / 2, spawnAreaCenter.x + spawnAreaSize.x / 2),
-                Random.Range(spawnAreaCenter.y - spawnAreaSize.y / 2, spawnAreaCenter.y + spawnAreaSize.y / 2),
-                Random.Range(spawnAreaCenter.z - spawnAreaSize.z / 2, spawnAreaCenter.z + spawnAreaSize.z / 2)
-            );
+            GameObject newUnit = Instantiate(randomPrefab, randomPosition, Quaternion.identity);
+            SetupNewUnit(newUnit); // Настройка юнита
+            spawnedObjects.Add(newUnit);
 
-            // Создаем объект и добавляем в список
-            GameObject newObj = Instantiate(randomPrefab, randomPosition, Quaternion.identity);
-            spawnedObjects.Add(newObj);
-
-            // Удаляем уничтоженные объекты из списка
             CleanupDestroyedObjects();
         }
     }
 
-    // Очистка списка от уничтоженных объектов
+    private Vector3 GetRandomPosition()
+    {
+        return new Vector3(
+            Random.Range(spawnAreaCenter.x - spawnAreaSize.x / 2, spawnAreaCenter.x + spawnAreaSize.x / 2),
+            Random.Range(spawnAreaCenter.y - spawnAreaSize.y / 2, spawnAreaCenter.y + spawnAreaSize.y / 2),
+            Random.Range(spawnAreaCenter.z - spawnAreaSize.z / 2, spawnAreaCenter.z + spawnAreaSize.z / 2)
+        );
+    }
+
+    // Настройка юнита: тег + активация
+    private void SetupNewUnit(GameObject unit)
+    {
+        unit.tag = unitTag; // Присваиваем тег
+        unit.SetActive(true); // Активируем (если префаб был неактивен)
+
+        // Дополнительно: можно добавить компоненты, например:
+        // unit.AddComponent<EnemyAI>();
+    }
+
     private void CleanupDestroyedObjects()
     {
-        for (int i = spawnedObjects.Count - 1; i >= 0; i--)
-        {
-            if (spawnedObjects[i] == null)
-            {
-                spawnedObjects.RemoveAt(i);
-            }
-        }
+        spawnedObjects.RemoveAll(obj => obj == null);
     }
 
-    // Визуализация зоны спавна в редакторе
+    // Визуализация зоны спавна (Gizmos)
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.color = new Color(1, 0, 0, 0.3f);
         Gizmos.DrawCube(spawnAreaCenter, spawnAreaSize);
-    }
-
-    // Остановить спавн (опционально)
-    public void StopSpawning()
-    {
-        isSpawning = false;
-    }
-
-    // Удалить все созданные объекты (опционально)
-    public void ClearAllObjects()
-    {
-        foreach (var obj in spawnedObjects)
-        {
-            if (obj != null) Destroy(obj);
-        }
-        spawnedObjects.Clear();
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(spawnAreaCenter, spawnAreaSize);
     }
 }
