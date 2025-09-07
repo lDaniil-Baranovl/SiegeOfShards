@@ -3,13 +3,13 @@ using UnityEngine;
 public class AttackCentaurState : CentaurBaseState
 {
     private bool usedSpecialAttack = false;
-
+    private DamageCentaur attackScript;
     public override void EnterState(CentaurStateManager manager)
     {
         manager.centaur_navMeshAgent.isStopped = true;
 
-        DamageCentaur attackScript = manager.centaur_damageCollider.GetComponent<DamageCentaur>();
-
+        attackScript = manager.centaur_damageCollider.GetComponent<DamageCentaur>();
+        
         if (manager.centaur_runTime >= 3f)
         {
             manager.centaur_animator.SetTrigger("SpecialAttackCentaur");
@@ -30,6 +30,7 @@ public class AttackCentaurState : CentaurBaseState
     {
         manager.centaur_navMeshAgent.isStopped = false;
         manager.centaur_animator.SetBool("IsAttackingCentaur", false);
+        
     }
 
     public override void UpdateState(CentaurStateManager manager)

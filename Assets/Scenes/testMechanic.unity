@@ -464,8 +464,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2690a4a1e63aa8489ea69eef1da9e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  centaur_maxHeath: 100
-  centaur_currentHeath: 0
+  cen_health: 100
+  cen_stateManager: {fileID: 266675367}
 --- !u!136 &266675365
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -489,6 +489,17 @@ CapsuleCollider:
   m_Height: 2.5969524
   m_Direction: 1
   m_Center: {x: 1.5750196e-10, y: 0.79846466, z: 0.03574085}
+--- !u!114 &266675367 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7271869486013913299, guid: 1ddf3d53aa0b7cf4db36475d6ad2fe45, type: 3}
+  m_PrefabInstance: {fileID: 613468318}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266675357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94d68acecd84d8941a62b50b07c57fab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &278834094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1199,7 +1210,7 @@ PrefabInstance:
       objectReference: {fileID: 1535783061}
     - target: {fileID: 7329450127803124629, guid: 1ddf3d53aa0b7cf4db36475d6ad2fe45, type: 3}
       propertyPath: normalAttackDamage
-      value: 50
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7329450127803124629, guid: 1ddf3d53aa0b7cf4db36475d6ad2fe45, type: 3}
       propertyPath: specialAttackDamage
@@ -1662,7 +1673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   specialAttackDamage: 80
-  normalAttackDamage: 50
+  normalAttackDamage: 25
 --- !u!1 &1093104197
 GameObject:
   m_ObjectHideFlags: 0
@@ -2039,7 +2050,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1295682859
@@ -2504,8 +2515,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2690a4a1e63aa8489ea69eef1da9e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  centaur_maxHeath: 100
-  centaur_currentHeath: 0
+  cen_health: 100
+  cen_stateManager: {fileID: 1481454349}
 --- !u!136 &1481454358
 CapsuleCollider:
   m_ObjectHideFlags: 0

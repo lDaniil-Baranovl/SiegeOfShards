@@ -1,11 +1,9 @@
 using UnityEngine;
-using System.Collections;
 
 public class DamageCentaur : MonoBehaviour
 {
     private bool isSpecialAttack = false;
-    private float lastDamageTime = 0f; 
-    private float damageCooldown = 0.5f; 
+    private bool hasDealtDamageThisAttack = false;
 
     public int specialAttackDamage = 400;
     public int normalAttackDamage = 200;
@@ -15,26 +13,27 @@ public class DamageCentaur : MonoBehaviour
         isSpecialAttack = value;
     }
 
+    // Этот метод вызывается только из StateManager через ивент анимации
+    public void CEN_ResetDamageFromAnimation()
+    {
+        hasDealtDamageThisAttack = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-
-        if (Time.time - lastDamageTime < damageCooldown) return;
+        if (hasDealtDamageThisAttack) return;
 
         int damageAmount = isSpecialAttack ? specialAttackDamage : normalAttackDamage;
 
         if (other.TryGetComponent<TowerDamageDetector>(out TowerDamageDetector detector))
         {
             detector.OnDamageDetected(damageAmount);
-            lastDamageTime = Time.time; 
+            hasDealtDamageThisAttack = true;
         }
-
-        if (other.TryGetComponent<HealthCen>(out HealthCen enemyHealth))
+        else if (other.TryGetComponent<HealthCen>(out HealthCen enemyHealth))
         {
             enemyHealth.Centaur_ApplyDamage(damageAmount);
-            lastDamageTime = Time.time;
+            hasDealtDamageThisAttack = true;
         }
     }
-
-    // Для отладки в инспекторе
-    public float GetTimeSinceLastDamage() => Time.time - lastDamageTime;
 }
