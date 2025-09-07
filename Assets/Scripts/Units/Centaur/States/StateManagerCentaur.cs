@@ -21,6 +21,7 @@ public class CentaurStateManager : MonoBehaviour
     CentaurBaseState currentState;
     public RunCentaurState runCentaurState = new RunCentaurState();
     public AttackCentaurState attackCentaurState = new AttackCentaurState();
+    public DeathCentaur deathCentaurState = new DeathCentaur();
 
     private void Start()
     {
@@ -59,23 +60,24 @@ public class CentaurStateManager : MonoBehaviour
 
     public Transform GetTarget()
     {
-        // Проверка на вражеских юнитов в радиусе агро
-        Transform nearestEnemy = GetClosestEnemy();
+        Transform closestEnemy = GetClosestEnemy();
+        Transform closestTower = GetClosestTower();
 
-        if (nearestEnemy != null)
-        {
-            return nearestEnemy;
-        }
+        float enemyDist = closestEnemy != null ? Vector3.Distance(transform.position, closestEnemy.position) : Mathf.Infinity;
+        float towerDist = closestTower != null ? Vector3.Distance(transform.position, closestTower.position) : Mathf.Infinity;
 
-        // Если врагов нет — атакуем ближайшую башню
-        return GetClosestTower();
+        // Если враг ближе башни и в пределах агро-радиуса — атакуем врага
+        if (enemyDist <= centaur_agroDistance && enemyDist < towerDist)
+            return closestEnemy;
+        return closestTower;
     }
 
     private Transform GetClosestEnemy()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("EnemyUnit");
+        string targetTag = gameObject.CompareTag("EnemyUnit") ? "PeacefulUnit" : "EnemyUnit";
 
-        // Если врагов вообще нет — возвращаем null
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(targetTag);
+
         if (enemies == null || enemies.Length == 0)
             return null;
 
@@ -84,7 +86,7 @@ public class CentaurStateManager : MonoBehaviour
 
         foreach (GameObject enemy in enemies)
         {
-            if (enemy == null) continue;
+            if (enemy == null || enemy == this.gameObject) continue; 
 
             Transform enemyTransform = enemy.transform;
             if (enemyTransform == null) continue;

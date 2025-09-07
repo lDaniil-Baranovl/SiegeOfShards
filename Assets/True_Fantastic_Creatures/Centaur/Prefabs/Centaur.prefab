@@ -1726,6 +1726,10 @@ GameObject:
   - component: {fileID: 465662}
   - component: {fileID: 14307310}
   - component: {fileID: 11447264}
+  - component: {fileID: -4644242101620334032}
+  - component: {fileID: 5288501126904977203}
+  - component: {fileID: 1337014587220307685}
+  - component: {fileID: 5828836136161365309}
   m_Layer: 0
   m_Name: Centaur
   m_TagString: Untagged
@@ -1794,6 +1798,101 @@ MonoBehaviour:
   runSpeed: 3
   turnSpeed: 60
   gravity: 20
+--- !u!95 &-4644242101620334032
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135620}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: adeea3529caea6342b5830afa0694323, type: 3}
+  m_Controller: {fileID: 9100000, guid: bf42494fa3b520146a49746c9a93919a, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!195 &5288501126904977203
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135620}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1337014587220307685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94d68acecd84d8941a62b50b07c57fab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centaur_animator: {fileID: 0}
+  centaur_navMeshAgent: {fileID: 0}
+  centaur_tower_enemy:
+  - {fileID: 0}
+  - {fileID: 0}
+  centaur_damageCollider: {fileID: 0}
+  centaur_walkSpeed: 1
+  centaur_agroDistance: 1.2
+  attackDistance: 1.25
+  canMove: 1
+  centaur_target: {fileID: 0}
+  centaur_runTime: 0
+--- !u!54 &5828836136161365309
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135620}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &136472
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class RandomSpawner : MonoBehaviour
     public float minSpawnDelay = 1f;    // Минимальная задержка
     public float maxSpawnDelay = 5f;    // Максимальная задержка
     public int maxObjects = 50;         // Лимит объектов
-    public string unitTag = "EnemyUnit"; // Тег для юнитов
+    //public string unitTag = "EnemyUnit"; // Тег для юнитов
 
     private List<GameObject> spawnedObjects = new List<GameObject>();
     private bool isSpawning = true;
@@ -63,7 +63,7 @@ public class RandomSpawner : MonoBehaviour
     // Настройка юнита: тег + активация
     private void SetupNewUnit(GameObject unit)
     {
-        unit.tag = unitTag; // Присваиваем тег
+        //unit.tag = unitTag; // Присваиваем тег
         unit.SetActive(true); // Активируем (если префаб был неактивен)
 
         // Дополнительно: можно добавить компоненты, например:
