@@ -1,6 +1,7 @@
+using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
 
 public class CentaurStateManager : MonoBehaviour
 {
@@ -138,38 +139,7 @@ public class CentaurStateManager : MonoBehaviour
     }
     public void Centaur_Die()
     {
-        if (cen_isDead) return;
-        cen_isDead = true;
-
-        // Отключаем управление и навигацию
-        centaur_navMeshAgent.isStopped = true;
-        centaur_navMeshAgent.enabled = false;
-
-        // Отключаем атакующий коллайдер
-        centaur_damageCollider.enabled = false;
-
-        // Замораживаем физику, чтобы не падал
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        // Переключаем состояние смерти
         SwitchState(deathCentaurState);
-
-        // Запускаем анимацию смерти
-        if (centaur_animator != null)
-        {
-            centaur_animator.applyRootMotion = true; // чтобы анимация управляла движением, если надо
-            centaur_animator.SetTrigger("DeathCentaur");
-        }
-
-        // Удаляем объект через 3 секунды (или по ивенту анимации)
-        Destroy(gameObject, 3f);
     }
 
     public void CenAnimationEvent_ResetDamage()

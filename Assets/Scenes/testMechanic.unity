@@ -1261,6 +1261,10 @@ PrefabInstance:
       value: Centaur (1) Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8622296778613873392, guid: 1ddf3d53aa0b7cf4db36475d6ad2fe45, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622296778613873392, guid: 1ddf3d53aa0b7cf4db36475d6ad2fe45, type: 3}
       propertyPath: m_TagString
       value: EnemyUnit
       objectReference: {fileID: 0}
@@ -1488,7 +1492,7 @@ MonoBehaviour:
   m_SerializedVersion: 0
   m_AgentTypeID: 0
   m_CollectObjects: 1
-  m_Size: {x: 16.63, y: 10, z: 18.353752}
+  m_Size: {x: 16.63, y: 3.88, z: 18.353752}
   m_Center: {x: 0.3, y: 2, z: -0.27}
   m_LayerMask:
     serializedVersion: 2

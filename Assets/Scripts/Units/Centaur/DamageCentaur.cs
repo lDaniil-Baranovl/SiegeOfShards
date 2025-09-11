@@ -12,8 +12,6 @@ public class DamageCentaur : MonoBehaviour
     {
         isSpecialAttack = value;
     }
-
-    // Этот метод вызывается только из StateManager через ивент анимации
     public void CEN_ResetDamageFromAnimation()
     {
         hasDealtDamageThisAttack = false;
