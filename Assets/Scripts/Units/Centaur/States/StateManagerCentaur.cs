@@ -25,9 +25,11 @@ public class CentaurStateManager : MonoBehaviour
     public AttackCentaurState attackCentaurState = new AttackCentaurState();
     public DeathCentaur deathCentaurState = new DeathCentaur();
 
+    [SerializeField] public GameObject effectDieth;
 
     private void Start()
     {
+        effectDieth.SetActive(false);
         SwitchState(runCentaurState);
     }
 
@@ -139,7 +141,7 @@ public class CentaurStateManager : MonoBehaviour
     }
     public void Centaur_Die()
     {
-        SwitchState(deathCentaurState);
+        SwitchState(deathCentaurState); 
     }
 
     public void CenAnimationEvent_ResetDamage()
