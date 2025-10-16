@@ -7,32 +7,11 @@ public class DeathCentaur : CentaurBaseState
     public override void EnterState(CentaurStateManager manager)
     {
         Debug.Log("Enter Death State - Instant Disappear with Effect");
-        StopAllMovement(manager);
         DisableAllColliders(manager);
         DisableAllRenderers(manager);
         ActivateDeathEffect(manager);
 
         manager.StartCoroutine(DestroyWithDelay(manager));
-    }
-
-    private void StopAllMovement(CentaurStateManager manager)
-    {
-        var agent = manager.centaur_navMeshAgent;
-        if (agent != null)
-        {
-            agent.isStopped = true;
-            agent.enabled = false;
-            Debug.Log("NavMeshAgent disabled");
-        }
-        var rbs = manager.GetComponentsInChildren<Rigidbody>();
-        foreach (var rb in rbs)
-        {
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            Debug.Log($"Rigidbody {rb.name} kinematic: true");
-        }
     }
     private void DisableAllColliders(CentaurStateManager manager)
     {
