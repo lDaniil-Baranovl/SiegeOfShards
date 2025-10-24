@@ -26,7 +26,7 @@ public class CentaurStateManager : MonoBehaviour
     public DeathCentaur deathCentaurState = new DeathCentaur();
 
     [SerializeField] public GameObject effectDieth;
-
+    public int teamID = 0; // 0 = синие, 1 = красные
     private void Start()
     {
         effectDieth.SetActive(false);
@@ -79,32 +79,24 @@ public class CentaurStateManager : MonoBehaviour
 
     private Transform GetClosestEnemy()
     {
-        string targetTag = gameObject.CompareTag("EnemyUnit") ? "PeacefulUnit" : "EnemyUnit";
-
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag(targetTag);
-
-        if (enemies == null || enemies.Length == 0)
-            return null;
+        HealthCen[] allCentaurs = FindObjectsByType<HealthCen>(FindObjectsSortMode.None);
 
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (GameObject enemy in enemies)
+        foreach (HealthCen cen in allCentaurs)
         {
-            if (enemy == null || enemy == this.gameObject) continue; 
+            if (cen == null) continue;
+            if (cen.gameObject == this.gameObject) continue;
+            if (cen.GetTeam() == teamID) continue;
 
-            Transform enemyTransform = enemy.transform;
-            if (enemyTransform == null) continue;
-
-            float dist = Vector3.Distance(transform.position, enemyTransform.position);
-
+            float dist = Vector3.Distance(transform.position, cen.transform.position);
             if (dist <= centaur_agroDistance && dist < minDist)
             {
                 minDist = dist;
-                closest = enemyTransform;
+                closest = cen.transform;
             }
         }
-
         return closest;
     }
 
@@ -141,7 +133,7 @@ public class CentaurStateManager : MonoBehaviour
     }
     public void Centaur_Die()
     {
-        SwitchState(deathCentaurState); 
+        SwitchState(deathCentaurState);
     }
 
     public void CenAnimationEvent_ResetDamage()
@@ -154,5 +146,13 @@ public class CentaurStateManager : MonoBehaviour
                 damageScript.CEN_ResetDamageFromAnimation();
             }
         }
+    }
+    public void SetTeam(int id)
+    {
+        teamID = id;
+    }
+    public int GetTeam()
+    {
+        return teamID;
     }
 }
