@@ -41,5 +41,13 @@ public class AttackCentaurState : CentaurBaseState
             manager.SwitchState(manager.runCentaurState);
             return;
         }
+        Vector3 direction = (manager.centaur_target.position - manager.transform.position).normalized;
+        direction.y = 0; // чтобы не наклонялся вверх/вниз
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            manager.transform.rotation = Quaternion.Slerp(manager.transform.rotation, lookRotation, Time.deltaTime * 5f);
+        }
     }
 }

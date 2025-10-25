@@ -3,7 +3,7 @@ using UnityEngine;
 public class RunCentaurState : CentaurBaseState
 {
     private float delayTimer = 0f;
-    private float delayBeforeRun = 1.3f; 
+    private float delayBeforeRun = 0.5f; 
     private bool hasStartedRunning = false;
 
     public override void EnterState(CentaurStateManager manager)

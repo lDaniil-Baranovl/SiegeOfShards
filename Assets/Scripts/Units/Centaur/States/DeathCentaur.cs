@@ -35,7 +35,7 @@ public class DeathCentaur : CentaurBaseState
     {
         if (manager.effectDieth != null)
         {
-            manager.effectDieth.transform.position = manager.transform.position;
+            manager.effectDieth.transform.position = manager.transform.position + Vector3.up * 1.25f;
             manager.effectDieth.SetActive(true);
             Debug.Log("Death effect activated");
         }
