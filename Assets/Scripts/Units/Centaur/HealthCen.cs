@@ -6,6 +6,11 @@ public class HealthCen : MonoBehaviour
     public CentaurStateManager cen_stateManager;
     // 0 = синие, 1 = красные
     [SerializeField] private int teamID;
+    private HealthBar healthBar;
+    private void Awake()
+    {
+        healthBar = GetComponentInChildren<HealthBar>();
+    }
     public int GetTeam()
     {
         return teamID;
@@ -20,8 +25,12 @@ public class HealthCen : MonoBehaviour
 
         cen_health -= damage;
         Debug.Log($"{gameObject.name} получил {damage} урона от {damageSource}. Здоровье: {cen_health}");
+        if (healthBar != null)
+            healthBar.UpdateHealthBar();
         if (cen_health <= 0 && cen_stateManager != null)
         {
+            if (healthBar != null)
+                healthBar.OnUnitDeath();
             cen_stateManager.Centaur_Die();
         }
     }
