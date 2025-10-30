@@ -58,7 +58,6 @@ public class DamageCentaur : MonoBehaviour
                 tower.OnDamageDetected(damageAmount);
                 hasDealtDamageThisAttack = true;
             }
-            return;
         }
         if (other.TryGetComponent<HealthCen>(out HealthCen enemyHealth))
         {

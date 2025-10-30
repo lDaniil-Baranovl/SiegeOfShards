@@ -6,10 +6,10 @@ public class HealthCen : MonoBehaviour
     public CentaurStateManager cen_stateManager;
     // 0 = синие, 1 = красные
     [SerializeField] private int teamID;
-    private HealthBar healthBar;
+    private HealthBarCen healthBar;
     private void Awake()
     {
-        healthBar = GetComponentInChildren<HealthBar>();
+        healthBar = GetComponentInChildren<HealthBarCen>();
     }
     public int GetTeam()
     {
