@@ -3,7 +3,7 @@ using System.Xml;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CentaurStateManager : MonoBehaviour
+public class CentaurStateManager : UnitStateManager
 {
     [SerializeField] public Animator centaur_animator;
     [SerializeField] public NavMeshAgent centaur_navMeshAgent;
@@ -79,12 +79,12 @@ public class CentaurStateManager : MonoBehaviour
 
     private Transform GetClosestEnemy()
     {
-        HealthCen[] allCentaurs = FindObjectsByType<HealthCen>(FindObjectsSortMode.None);
+        Health[] allCentaurs = FindObjectsByType<Health>(FindObjectsSortMode.None);
 
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (HealthCen cen in allCentaurs)
+        foreach (Health cen in allCentaurs)
         {
             if (cen == null) continue;
             if (cen.gameObject == this.gameObject) continue;
@@ -131,7 +131,7 @@ public class CentaurStateManager : MonoBehaviour
             centaur_damageCollider.enabled = true;
         }
     }
-    public void Centaur_Die()
+    public override void OnUnitDie()
     {
         SwitchState(deathCentaurState);
     }

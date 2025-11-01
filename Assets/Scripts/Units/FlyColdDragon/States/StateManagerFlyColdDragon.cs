@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.AI;
-public class StateManagerFlyColdDragon : MonoBehaviour
+using System.Collections;
+public class StateManagerFlyColdDragon : UnitStateManager
 {
     [SerializeField] public Animator dragFlyCold_animator;
     [SerializeField] public NavMeshAgent dragFlyCold_navMeshAgent;
@@ -17,17 +18,16 @@ public class StateManagerFlyColdDragon : MonoBehaviour
     public Transform dragFlyCold_target;
     private bool dragFlyCold_isDead = false;
 
-    [HideInInspector] public float dragFlyCold_runTime;
-
     FlyColdDragonBaseState currentState;
     public DragFlyColdRunState dragFlyColdRunState = new DragFlyColdRunState();
-    //public DragFlyColdAttackState dragFlyColdAttackState = new DragFlyColdAttackState();
-    //public DragFlyColdDeathState dragFlyColdDeathState = new DragFlyColdDeathState();
+    public DragFlyColdAttackState dragFlyColdAttackState = new DragFlyColdAttackState();
+    public DragFlyColdDeathState dragFlyColdDeathState = new DragFlyColdDeathState();
 
     [SerializeField] public GameObject effectDieth;
     public int teamID = 0; // 0 = синие, 1 = красные
     private void Start()
     {
+        StartCoroutine(EnableNavMeshAfterDeath());
         effectDieth.SetActive(false);
         SwitchState(dragFlyColdRunState);
     }
@@ -78,12 +78,12 @@ public class StateManagerFlyColdDragon : MonoBehaviour
 
     private Transform GetClosestEnemy()
     {
-        HealthCen[] allCentaurs = FindObjectsByType<HealthCen>(FindObjectsSortMode.None);
+        Health[] allCentaurs = FindObjectsByType<Health>(FindObjectsSortMode.None);
 
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (HealthCen cen in allCentaurs)
+        foreach (Health cen in allCentaurs)
         {
             if (cen == null) continue;
             if (cen.gameObject == this.gameObject) continue;
@@ -119,7 +119,7 @@ public class StateManagerFlyColdDragon : MonoBehaviour
         return closest;
     }
 
-    void OnOffDamagerCen(int isOff)
+    void OnOffDamagerFDC(int isOff)
     {
         if (isOff == 0)
         {
@@ -130,19 +130,19 @@ public class StateManagerFlyColdDragon : MonoBehaviour
             dragFlyCold_damageCollider.enabled = true;
         }
     }
-    public void Centaur_Die()
+    public override void OnUnitDie()
     {
         SwitchState(dragFlyColdDeathState);
     }
 
-    public void CenAnimationEvent_ResetDamage()
+    public void FLCAnimationEvent_ResetDamage()
     {
         if (dragFlyCold_damageCollider != null)
         {
-            DamageCentaur damageScript = dragFlyCold_damageCollider.GetComponent<DamageCentaur>();
+            DamageFDC damageScript = dragFlyCold_damageCollider.GetComponent<DamageFDC>();
             if (damageScript != null)
             {
-                damageScript.CEN_ResetDamageFromAnimation();
+                damageScript.DFC_ResetDamageFromAnimation();
             }
         }
     }
@@ -153,5 +153,13 @@ public class StateManagerFlyColdDragon : MonoBehaviour
     public int GetTeam()
     {
         return teamID;
+    }
+    public IEnumerator EnableNavMeshAfterDeath()
+    {
+        yield return new WaitForSeconds(1.2f);
+        if (dragFlyCold_navMeshAgent != null)
+        {
+            dragFlyCold_navMeshAgent.enabled = true;
+        }
     }
 }

@@ -10,7 +10,6 @@ public class DragFlyColdRunState : FlyColdDragonBaseState
     {
         delayTimer = 0f;
         hasStartedRunning = false;
-        manager.dragFlyCold_runTime = 0f;
 
         manager.SetSpeed(manager.dragFlyCold_walkSpeed);
         manager.dragFlyCold_navMeshAgent.isStopped = false;
@@ -44,8 +43,6 @@ public class DragFlyColdRunState : FlyColdDragonBaseState
             }
             return;
         }
-
-        manager.dragFlyCold_runTime += Time.deltaTime;
 
         Transform newTarget = manager.GetTarget();
 

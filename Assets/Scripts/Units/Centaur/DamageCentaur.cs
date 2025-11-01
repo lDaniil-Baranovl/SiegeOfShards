@@ -59,11 +59,11 @@ public class DamageCentaur : MonoBehaviour
                 hasDealtDamageThisAttack = true;
             }
         }
-        if (other.TryGetComponent<HealthCen>(out HealthCen enemyHealth))
+        if (other.TryGetComponent<Health>(out Health enemyHealth))
         {
             if (enemyHealth.GetTeam() != teamID)
             {
-                enemyHealth.Centaur_ApplyDamage(damageAmount, "враг-кентавр");
+                enemyHealth.ApplyDamage(damageAmount, "враг-кентавр");
                 hasDealtDamageThisAttack = true;
             }
         }

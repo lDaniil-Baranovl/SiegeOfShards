@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: 858b712805ebc4349958c3636ad40b29
+AssetOrigin:
+  serializedVersion: 1
+  productId: 64248
+  packageName: 'Little Dragons: Tiger'
+  packageVersion: 3.9a
+  assetPath: Assets/Malbers Animations/Dragons/Common/Animations/TD_Air In Place.FBX
+  uploadId: 639431
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -548,9 +555,8 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -618,13 +624,6 @@ ModelImporter:
       - time: 0
         functionName: Eyes
         data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 1
-        messageOptions: 0
-      - time: 0.3908765
-        functionName: PlaySound
-        data: Wing Flap
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 1
@@ -904,12 +903,12 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -939,14 +938,7 @@ ModelImporter:
           preInfinity: 3
           postInfinity: 3
           rotationOrder: 0
-      events:
-      - time: 0.45762816
-        functionName: PlaySound
-        data: Wing Flap
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -3261,16 +3253,14 @@ ModelImporter:
       - time: 0.009177492
         functionName: Eyes
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.57834095
         functionName: Eyes
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
@@ -3436,8 +3426,7 @@ ModelImporter:
       - time: 0.43076897
         functionName: Eyes
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -3884,8 +3873,7 @@ ModelImporter:
       - time: 0.13461436
         functionName: Eyes
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
@@ -4217,8 +4205,7 @@ ModelImporter:
       - time: 0.15350877
         functionName: FireAttack
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 58e889cf9faf0e646a645c31d629350b,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 58e889cf9faf0e646a645c31d629350b, type: 3}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
@@ -5265,27 +5252,35 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 0
     importCameras: 0
     importLights: 0
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 0
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
     meshOptimizationFlags: 1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 2
@@ -5312,20 +5307,15 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c869acf0f32d55340b4dd39f39cc49f3,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c869acf0f32d55340b4dd39f39cc49f3, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 64248
-  packageName: 'Little Dragons: Tiger'
-  packageVersion: 3.9a
-  assetPath: Assets/Malbers Animations/Dragons/Common/Animations/TD_Air In Place.FBX
-  uploadId: 639431
