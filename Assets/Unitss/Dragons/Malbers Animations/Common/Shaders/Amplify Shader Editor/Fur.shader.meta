@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a585ea739537dc340acceaa41c77f52c
+labels:
+- AllCreature
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 204253
+  packageName: 'Poly Art: Rhino'
+  packageVersion: 1.0
+  assetPath: Assets/Malbers Animations/Common/Shaders/Amplify Shader Editor/Fur.shader
+  uploadId: 773299
