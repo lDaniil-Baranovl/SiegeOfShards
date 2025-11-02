@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
 
     [SerializeField] private UnitStateManager stateManager;
     [SerializeField] private int teamID;
-
+    public bool CanFly = false;
     private HealthBar healthBar;
 
     private void Awake()

@@ -4085,7 +4085,7 @@ ModelImporter:
           postInfinity: 3
           rotationOrder: 0
       events:
-      - time: 0.16795665
+      - time: 0.054437567
         functionName: OnOffDamagerFDC
         data: 
         objectReferenceParameter: {instanceID: 0}

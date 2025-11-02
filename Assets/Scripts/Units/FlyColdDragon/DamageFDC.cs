@@ -31,7 +31,7 @@ public class DamageFDC : MonoBehaviour
     {
         if (hasDealtDamageThisAttack) return;
         if (manager == null || manager.dragFlyCold_target == null) return;
-        if (other.gameObject != manager.dragFlyCold_target.gameObject) return;
+        //if (other.gameObject != manager.dragFlyCold_target.gameObject) return;
         if (other.TryGetComponent<HealthTower>(out HealthTower tower))
         {
             if (tower.GetTeam() != teamID)

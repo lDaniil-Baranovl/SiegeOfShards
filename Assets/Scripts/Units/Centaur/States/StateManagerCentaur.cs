@@ -18,6 +18,8 @@ public class CentaurStateManager : UnitStateManager
     public Transform centaur_target;
     private bool cen_isDead = false;
 
+    public bool CanAttackFlyTarget = false; 
+
     [HideInInspector] public float centaur_runTime;
 
     CentaurBaseState currentState;
@@ -79,22 +81,24 @@ public class CentaurStateManager : UnitStateManager
 
     private Transform GetClosestEnemy()
     {
-        Health[] allCentaurs = FindObjectsByType<Health>(FindObjectsSortMode.None);
+        Health[] allUnits = FindObjectsByType<Health>(FindObjectsSortMode.None);
 
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (Health cen in allCentaurs)
+        foreach (Health unit in allUnits)
         {
-            if (cen == null) continue;
-            if (cen.gameObject == this.gameObject) continue;
-            if (cen.GetTeam() == teamID) continue;
+            if (unit == null) continue;
+            if (unit.gameObject == this.gameObject) continue;
+            if (unit.GetTeam() == teamID) continue;
 
-            float dist = Vector3.Distance(transform.position, cen.transform.position);
+            if (!CanAttackFlyTarget && unit.CanFly) continue;
+
+            float dist = Vector3.Distance(transform.position, unit.transform.position);
             if (dist <= centaur_agroDistance && dist < minDist)
             {
                 minDist = dist;
-                closest = cen.transform;
+                closest = unit.transform;
             }
         }
         return closest;
@@ -102,13 +106,26 @@ public class CentaurStateManager : UnitStateManager
 
     private Transform GetClosestTower()
     {
-        if (centaur_tower_enemy.Count == 0) return null;
+        if (centaur_tower_enemy.Count == 0)
+        {
+            HealthTower[] allTowers = FindObjectsByType<HealthTower>(FindObjectsSortMode.None);
+            foreach (HealthTower tower in allTowers)
+            {
+                if (tower != null && tower.GetTeam() != teamID)
+                {
+                    centaur_tower_enemy.Add(tower.transform);
+                }
+            }
+
+            if (centaur_tower_enemy.Count == 0) return null;
+        }
+
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
         foreach (var tower in centaur_tower_enemy)
         {
-            if(tower == null) continue;
+            if (tower == null) continue;
             float dist = Vector3.Distance(transform.position, tower.position);
             if (dist < minDist)
             {
@@ -116,10 +133,9 @@ public class CentaurStateManager : UnitStateManager
                 closest = tower;
             }
         }
-
         return closest;
     }
-    
+
     void OnOffDamagerCen(int isOff)
     {
         if (isOff == 0)

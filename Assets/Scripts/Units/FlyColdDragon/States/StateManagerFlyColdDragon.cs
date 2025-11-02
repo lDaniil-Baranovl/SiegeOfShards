@@ -18,6 +18,8 @@ public class StateManagerFlyColdDragon : UnitStateManager
     public Transform dragFlyCold_target;
     private bool dragFlyCold_isDead = false;
 
+    public bool CanAttackFlyTarget = false;
+
     FlyColdDragonBaseState currentState;
     public DragFlyColdRunState dragFlyColdRunState = new DragFlyColdRunState();
     public DragFlyColdAttackState dragFlyColdAttackState = new DragFlyColdAttackState();
@@ -25,11 +27,19 @@ public class StateManagerFlyColdDragon : UnitStateManager
 
     [SerializeField] public GameObject effectDieth;
     public int teamID = 0; // 0 = синие, 1 = красные
+
+
+    //-----------------------------
+    [SerializeField] public GameObject AttackEffect;
+    private bool isAttackEff = false;
+
     private void Start()
     {
         StartCoroutine(EnableNavMeshAfterDeath());
         effectDieth.SetActive(false);
         SwitchState(dragFlyColdRunState);
+        //------------------------
+        AttackEffect.SetActive(false);
     }
 
     public void SwitchState(FlyColdDragonBaseState newState)
@@ -78,22 +88,24 @@ public class StateManagerFlyColdDragon : UnitStateManager
 
     private Transform GetClosestEnemy()
     {
-        Health[] allCentaurs = FindObjectsByType<Health>(FindObjectsSortMode.None);
+        Health[] allUnits = FindObjectsByType<Health>(FindObjectsSortMode.None);
 
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
-        foreach (Health cen in allCentaurs)
+        foreach (Health unit in allUnits)
         {
-            if (cen == null) continue;
-            if (cen.gameObject == this.gameObject) continue;
-            if (cen.GetTeam() == teamID) continue;
+            if (unit == null) continue;
+            if (unit.gameObject == this.gameObject) continue;
+            if (unit.GetTeam() == teamID) continue;
 
-            float dist = Vector3.Distance(transform.position, cen.transform.position);
+            if (!CanAttackFlyTarget && unit.CanFly) continue;
+
+            float dist = Vector3.Distance(transform.position, unit.transform.position);
             if (dist <= dragFlyCold_agroDistance && dist < minDist)
             {
                 minDist = dist;
-                closest = cen.transform;
+                closest = unit.transform;
             }
         }
         return closest;
@@ -101,7 +113,20 @@ public class StateManagerFlyColdDragon : UnitStateManager
 
     private Transform GetClosestTower()
     {
-        if (dragFlyCold_tower_enemy.Count == 0) return null;
+        if (dragFlyCold_tower_enemy.Count == 0)
+        {
+            HealthTower[] allTowers = FindObjectsByType<HealthTower>(FindObjectsSortMode.None);
+            foreach (HealthTower tower in allTowers)
+            {
+                if (tower != null && tower.GetTeam() != teamID)
+                {
+                    dragFlyCold_tower_enemy.Add(tower.transform);
+                }
+            }
+
+            if (dragFlyCold_tower_enemy.Count == 0) return null;
+        }
+
         Transform closest = null;
         float minDist = Mathf.Infinity;
 
@@ -121,13 +146,17 @@ public class StateManagerFlyColdDragon : UnitStateManager
 
     void OnOffDamagerFDC(int isOff)
     {
-        if (isOff == 0)
+        if (isOff == 0 || isAttackEff == true)
         {
             dragFlyCold_damageCollider.enabled = false;
+            AttackEffect.SetActive(false);
+            isAttackEff = false;
         }
         else
         {
             dragFlyCold_damageCollider.enabled = true;
+            AttackEffect.SetActive(true);
+            isAttackEff = true;
         }
     }
     public override void OnUnitDie()
