@@ -46,8 +46,8 @@ public class DamageCentaur : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (hasDealtDamageThisAttack) return;
-        if (manager == null || manager.centaur_target == null) return;
-        if (other.gameObject != manager.centaur_target.gameObject) return;
+        if (manager == null || manager.target == null) return;
+        if (other.gameObject != manager.target.gameObject) return;
 
         int damageAmount = isSpecialAttack ? specialAttackDamage : normalAttackDamage;
 

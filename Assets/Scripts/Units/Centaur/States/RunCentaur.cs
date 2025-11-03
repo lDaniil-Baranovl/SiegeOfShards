@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RunCentaurState : CentaurBaseState
+public class RunCentaurState : UnitBaseState<CentaurStateManager>
 {
     private float delayTimer = 0f;
     private float delayBeforeRun = 0.5f; 
@@ -12,15 +12,15 @@ public class RunCentaurState : CentaurBaseState
         hasStartedRunning = false;
         manager.centaur_runTime = 0f;
        
-        manager.SetSpeed(manager.centaur_walkSpeed);
-        manager.centaur_navMeshAgent.isStopped = false;
-        manager.centaur_animator.SetBool("IsRunningCentaur", false);
-        manager.centaur_animator.SetBool("IsAttackingCentaur", false);
+        manager.SetSpeed(manager.walkSpeed);
+        manager.navMeshAgent.isStopped = false;
+        manager.unitAnimator.SetBool("IsRunningCentaur", false);
+        manager.unitAnimator.SetBool("IsAttackingCentaur", false);
     }
 
     public override void ExitState(CentaurStateManager manager)
     {
-        manager.centaur_animator.SetBool("IsRunningCentaur", false);
+        manager.unitAnimator.SetBool("IsRunningCentaur", false);
     }
 
     public override void UpdateState(CentaurStateManager manager)
@@ -39,7 +39,7 @@ public class RunCentaurState : CentaurBaseState
                 if (target != null)
                 {
                     manager.SetDestination(target);
-                    manager.centaur_animator.SetBool("IsRunningCentaur", true);
+                    manager.unitAnimator.SetBool("IsRunningCentaur", true);
                 }
             }
             return;
@@ -51,9 +51,9 @@ public class RunCentaurState : CentaurBaseState
 
         if (newTarget != null)
         {
-            manager.centaur_target = newTarget;
+            manager.target = newTarget;
 
-            manager.centaur_navMeshAgent.SetDestination(newTarget.position);
+            manager.navMeshAgent.SetDestination(newTarget.position);
 
             if (manager.HasReachedTarget())
             {
@@ -62,8 +62,8 @@ public class RunCentaurState : CentaurBaseState
         }
         else
         {
-            manager.centaur_animator.SetBool("IsRunningCentaur", false);
-            manager.centaur_navMeshAgent.isStopped = true;
+            manager.unitAnimator.SetBool("IsRunningCentaur", false);
+            manager.navMeshAgent.isStopped = true;
         }
     }
 }

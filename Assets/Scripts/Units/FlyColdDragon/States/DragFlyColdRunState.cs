@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DragFlyColdRunState : FlyColdDragonBaseState
+public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
 {
     private float delayTimer = 0f;
     private float delayBeforeRun = 0.5f;
@@ -11,15 +11,15 @@ public class DragFlyColdRunState : FlyColdDragonBaseState
         delayTimer = 0f;
         hasStartedRunning = false;
 
-        manager.SetSpeed(manager.dragFlyCold_walkSpeed);
-        manager.dragFlyCold_navMeshAgent.isStopped = false;
-        manager.dragFlyCold_animator.SetBool("IsRunningdragFlyCold", false);
-        manager.dragFlyCold_animator.SetBool("IsAttackingdragFlyCold", false);
+        manager.SetSpeed(manager.walkSpeed);
+        manager.navMeshAgent.isStopped = false;
+        manager.unitAnimator.SetBool("IsRunningdragFlyCold", false);
+        manager.unitAnimator.SetBool("IsAttackingdragFlyCold", false);
     }
 
     public override void ExitState(StateManagerFlyColdDragon manager)
     {
-        manager.dragFlyCold_animator.SetBool("IsRunningdragFlyCold", false);
+        manager.unitAnimator.SetBool("IsRunningdragFlyCold", false);
     }
 
     public override void UpdateState(StateManagerFlyColdDragon manager)
@@ -38,7 +38,7 @@ public class DragFlyColdRunState : FlyColdDragonBaseState
                 if (target != null)
                 {
                     manager.SetDestination(target);
-                    manager.dragFlyCold_animator.SetBool("IsRunningdragFlyCold", true);
+                    manager.unitAnimator.SetBool("IsRunningdragFlyCold", true);
                 }
             }
             return;
@@ -48,9 +48,9 @@ public class DragFlyColdRunState : FlyColdDragonBaseState
 
         if (newTarget != null)
         {
-            manager.dragFlyCold_target = newTarget;
+            manager.target = newTarget;
 
-            manager.dragFlyCold_navMeshAgent.SetDestination(newTarget.position);
+            manager.navMeshAgent.SetDestination(newTarget.position);
 
             if (manager.HasReachedTarget())
             {
@@ -59,8 +59,8 @@ public class DragFlyColdRunState : FlyColdDragonBaseState
         }
         else
         {
-            manager.dragFlyCold_animator.SetBool("IsRunningdragFlyCold", false);
-            manager.dragFlyCold_navMeshAgent.isStopped = true;
+            manager.unitAnimator.SetBool("IsRunningdragFlyCold", false);
+            manager.navMeshAgent.isStopped = true;
         }
     }
 }

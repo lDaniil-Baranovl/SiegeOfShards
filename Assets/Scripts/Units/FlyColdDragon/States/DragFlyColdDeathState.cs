@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
-public class DragFlyColdDeathState : FlyColdDragonBaseState
+public class DragFlyColdDeathState : UnitBaseState<StateManagerFlyColdDragon>
 {
     public override void EnterState(StateManagerFlyColdDragon manager)
     {
@@ -29,10 +29,10 @@ public class DragFlyColdDeathState : FlyColdDragonBaseState
     }
     private void ActivateDeathEffect(StateManagerFlyColdDragon manager)
     {
-        if (manager.effectDieth != null)
+        if (manager.deathEffect != null)
         {
-            manager.effectDieth.transform.position = manager.transform.position + Vector3.up * 1.25f;
-            manager.effectDieth.SetActive(true);
+            manager.deathEffect.transform.position = manager.transform.position + Vector3.up * 1.25f;
+            manager.deathEffect.SetActive(true);
         }
     }
 

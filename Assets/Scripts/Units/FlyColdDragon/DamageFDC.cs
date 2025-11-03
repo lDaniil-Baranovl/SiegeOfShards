@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageFDC : MonoBehaviour
 {
-    private bool hasDealtDamageThisAttack = false;
+    private HashSet<GameObject> damagedTargets = new HashSet<GameObject>();
     private StateManagerFlyColdDragon manager;
 
     public int damageAmount = 50;
@@ -24,20 +25,20 @@ public class DamageFDC : MonoBehaviour
     }
     public void DFC_ResetDamageFromAnimation()
     {
-        hasDealtDamageThisAttack = false;
+        damagedTargets.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hasDealtDamageThisAttack) return;
-        if (manager == null || manager.dragFlyCold_target == null) return;
-        //if (other.gameObject != manager.dragFlyCold_target.gameObject) return;
+        if (manager == null) return;
+        GameObject target = other.gameObject; 
+        if(damagedTargets.Contains(target)) return;
         if (other.TryGetComponent<HealthTower>(out HealthTower tower))
         {
             if (tower.GetTeam() != teamID)
             {
                 tower.OnDamageDetected(damageAmount);
-                hasDealtDamageThisAttack = true;
+                damagedTargets.Add(target);
             }
         }
         if (other.TryGetComponent<Health>(out Health enemyHealth))
@@ -45,7 +46,7 @@ public class DamageFDC : MonoBehaviour
             if (enemyHealth.GetTeam() != teamID)
             {
                 enemyHealth.ApplyDamage(damageAmount, "враг-дракон");
-                hasDealtDamageThisAttack = true;
+                damagedTargets.Add(target);
             }
         }
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class DeathCentaur : CentaurBaseState
+public class DeathCentaur : UnitBaseState<CentaurStateManager>
 {
     public override void EnterState(CentaurStateManager manager)
     {
@@ -30,10 +30,10 @@ public class DeathCentaur : CentaurBaseState
     }
     private void ActivateDeathEffect(CentaurStateManager manager)
     {
-        if (manager.effectDieth != null)
+        if (manager.deathEffect != null)
         {
-            manager.effectDieth.transform.position = manager.transform.position + Vector3.up * 1.25f;
-            manager.effectDieth.SetActive(true);
+            manager.deathEffect.transform.position = manager.transform.position + Vector3.up * 1.25f;
+            manager.deathEffect.SetActive(true);
         }
     }
 
