@@ -16,7 +16,13 @@ public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
     {
         manager.navMeshAgent.isStopped = false;
         manager.unitAnimator.SetBool("IsAttackingdragFlyCold", false);
+        if (manager.damageCollider != null)
+            manager.damageCollider.enabled = false;
 
+        if (manager.attackEffect != null)
+            manager.attackEffect.SetActive(false);
+
+        manager.isAttackEffectActive = false;
     }
 
     public override void UpdateState(StateManagerFlyColdDragon manager)

@@ -11,7 +11,7 @@ public class StateManagerFlyColdDragon : UnitStateManager
     private UnitBaseState<StateManagerFlyColdDragon> currentState;
 
     [SerializeField] public GameObject attackEffect;
-    private bool isAttackEffectActive = false;
+    public bool isAttackEffectActive = false;
 
 
     protected override void Start()

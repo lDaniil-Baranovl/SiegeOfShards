@@ -1,47 +1,7 @@
-using UnityEngine;
-using UnityEngine.AI;
-using System.Collections;
-public class DragFlyColdDeathState : UnitBaseState<StateManagerFlyColdDragon>
+public class DragFlyColdDeathState : UnitDeathState<StateManagerFlyColdDragon>
 {
-    public override void EnterState(StateManagerFlyColdDragon manager)
+    protected override void OnEnterDeath(StateManagerFlyColdDragon manager)
     {
-        DisableAllColliders(manager);
-        DisableAllRenderers(manager);
-        ActivateDeathEffect(manager);
-
-        manager.StartCoroutine(DestroyWithDelay(manager));
+        base.OnEnterDeath(manager);
     }
-    private void DisableAllColliders(StateManagerFlyColdDragon manager)
-    {
-        var colliders = manager.GetComponentsInChildren<Collider>();
-        foreach (var collider in colliders)
-        {
-            collider.enabled = false;
-        }
-    }
-    private void DisableAllRenderers(StateManagerFlyColdDragon manager)
-    {
-        var renderers = manager.GetComponentsInChildren<Renderer>();
-        foreach (var renderer in renderers)
-        {
-            renderer.enabled = false;
-        }
-    }
-    private void ActivateDeathEffect(StateManagerFlyColdDragon manager)
-    {
-        if (manager.deathEffect != null)
-        {
-            manager.deathEffect.transform.position = manager.transform.position + Vector3.up * 1.25f;
-            manager.deathEffect.SetActive(true);
-        }
-    }
-
-    private IEnumerator DestroyWithDelay(StateManagerFlyColdDragon manager)
-    {
-        yield return new WaitForSeconds(1f);
-        GameObject.Destroy(manager.gameObject);
-    }
-
-    public override void UpdateState(StateManagerFlyColdDragon manager) { }
-    public override void ExitState(StateManagerFlyColdDragon manager) { }
 }
