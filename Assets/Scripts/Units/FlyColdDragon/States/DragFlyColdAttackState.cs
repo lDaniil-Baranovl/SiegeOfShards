@@ -1,7 +1,6 @@
 using UnityEngine;
-
 public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
-{
+{    
     public DamageFDC attackScript;
     public override void EnterState(StateManagerFlyColdDragon manager)
     {
@@ -9,13 +8,13 @@ public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
 
         attackScript = manager.damageCollider.GetComponent<DamageFDC>();
 
-        manager.unitAnimator.SetBool("IsAttackingdragFlyCold", true);
+        manager.unitAnimator.SetBool("IsAttacking", true);
     }
 
     public override void ExitState(StateManagerFlyColdDragon manager)
     {
         manager.navMeshAgent.isStopped = false;
-        manager.unitAnimator.SetBool("IsAttackingdragFlyCold", false);
+        manager.unitAnimator.SetBool("IsAttacking", false);
         if (manager.damageCollider != null)
             manager.damageCollider.enabled = false;
 
@@ -24,7 +23,6 @@ public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
 
         manager.isAttackEffectActive = false;
     }
-
     public override void UpdateState(StateManagerFlyColdDragon manager)
     {
 

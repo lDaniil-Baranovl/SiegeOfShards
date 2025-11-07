@@ -1,31 +1,18 @@
 using UnityEngine;
 
-public class AttackCentaurState : UnitBaseState<CentaurStateManager>
+public class AttackFireState : UnitBaseState<StateManagerFireDragon>
 {
-    private DamageCentaur attackScript;
-    public override void EnterState(CentaurStateManager manager)
+    public DamageFDC attackScript;
+    public override void EnterState(StateManagerFireDragon manager)
     {
         manager.navMeshAgent.isStopped = true;
 
-        attackScript = manager.damageCollider.GetComponent<DamageCentaur>();
-        
-        if (manager.centaur_runTime >= 3f)
-        {
-            manager.unitAnimator.SetTrigger("SpecialAttack");
-            if (attackScript != null)
-                attackScript.SetSpecialAttack(true);
-        }
-        else
-        {
-            manager.unitAnimator.SetBool("IsAttacking", true);
-            if (attackScript != null)
-                attackScript.SetSpecialAttack(false);
-        }
+        attackScript = manager.damageCollider.GetComponent<DamageFDC>();
 
-        manager.centaur_runTime = 0f;
+        manager.unitAnimator.SetBool("IsAttacking", true);
     }
 
-    public override void ExitState(CentaurStateManager manager)
+    public override void ExitState(StateManagerFireDragon manager)
     {
         manager.navMeshAgent.isStopped = false;
         manager.unitAnimator.SetBool("IsAttacking", false);
@@ -37,17 +24,16 @@ public class AttackCentaurState : UnitBaseState<CentaurStateManager>
 
         manager.isAttackEffectActive = false;
     }
-
-    public override void UpdateState(CentaurStateManager manager)
+    public override void UpdateState(StateManagerFireDragon manager)
     {
 
         if (manager.target == null || Vector3.Distance(manager.transform.position, manager.target.position) > manager.attackDistance + 1f)
         {
-            manager.SwitchState(manager.runCentaurState);
+            manager.SwitchState(manager.fireDrgRunState);
             return;
         }
         Vector3 direction = (manager.target.position - manager.transform.position).normalized;
-        direction.y = 0;
+        direction.y = 0; // чтобы не наклонялся вверх/вниз
 
         if (direction != Vector3.zero)
         {

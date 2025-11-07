@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: aff0e7512cf8c0a4da53b98f9541b050
+AssetOrigin:
+  serializedVersion: 1
+  productId: 64248
+  packageName: 'Little Dragons: Tiger'
+  packageVersion: 3.9a
+  assetPath: Assets/Malbers Animations/Dragons/Common/Animations/TD_Run.FBX
+  uploadId: 639431
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -319,8 +326,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -350,8 +355,8 @@ ModelImporter:
       loopTime: 1
       loopBlend: 1
       loopBlendOrientation: 1
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
@@ -359,15 +364,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0
-        functionName: Eyes
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: c4c988c800d11794680c307fafec6cb5,
-          type: 3}
-        floatParameter: 0
-        intParameter: 1
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -1082,8 +1079,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c869acf0f32d55340b4dd39f39cc49f3,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c869acf0f32d55340b4dd39f39cc49f3, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
@@ -1095,10 +1091,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 64248
-  packageName: 'Little Dragons: Tiger'
-  packageVersion: 3.9a
-  assetPath: Assets/Malbers Animations/Dragons/Common/Animations/TD_Run.FBX
-  uploadId: 639431

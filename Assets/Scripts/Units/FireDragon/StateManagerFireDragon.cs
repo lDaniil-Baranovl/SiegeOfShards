@@ -1,27 +1,24 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
-public class CentaurStateManager : UnitStateManager
+public class StateManagerFireDragon : UnitStateManager
 {
-    public float centaur_runTime = 3f;
-
-    public RunCentaurState runCentaurState = new RunCentaurState();
-    public AttackCentaurState attackCentaurState = new AttackCentaurState();
-    public DeathCentaur deathCentaurState = new DeathCentaur();
-
-    private UnitBaseState<CentaurStateManager> currentState;
-
-    [HideInInspector] public float runTime;
+    private UnitBaseState<StateManagerFireDragon> currentState;
 
     [SerializeField] public GameObject attackEffect;
     public bool isAttackEffectActive = false;
 
+    public AttackFireState attackFireState = new AttackFireState();
+    public FireDrgRunState fireDrgRunState = new FireDrgRunState();
+    public DeathFireState deathFireState = new DeathFireState();
+
     protected override void Start()
     {
         base.Start();
+        StartCoroutine(EnableNavMeshAfterDeath());
         attackEffect.SetActive(false);
-        SwitchState(runCentaurState);
+        SwitchState(fireDrgRunState);
     }
 
     protected override void Update()
@@ -30,7 +27,7 @@ public class CentaurStateManager : UnitStateManager
         currentState?.UpdateState(this);
     }
 
-    public void SwitchState(UnitBaseState<CentaurStateManager> newState)
+    public void SwitchState(UnitBaseState<StateManagerFireDragon> newState)
     {
         currentState?.ExitState(this);
         currentState = newState;
@@ -39,11 +36,17 @@ public class CentaurStateManager : UnitStateManager
 
     public override void OnUnitDie()
     {
-        SwitchState(deathCentaurState);
+        SwitchState(deathFireState);
+    }
+    public IEnumerator EnableNavMeshAfterDeath()
+    {
+        yield return new WaitForSeconds(1.2f);
+        if (navMeshAgent != null)
+            navMeshAgent.enabled = true;
     }
 
     // Animation Events:
-    public void OnOffDamagerCen(int isOff)
+    public void OnOffDamagerFireDr(int isOff)
     {
         if (isOff == 0 || isAttackEffectActive == true)
         {
@@ -58,11 +61,11 @@ public class CentaurStateManager : UnitStateManager
             isAttackEffectActive = true;
         }
     }
-    public void CenAnimationEvent_ResetDamage()
+    public void FiraDrgAnimationEvent_ResetDamage()
     {
         if (damageCollider == null) return;
 
-        var damageScript = damageCollider.GetComponent<DamageCentaur>();
-        damageScript?.CEN_ResetDamageFromAnimation();
+        var damageScript = damageCollider.GetComponent<DamageFiraDrg>();
+        damageScript?.FiraDrgAnimationEvent_ResetDamage();
     }
 }
