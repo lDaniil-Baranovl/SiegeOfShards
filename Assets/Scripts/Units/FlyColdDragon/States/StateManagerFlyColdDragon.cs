@@ -13,6 +13,8 @@ public class StateManagerFlyColdDragon : UnitStateManager
     [SerializeField] public GameObject attackEffect;
     public bool isAttackEffectActive = false;
 
+    public AudioClip attackSound;
+    private AudioSource audioSource;
 
     protected override void Start()
     {
@@ -20,6 +22,10 @@ public class StateManagerFlyColdDragon : UnitStateManager
         StartCoroutine(EnableNavMeshAfterDeath());
         attackEffect.SetActive(false);
         SwitchState(dragFlyColdRunState);
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     protected override void Update()
@@ -68,5 +74,13 @@ public class StateManagerFlyColdDragon : UnitStateManager
 
         var damageScript = damageCollider.GetComponent<DamageFDC>();
         damageScript?.DFC_ResetDamageFromAnimation();
+    }
+
+    public void PlayAttackSound()
+    {
+        if (attackSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(attackSound);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Audio;
 
 public class StateManagerFireDragon : UnitStateManager
 {
@@ -13,12 +14,19 @@ public class StateManagerFireDragon : UnitStateManager
     public FireDrgRunState fireDrgRunState = new FireDrgRunState();
     public DeathFireState deathFireState = new DeathFireState();
 
+    public AudioClip attackSound;
+    private AudioSource audioSource;
+
     protected override void Start()
     {
         base.Start();
         StartCoroutine(EnableNavMeshAfterDeath());
         attackEffect.SetActive(false);
         SwitchState(fireDrgRunState);
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     protected override void Update()
@@ -67,5 +75,12 @@ public class StateManagerFireDragon : UnitStateManager
 
         var damageScript = damageCollider.GetComponent<DamageFiraDrg>();
         damageScript?.FiraDrgAnimationEvent_ResetDamage();
+    }
+    public void PlayAttackSound()
+    {
+        if (attackSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(attackSound);
+        }
     }
 }
