@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d86f425e09bd3ff4fa0e23cbd09347a6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 22100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306857
+  packageName: Stylized Low Poly Skeleton
+  packageVersion: 1.1
+  assetPath: Assets/SazenGames/Skeleton/Art/Demo Animator Controllers/death.overrideController
+  uploadId: 792234

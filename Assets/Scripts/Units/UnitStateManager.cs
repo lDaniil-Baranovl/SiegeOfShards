@@ -22,7 +22,7 @@ public abstract class UnitStateManager : MonoBehaviour
     [SerializeField] public Transform target;
     [SerializeField] public bool canMove = false;
     [SerializeField] public bool canAttackFlyTarget = false;
-    protected bool isDead = false;
+    public bool isDead = false;
 
 
     protected virtual void Start()
@@ -79,6 +79,7 @@ public abstract class UnitStateManager : MonoBehaviour
 
         foreach (Health unit in allUnits)
         {
+            if (unit == null || unit.IsDead) continue;
             if (unit == null || unit.gameObject == this.gameObject) continue;
             if (unit.GetTeam() == teamID) continue;
             if (!canAttackFlyTarget && unit.CanFly) continue;

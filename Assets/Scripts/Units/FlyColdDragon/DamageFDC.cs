@@ -30,6 +30,7 @@ public class DamageFDC : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (manager == null || manager.isDead) return;
         if (manager == null) return;
         GameObject target = other.gameObject; 
         if(damagedTargets.Contains(target)) return;

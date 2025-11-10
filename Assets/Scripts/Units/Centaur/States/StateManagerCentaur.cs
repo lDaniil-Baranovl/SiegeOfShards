@@ -15,13 +15,20 @@ public class CentaurStateManager : UnitStateManager
     [HideInInspector] public float runTime;
 
     [SerializeField] public GameObject attackEffect;
+    public AudioClip specialAttackSound;
     public bool isAttackEffectActive = false;
 
+    public AudioClip attackSound;
+    private AudioSource audioSource;
     protected override void Start()
     {
         base.Start();
         attackEffect.SetActive(false);
         SwitchState(runCentaurState);
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     protected override void Update()
@@ -39,6 +46,20 @@ public class CentaurStateManager : UnitStateManager
 
     public override void OnUnitDie()
     {
+        if (isDead) return;
+        isDead = true;
+
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+
+        if (damageCollider != null) damageCollider.enabled = false;
+        if (attackEffect != null) attackEffect.SetActive(false);
+
+        if (navMeshAgent != null) navMeshAgent.isStopped = true;
+        if (unitAnimator != null)
+        {
+            unitAnimator.SetBool("IsAttacking", false);
+            unitAnimator.SetBool("IsRunning", false);
+        }
         SwitchState(deathCentaurState);
     }
 
@@ -64,5 +85,23 @@ public class CentaurStateManager : UnitStateManager
 
         var damageScript = damageCollider.GetComponent<DamageCentaur>();
         damageScript?.CEN_ResetDamageFromAnimation();
+    }
+    public void PlayAttackSound()
+    {
+        if (attackSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(attackSound);
+        }
+    }
+    public void PlaySpecialAttackSound()
+    {
+        if (specialAttackSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(specialAttackSound);
+        }
+        else if (attackSound != null && audioSource != null) // fallback на обычный звук
+        {
+            audioSource.PlayOneShot(attackSound);
+        }
     }
 }

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 15340e2c8ae3d5b479a50465a6d23485
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 22100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 306857
+  packageName: Stylized Low Poly Skeleton
+  packageVersion: 1.1
+  assetPath: Assets/SazenGames/Skeleton/Art/Demo Animator Controllers/revive.overrideController
+  uploadId: 792234

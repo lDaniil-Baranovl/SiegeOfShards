@@ -10,6 +10,8 @@ public class Health : MonoBehaviour
     public bool CanFly = false;
     private HealthBar healthBar;
 
+    public bool IsDead { get; private set; } = false;
+
     private void Awake()
     {
         CurrentHealth = maxHealth;
@@ -21,6 +23,8 @@ public class Health : MonoBehaviour
 
     public void ApplyDamage(int damage, string damageSource)
     {
+        if (IsDead) return;
+
         if (CurrentHealth <= 0) return;
 
         CurrentHealth -= damage;

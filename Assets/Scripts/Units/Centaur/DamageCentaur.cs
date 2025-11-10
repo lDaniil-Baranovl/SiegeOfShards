@@ -45,6 +45,7 @@ public class DamageCentaur : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (manager == null || manager.isDead) return;
         if (hasDealtDamageThisAttack) return;
         if (manager == null || manager.target == null) return;
         if (other.gameObject != manager.target.gameObject) return;

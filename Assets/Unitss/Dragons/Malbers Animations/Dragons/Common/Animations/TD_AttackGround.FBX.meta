@@ -1813,7 +1813,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.22452247
+      - time: 0.19655947
         functionName: PlayAttackSound
         data: 
         objectReferenceParameter: {instanceID: 0}

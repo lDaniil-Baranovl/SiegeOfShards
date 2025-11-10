@@ -44,6 +44,20 @@ public class StateManagerFireDragon : UnitStateManager
 
     public override void OnUnitDie()
     {
+        if (isDead) return;
+        isDead = true;
+
+        gameObject.layer = LayerMask.NameToLayer("Dead");
+
+        if (damageCollider != null) damageCollider.enabled = false;
+        if (attackEffect != null) attackEffect.SetActive(false);
+
+        if (navMeshAgent != null) navMeshAgent.isStopped = true;
+        if (unitAnimator != null)
+        {
+            unitAnimator.SetBool("IsAttacking", false);
+            unitAnimator.SetBool("IsRunning", false);
+        }
         SwitchState(deathFireState);
     }
     public IEnumerator EnableNavMeshAfterDeath()
