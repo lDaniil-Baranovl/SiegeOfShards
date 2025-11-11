@@ -37,6 +37,7 @@ public class SkeletRunSt : UnitBaseState<SkeletStMan>
                 Transform target = manager.GetTarget();
                 if (target != null)
                 {
+                    manager.target = target;
                     manager.SetDestination(target);
                     manager.unitAnimator.SetBool("IsRunning", true);
                 }
@@ -50,7 +51,8 @@ public class SkeletRunSt : UnitBaseState<SkeletStMan>
         {
             manager.target = newTarget;
 
-            manager.navMeshAgent.SetDestination(newTarget.position);
+            Vector3 targetPos = manager.GetAttackPosition(newTarget);
+            manager.navMeshAgent.SetDestination(targetPos);
 
             if (manager.HasReachedTarget())
             {

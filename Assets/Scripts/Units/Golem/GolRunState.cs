@@ -1,29 +1,28 @@
 using UnityEngine;
 
-public class RunCentaurState : UnitBaseState<CentaurStateManager>
+public class GolRunState : UnitBaseState<GolStateMan>
 {
     private float delayTimer = 0f;
-    private float delayBeforeRun = 0.5f; 
+    private float delayBeforeRun = 0.5f;
     private bool hasStartedRunning = false;
 
-    public override void EnterState(CentaurStateManager manager)
+    public override void EnterState(GolStateMan manager)
     {
         delayTimer = 0f;
         hasStartedRunning = false;
-        manager.centaur_runTime = 0f;
-       
+
         manager.SetSpeed(manager.walkSpeed);
         manager.navMeshAgent.isStopped = false;
-        manager.unitAnimator.SetBool("IsRunningCentaur", false);
-        manager.unitAnimator.SetBool("IsAttackingCentaur", false);
+        manager.unitAnimator.SetBool("IsRunning", false);
+        manager.unitAnimator.SetBool("IsAttacking", false);
     }
 
-    public override void ExitState(CentaurStateManager manager)
+    public override void ExitState(GolStateMan manager)
     {
-        manager.unitAnimator.SetBool("IsRunningCentaur", false);
+        manager.unitAnimator.SetBool("IsRunning", false);
     }
 
-    public override void UpdateState(CentaurStateManager manager)
+    public override void UpdateState(GolStateMan manager)
     {
         if (!manager.canMove) return;
 
@@ -40,13 +39,11 @@ public class RunCentaurState : UnitBaseState<CentaurStateManager>
                 {
                     manager.target = target;
                     manager.SetDestination(target);
-                    manager.unitAnimator.SetBool("IsRunningCentaur", true);
+                    manager.unitAnimator.SetBool("IsRunning", true);
                 }
             }
             return;
         }
-
-        manager.centaur_runTime += Time.deltaTime;
 
         Transform newTarget = manager.GetTarget();
 
@@ -59,12 +56,12 @@ public class RunCentaurState : UnitBaseState<CentaurStateManager>
 
             if (manager.HasReachedTarget())
             {
-                manager.SwitchState(manager.attackCentaurState);
+                manager.SwitchState(manager.golAttackState);
             }
         }
         else
         {
-            manager.unitAnimator.SetBool("IsRunningCentaur", false);
+            manager.unitAnimator.SetBool("IsRunning", false);
             manager.navMeshAgent.isStopped = true;
         }
     }

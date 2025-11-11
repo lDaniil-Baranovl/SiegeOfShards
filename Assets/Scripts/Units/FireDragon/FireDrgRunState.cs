@@ -37,6 +37,7 @@ public class FireDrgRunState : UnitBaseState<StateManagerFireDragon>
                 Transform target = manager.GetTarget();
                 if (target != null)
                 {
+                    manager.target = target;
                     manager.SetDestination(target);
                     manager.unitAnimator.SetBool("IsRunning", true);
                 }
@@ -50,7 +51,8 @@ public class FireDrgRunState : UnitBaseState<StateManagerFireDragon>
         {
             manager.target = newTarget;
 
-            manager.navMeshAgent.SetDestination(newTarget.position);
+            Vector3 targetPos = manager.GetAttackPosition(newTarget);
+            manager.navMeshAgent.SetDestination(targetPos);
 
             if (manager.HasReachedTarget())
             {

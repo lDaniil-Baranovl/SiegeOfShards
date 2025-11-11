@@ -44,13 +44,39 @@ public abstract class UnitStateManager : MonoBehaviour
             navMeshAgent.speed = newSpeed;
     }
 
+    //public virtual void SetDestination(Transform newDestination)
+    //{
+    //    if (navMeshAgent == null || newDestination == null) return;
+    //    target = newDestination;
+    //    //navMeshAgent.SetDestination(newDestination.position);
+    //    Vector3 targetPoint = GetClosestPointOnTarget(newDestination);
+    //    navMeshAgent.SetDestination(targetPoint);
+    //}
     public virtual void SetDestination(Transform newDestination)
     {
         if (navMeshAgent == null || newDestination == null) return;
         target = newDestination;
-        navMeshAgent.SetDestination(newDestination.position);
-    }
 
+        // »спользуем умную точку дл€ движени€ Ч ближайша€ поверхность цели
+        Vector3 targetPoint = GetAttackPosition(newDestination);
+        navMeshAgent.SetDestination(targetPoint);
+    }
+    public virtual Vector3 GetAttackPosition(Transform targetTransform)
+    {
+        if (targetTransform == null)
+            return transform.position;
+
+        Collider targetCollider = targetTransform.GetComponentInChildren<Collider>();
+        if (targetCollider == null)
+            return targetTransform.position;
+
+        Vector3 closest = targetCollider.ClosestPoint(transform.position);
+
+        Vector3 dir = (transform.position - closest).normalized;
+        closest += dir * 0.3f;
+
+        return closest;
+    }
     public virtual bool HasReachedTarget()
     {
         if (target == null) return false;

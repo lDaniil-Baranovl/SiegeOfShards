@@ -7,7 +7,7 @@ public class TowerBarHealth : MonoBehaviour
     [SerializeField] private HealthTower healthComponent;
     [SerializeField] private Canvas healthCanvas;
     [SerializeField] private bool alwaysVisible = true;
-    private bool hasTakenDamage = false;
+    //private bool hasTakenDamage = false;
     private bool isBroke = false;
     private void Start()
     {
