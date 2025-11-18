@@ -44,4 +44,33 @@ public class Health : MonoBehaviour
     }
 
     public int GetMaxHealth() => maxHealth;
+
+    // ================= FREEZE SYSTEM =================
+    public void Freeze()
+    {
+        if (stateManager == null) return;
+
+        stateManager.isFrozen = true;
+
+        if (stateManager.navMeshAgent != null)
+            stateManager.navMeshAgent.speed = 0;
+
+        if (stateManager.unitAnimator != null)
+            stateManager.unitAnimator.speed = 0;
+    }
+
+    public void Unfreeze()
+    {
+        if (stateManager == null) return;
+
+        stateManager.isFrozen = false;
+
+        if (stateManager.navMeshAgent != null)
+            stateManager.navMeshAgent.speed = stateManager.walkSpeed;
+
+        if (stateManager.unitAnimator != null)
+            stateManager.unitAnimator.speed = 1;
+    }
+
+
 }

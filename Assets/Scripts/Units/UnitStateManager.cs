@@ -24,7 +24,9 @@ public abstract class UnitStateManager : MonoBehaviour
     [SerializeField] public bool canAttackFlyTarget = false;
     public bool isDead = false;
 
-
+    public bool isFrozen = false;
+    private float defaultSpeed;
+    private float defaultAnimatorSpeed = 1f;
     protected virtual void Start()
     {
         if (deathEffect != null)
@@ -35,23 +37,54 @@ public abstract class UnitStateManager : MonoBehaviour
     {
         enemyTowers.RemoveAll(tower => tower == null);
     }
+    // ================= FREEZE SYSTEM =================
+    private float savedSpeed;
+    private float savedAnimatorSpeed;
 
+    public virtual void Freeze()
+    {
+        if (isFrozen) return;
+        isFrozen = true;
+        if (navMeshAgent != null)
+        {
+            savedSpeed = navMeshAgent.speed;
+            navMeshAgent.speed = 0f;
+            navMeshAgent.isStopped = true;
+        }
+
+        if (unitAnimator != null)
+        {
+            savedAnimatorSpeed = unitAnimator.speed;
+            unitAnimator.speed = 0f;
+        }
+        if (damageCollider != null)
+            damageCollider.enabled = false;
+
+        if (this is GolStateMan gol)
+        {
+            gol.attackEffect.SetActive(false);
+            gol.isAttackEffectActive = false;
+        }
+    }
+
+    public virtual void Unfreeze()
+    {
+        if (!isFrozen) return;
+        isFrozen = false;
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.speed = savedSpeed;
+            navMeshAgent.isStopped = false;
+        }
+        if (unitAnimator != null)
+            unitAnimator.speed = savedAnimatorSpeed;
+    }
     // ========== COMMON METHODS ==========
-
     public virtual void SetSpeed(float newSpeed)
     {
         if (navMeshAgent != null)
             navMeshAgent.speed = newSpeed;
     }
-
-    //public virtual void SetDestination(Transform newDestination)
-    //{
-    //    if (navMeshAgent == null || newDestination == null) return;
-    //    target = newDestination;
-    //    //navMeshAgent.SetDestination(newDestination.position);
-    //    Vector3 targetPoint = GetClosestPointOnTarget(newDestination);
-    //    navMeshAgent.SetDestination(targetPoint);
-    //}
     public virtual void SetDestination(Transform newDestination)
     {
         if (navMeshAgent == null || newDestination == null) return;
