@@ -21,12 +21,65 @@ public class LaserAOE : MonoBehaviour
     private readonly Dictionary<Health, int> unitWave = new Dictionary<Health, int>();
     private readonly HashSet<Health> unitsInZone = new HashSet<Health>();
 
+    [Header("Wave Timing")]
+    [SerializeField] private float waveActiveTime = 4f;
+    [SerializeField] private float waveFadeTime = 0.4f;
+
+    [Header("Sound Settings")]
+    [SerializeField] private AudioClip LAZERSound;
+
+    [SerializeField] private float baseInterval = 0.3f;
+    [SerializeField] private float randomOffset = 0.15f;
+
+    [Header("Effect Lifetime")]
+    [SerializeField] private float effectDuration = 15f;
+    [SerializeField] private float blockEdgeTime = 0.3f;
+
+    private AudioSource audioSource;
+    private float startTime;
 
     private void Start()
     {
-        Destroy(gameObject, 15f);
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+
+        startTime = Time.time;
+
+        StartCoroutine(SoundRoutine());
+
+        Destroy(gameObject, effectDuration);
     }
 
+    private IEnumerator SoundRoutine()
+    {
+        float waveStart = Time.time;
+
+        while (true)
+        {
+            float elapsedTotal = Time.time - startTime;
+            if (elapsedTotal > effectDuration - blockEdgeTime)
+                yield break;
+
+            float waveElapsed = Time.time - waveStart;
+            if (waveElapsed < waveActiveTime)
+            {
+                if (elapsedTotal >= blockEdgeTime)
+                {
+                    audioSource.PlayOneShot(LAZERSound);
+                }
+
+                float delay = baseInterval + Random.Range(-randomOffset, randomOffset);
+                if (delay < 0.1f) delay = 0.1f;
+
+                yield return new WaitForSeconds(delay);
+            }
+            else
+            {
+                yield return new WaitForSeconds(waveFadeTime);
+                waveStart = Time.time;
+            }
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {

@@ -7,15 +7,52 @@ public class DelayedExplosionDamage : MonoBehaviour
     [SerializeField] private int damage = 100;
     [SerializeField] private float delay = 2f;
     [SerializeField] public int teamID = 0;
-    [SerializeField] private bool destroyAfterHit = true; 
 
     private readonly HashSet<Health> targets = new HashSet<Health>();
     private bool damageApplied = false;
 
+    [Header("Cast + Explosion Sounds")]
+    [SerializeField] private AudioClip castSound;
+    [SerializeField] private AudioClip explosionSound;
+
+    private void Start()
+    {
+        StartCoroutine(CastExplosionSoundRoutine());
+        Destroy(gameObject, 2f);
+    }
     private void Awake()
     {
-        
         StartCoroutine(DelayedDamage());
+    }
+    private IEnumerator CastExplosionSoundRoutine()
+    {
+        if (castSound == null || explosionSound == null)
+            yield break;
+        AudioSource castSource = gameObject.AddComponent<AudioSource>();
+        AudioSource explosionSource = gameObject.AddComponent<AudioSource>();
+
+        castSource.playOnAwake = false;
+        explosionSource.playOnAwake = false;
+
+        castSource.PlayOneShot(castSound);
+
+        yield return new WaitForSeconds(0.85f);
+
+        explosionSource.PlayOneShot(explosionSound);
+
+        float fadeTime = 0.4f;   
+        float t = 0f;
+
+        float startVolume = castSource.volume;
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+            castSource.volume = Mathf.Lerp(startVolume, 0f, t / fadeTime);
+            yield return null;
+        }
+
+        castSource.volume = 0f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,8 +89,5 @@ public class DelayedExplosionDamage : MonoBehaviour
             if (unit != null && !unit.IsDead)
                 unit.ApplyDamage(damage, "Potion Explosion");
         }
-
-        if (destroyAfterHit)
-            Destroy(gameObject);
     }
 }

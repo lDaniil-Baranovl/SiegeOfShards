@@ -14,6 +14,9 @@ public class SkeletStMan : UnitStateManager
 
     public AudioClip attackSound;
     private AudioSource audioSource;
+
+    [SerializeField] private float towerAttackDistance = 1.35f;
+
     protected override void Start()
     {
         base.Start();
@@ -30,7 +33,17 @@ public class SkeletStMan : UnitStateManager
         base.Update();
         currentState?.UpdateState(this);
     }
+    public override bool HasReachedTarget()
+    {
+        if (target == null) return false;
 
+        float dist = Vector3.Distance(transform.position, target.position);
+        if (target.GetComponent<HealthTower>() != null)
+        {
+            return dist <= towerAttackDistance;
+        }
+        return dist <= attackDistance;
+    }
     public void SwitchState(UnitBaseState<SkeletStMan> newState)
     {
         currentState?.ExitState(this);

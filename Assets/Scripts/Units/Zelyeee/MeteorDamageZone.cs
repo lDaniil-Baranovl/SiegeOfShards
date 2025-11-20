@@ -16,6 +16,48 @@ public class MeteorDamageZone : MonoBehaviour
     private readonly Dictionary<Health, float> enterTime = new Dictionary<Health, float>();
     private readonly HashSet<Health> unitsInZone = new HashSet<Health>();
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioClip meteorSound;
+
+    [SerializeField] private float baseInterval = 1f;       
+    [SerializeField] private float randomOffset = 0.5f;     
+
+    [Header("Effect Lifetime")]
+    [SerializeField] private float effectDuration = 4f;     
+    [SerializeField] private float blockEdgeTime = 0.5f;    
+
+    private AudioSource audioSource;
+    private float startTime;
+
+    private void Start()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+
+        startTime = Time.time;
+
+        StartCoroutine(SoundRoutine());
+
+        Destroy(gameObject, effectDuration);
+    }
+
+    private IEnumerator SoundRoutine()
+    {
+        while (true)
+        {
+            float elapsed = Time.time - startTime;
+            if (elapsed > effectDuration - blockEdgeTime)
+                yield break;
+            if (elapsed >= blockEdgeTime)
+            {
+                audioSource.PlayOneShot(meteorSound);
+            }
+            float delay = baseInterval + Random.Range(-randomOffset, randomOffset);
+            if (delay < 0.1f) delay = 0.1f;
+
+            yield return new WaitForSeconds(delay);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         Health hp = other.GetComponent<Health>();
