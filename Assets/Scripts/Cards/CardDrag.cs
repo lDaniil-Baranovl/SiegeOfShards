@@ -1,0 +1,118 @@
+using UnityEngine;
+
+public class CardDrag : MonoBehaviour
+{
+    [Header("Summon Circle")]
+    public GameObject summonCirclePrefab;
+    private GameObject summonCircleInstance;
+
+    public LayerMask battlefieldMask;
+    public UnitCost data;
+
+    private bool isDragging = false;
+    private Vector3 startPosition;
+
+    void Start()
+    {
+        startPosition = transform.position;
+    }
+
+    void Update()
+    {
+        HandleMouseInput();
+
+        if (!isDragging) return;
+
+        FollowCursor();
+        UpdateSummonCircle();
+    }
+
+    private void HandleMouseInput()
+    {
+        // --- Õ¿◊¿ÀŒ œ≈–≈“¿— »¬¿Õ»ﬂ ---
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(r, out RaycastHit hit) && hit.transform == transform)
+            {
+                BeginDrag();
+            }
+        }
+
+        // ---  ŒÕ≈÷ œ≈–≈“¿— »¬¿Õ»ﬂ ---
+        if (Input.GetMouseButtonUp(0) && isDragging)
+        {
+            EndDrag();
+        }
+    }
+
+    private void BeginDrag()
+    {
+        isDragging = true;
+    }
+
+    private void EndDrag()
+    {
+        isDragging = false;
+
+        if (summonCircleInstance != null)
+            summonCircleInstance.SetActive(false);
+
+        // ÀÛ˜ ‚ÌËÁ
+        if (!Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
+            out RaycastHit hit, 20f, battlefieldMask))
+        {
+            ReturnCard();
+            return;
+        }
+
+        // œÓ‚ÂˇÂÏ ˝ÎËÍÒË
+        if (!ElixirManager.Instance.TrySpend(data.elixirCost))
+        {
+            ReturnCard();
+            return;
+        }
+
+        SpawnUnit(hit.point);
+    }
+
+    private void UpdateSummonCircle()
+    {
+        if (Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
+            out RaycastHit hit, 20f, battlefieldMask))
+        {
+            if (summonCircleInstance == null)
+                summonCircleInstance = Instantiate(summonCirclePrefab);
+
+            summonCircleInstance.SetActive(true);
+            summonCircleInstance.transform.position = hit.point + Vector3.up * 0.05f;
+        }
+        else
+        {
+            if (summonCircleInstance != null)
+                summonCircleInstance.SetActive(false);
+        }
+    }
+
+    private void FollowCursor()
+    {
+        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(r, out RaycastHit hit, 100f))
+        {
+            transform.position = hit.point + Vector3.up * 0.3f;
+        }
+    }
+
+    private void SpawnUnit(Vector3 pos)
+    {
+        Instantiate(data.prefab, pos, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
+    private void ReturnCard()
+    {
+        transform.position = startPosition;
+    }
+}
