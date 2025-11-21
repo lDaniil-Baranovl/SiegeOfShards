@@ -4,6 +4,12 @@ using UnityEngine;
 public class UnitCost : ScriptableObject
 {
     public string unitName;
-    public GameObject prefab;
+
+    [Header("Multiple unit prefabs")]
+    public GameObject[] prefabs;
+
     public int elixirCost;
+
+    [Header("Optional spawn offsets")]
+    public Vector3[] spawnOffsets;
 }

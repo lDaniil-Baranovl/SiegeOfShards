@@ -8,6 +8,7 @@ public class ElixirManager : MonoBehaviour
 
     [Header("UI")]
     public Slider elixirSlider;
+    public JellyElixir jelly;
 
     [Header("Settings")]
     public int maxElixir = 10;
@@ -44,6 +45,8 @@ public class ElixirManager : MonoBehaviour
 
                 elixirSlider.value = currentElixir;
             }
+            if (jelly != null && currentElixir != maxElixir)
+                jelly.PlayJelly();
         }
     }
 
@@ -54,6 +57,9 @@ public class ElixirManager : MonoBehaviour
 
         currentElixir -= amount;
         elixirSlider.value = currentElixir;
+
+        if (jelly != null)
+            jelly.PlayJelly();
         return true;
     }
 

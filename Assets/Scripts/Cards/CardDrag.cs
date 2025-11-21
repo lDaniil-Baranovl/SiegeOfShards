@@ -12,13 +12,20 @@ public class CardDrag : MonoBehaviour
     private bool isDragging = false;
     private Vector3 startPosition;
 
+    public CanvasGroup canvasGroup;
     void Start()
     {
         startPosition = transform.position;
+
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
 
     void Update()
     {
+        UpdateCardLockState();
+
         HandleMouseInput();
 
         if (!isDragging) return;
@@ -26,21 +33,36 @@ public class CardDrag : MonoBehaviour
         FollowCursor();
         UpdateSummonCircle();
     }
+    private void UpdateCardLockState()
+    {
+        int current = ElixirManager.Instance.GetElixir();
 
+        if (current < data.elixirCost)
+        {
+            canvasGroup.alpha = 0.4f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+        else
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+    }
     private void HandleMouseInput()
     {
-        // --- ÍÀ×ÀËÎ ÏÅÐÅÒÀÑÊÈÂÀÍÈß ---
         if (Input.GetMouseButtonDown(0))
         {
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(r, out RaycastHit hit) && hit.transform == transform)
             {
+                if (ElixirManager.Instance.GetElixir() < data.elixirCost)
+                    return;
                 BeginDrag();
             }
-        }
-
-        // --- ÊÎÍÅÖ ÏÅÐÅÒÀÑÊÈÂÀÍÈß ---
+        } 
         if (Input.GetMouseButtonUp(0) && isDragging)
         {
             EndDrag();
@@ -59,7 +81,6 @@ public class CardDrag : MonoBehaviour
         if (summonCircleInstance != null)
             summonCircleInstance.SetActive(false);
 
-        // Ëó÷ âíèç
         if (!Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
             out RaycastHit hit, 20f, battlefieldMask))
         {
@@ -67,7 +88,6 @@ public class CardDrag : MonoBehaviour
             return;
         }
 
-        // Ïðîâåðÿåì ýëèêñèð
         if (!ElixirManager.Instance.TrySpend(data.elixirCost))
         {
             ReturnCard();
@@ -107,9 +127,19 @@ public class CardDrag : MonoBehaviour
 
     private void SpawnUnit(Vector3 pos)
     {
-        Instantiate(data.prefab, pos, Quaternion.identity);
+        for (int i = 0; i < data.prefabs.Length; i++)
+        {
+            Vector3 spawnPos = pos;
+
+            if (data.spawnOffsets != null && i < data.spawnOffsets.Length)
+                spawnPos += data.spawnOffsets[i];
+
+            Instantiate(data.prefabs[i], spawnPos, Quaternion.identity);
+        }
+
         Destroy(gameObject);
     }
+
 
     private void ReturnCard()
     {

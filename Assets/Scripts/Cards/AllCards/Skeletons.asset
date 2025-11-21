@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cb1346b6c1af1459de4fa440c4c767, type: 3}
+  m_Name: Skeletons
+  m_EditorClassIdentifier: 
+  unitName: Skeletons
+  prefabs:
+  - {fileID: 1523308016286564832, guid: 77a86f1537f52a144a1fc702ed736193, type: 3}
+  - {fileID: 1427721808480448209, guid: 0bad6b89d873fcb4d8b0fa21f60eec04, type: 3}
+  - {fileID: 3206839800540294871, guid: b201405d94b08694e8801bd4b33deac2, type: 3}
+  elixirCost: 1
+  spawnOffsets:
+  - {x: -0.4, y: 0, z: -0.4}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0.4, y: 0, z: -0.4}

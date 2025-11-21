@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cb1346b6c1af1459de4fa440c4c767, type: 3}
+  m_Name: Heal
+  m_EditorClassIdentifier: 
+  unitName: Heal
+  prefabs:
+  - {fileID: 413606237440644276, guid: d76ddcc2fad43bd47885503f271e2a53, type: 3}
+  elixirCost: 4
+  spawnOffsets:
+  - {x: 0, y: 0, z: 0}
