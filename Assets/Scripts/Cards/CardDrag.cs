@@ -137,7 +137,7 @@ public class CardDrag : MonoBehaviour
             Instantiate(data.prefabs[i], spawnPos, Quaternion.identity);
         }
 
-        Destroy(gameObject);
+        FindObjectOfType<CardCycleManager>().OnCardUsed(this);
     }
 
 
