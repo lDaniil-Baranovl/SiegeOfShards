@@ -10,16 +10,17 @@ public class CardDrag : MonoBehaviour
     public UnitCost data;
 
     private bool isDragging = false;
-    private Vector3 startPosition;
 
-    public CanvasGroup canvasGroup;
+    [HideInInspector] public Transform slotPoint;
+
+
+    //public CanvasGroup canvasGroup; - сереый цвет когда не хватает эликсира
     void Start()
     {
-        startPosition = transform.position;
 
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        //canvasGroup = GetComponent<CanvasGroup>();
+        //if (canvasGroup == null)
+        //    canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
 
     void Update()
@@ -37,18 +38,18 @@ public class CardDrag : MonoBehaviour
     {
         int current = ElixirManager.Instance.GetElixir();
 
-        if (current < data.elixirCost)
-        {
-            canvasGroup.alpha = 0.4f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-        }
-        else
-        {
-            canvasGroup.alpha = 1f;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-        }
+        //if (current < data.elixirCost)
+        //{
+        //    canvasGroup.alpha = 0.4f;
+        //    canvasGroup.interactable = false;
+        //    canvasGroup.blocksRaycasts = false;
+        //}
+        //else
+        //{
+        //    canvasGroup.alpha = 1f;
+        //    canvasGroup.interactable = true;
+        //    canvasGroup.blocksRaycasts = true;
+        //}
     }
     private void HandleMouseInput()
     {
@@ -143,6 +144,7 @@ public class CardDrag : MonoBehaviour
 
     private void ReturnCard()
     {
-        transform.position = startPosition;
+        transform.position = slotPoint.position;
+        transform.rotation = slotPoint.rotation;
     }
 }
