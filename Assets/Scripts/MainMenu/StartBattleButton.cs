@@ -4,14 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class StartBattleButton : MonoBehaviour
 {
-    public Button startButton;
-
-    private void Start()
-    {
-        startButton.onClick.AddListener(OnStart);
-    }
-
-    private void OnStart()
+    public void OnStart()
     {
         if (DeckManager.Instance.selectedDeck.Count == 8)
         {
