@@ -1,150 +1,126 @@
-using UnityEngine;
+//using UnityEngine;
 
-public class CardDrag : MonoBehaviour
-{
-    [Header("Summon Circle")]
-    public GameObject summonCirclePrefab;
-    private GameObject summonCircleInstance;
+//public class CardDrag : MonoBehaviour
+//{
+//    [Header("Summon Circle")]
+//    public GameObject summonCirclePrefab;
+//    private GameObject summonCircleInstance;
 
-    public LayerMask battlefieldMask;
-    public UnitCost data;
+//    public LayerMask battlefieldMask;
+//    public UnitCost data;
 
-    private bool isDragging = false;
+//    private bool isDragging = false;
 
-    [HideInInspector] public Transform slotPoint;
+//    [HideInInspector] public Transform slotPoint;
 
+//    void Update()
+//    {
+//        UpdateCardLockState();
 
-    //public CanvasGroup canvasGroup; - сереый цвет когда не хватает эликсира
-    void Start()
-    {
+//        HandleMouseInput();
 
-        //canvasGroup = GetComponent<CanvasGroup>();
-        //if (canvasGroup == null)
-        //    canvasGroup = gameObject.AddComponent<CanvasGroup>();
-    }
+//        if (!isDragging) return;
 
-    void Update()
-    {
-        UpdateCardLockState();
+//        FollowCursor();
+//        UpdateSummonCircle();
+//    }
+//    private void UpdateCardLockState()
+//    {
+//        int current = ElixirManager.Instance.GetElixir();
+//    }
+//    private void HandleMouseInput()
+//    {
+//        if (Input.GetMouseButtonDown(0))
+//        {
+//            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        HandleMouseInput();
+//            if (Physics.Raycast(r, out RaycastHit hit) && hit.transform == transform)
+//            {
+//                if (ElixirManager.Instance.GetElixir() < data.elixirCost)
+//                    return;
+//                BeginDrag();
+//            }
+//        } 
+//        if (Input.GetMouseButtonUp(0) && isDragging)
+//        {
+//            EndDrag();
+//        }
+//    }
 
-        if (!isDragging) return;
+//    private void BeginDrag()
+//    {
+//        isDragging = true;
+//    }
 
-        FollowCursor();
-        UpdateSummonCircle();
-    }
-    private void UpdateCardLockState()
-    {
-        int current = ElixirManager.Instance.GetElixir();
+//    private void EndDrag()
+//    {
+//        isDragging = false;
 
-        //if (current < data.elixirCost)
-        //{
-        //    canvasGroup.alpha = 0.4f;
-        //    canvasGroup.interactable = false;
-        //    canvasGroup.blocksRaycasts = false;
-        //}
-        //else
-        //{
-        //    canvasGroup.alpha = 1f;
-        //    canvasGroup.interactable = true;
-        //    canvasGroup.blocksRaycasts = true;
-        //}
-    }
-    private void HandleMouseInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+//        if (summonCircleInstance != null)
+//            summonCircleInstance.SetActive(false);
 
-            if (Physics.Raycast(r, out RaycastHit hit) && hit.transform == transform)
-            {
-                if (ElixirManager.Instance.GetElixir() < data.elixirCost)
-                    return;
-                BeginDrag();
-            }
-        } 
-        if (Input.GetMouseButtonUp(0) && isDragging)
-        {
-            EndDrag();
-        }
-    }
+//        if (!Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
+//            out RaycastHit hit, 20f, battlefieldMask))
+//        {
+//            ReturnCard();
+//            return;
+//        }
 
-    private void BeginDrag()
-    {
-        isDragging = true;
-    }
+//        if (!ElixirManager.Instance.TrySpend(data.elixirCost))
+//        {
+//            ReturnCard();
+//            return;
+//        }
 
-    private void EndDrag()
-    {
-        isDragging = false;
+//        SpawnUnit(hit.point);
+//    }
 
-        if (summonCircleInstance != null)
-            summonCircleInstance.SetActive(false);
+//    private void UpdateSummonCircle()
+//    {
+//        if (Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
+//            out RaycastHit hit, 20f, battlefieldMask))
+//        {
+//            if (summonCircleInstance == null)
+//                summonCircleInstance = Instantiate(summonCirclePrefab);
 
-        if (!Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
-            out RaycastHit hit, 20f, battlefieldMask))
-        {
-            ReturnCard();
-            return;
-        }
+//            summonCircleInstance.SetActive(true);
+//            summonCircleInstance.transform.position = hit.point + Vector3.up * 0.05f;
+//        }
+//        else
+//        {
+//            if (summonCircleInstance != null)
+//                summonCircleInstance.SetActive(false);
+//        }
+//    }
 
-        if (!ElixirManager.Instance.TrySpend(data.elixirCost))
-        {
-            ReturnCard();
-            return;
-        }
+//    private void FollowCursor()
+//    {
+//        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        SpawnUnit(hit.point);
-    }
+//        if (Physics.Raycast(r, out RaycastHit hit, 100f))
+//        {
+//            transform.position = hit.point + Vector3.up * 0.3f;
+//        }
+//    }
 
-    private void UpdateSummonCircle()
-    {
-        if (Physics.Raycast(transform.position + Vector3.up * 2f, Vector3.down,
-            out RaycastHit hit, 20f, battlefieldMask))
-        {
-            if (summonCircleInstance == null)
-                summonCircleInstance = Instantiate(summonCirclePrefab);
+//    private void SpawnUnit(Vector3 pos)
+//    {
+//        for (int i = 0; i < data.prefabs.Length; i++)
+//        {
+//            Vector3 spawnPos = pos;
 
-            summonCircleInstance.SetActive(true);
-            summonCircleInstance.transform.position = hit.point + Vector3.up * 0.05f;
-        }
-        else
-        {
-            if (summonCircleInstance != null)
-                summonCircleInstance.SetActive(false);
-        }
-    }
+//            if (data.spawnOffsets != null && i < data.spawnOffsets.Length)
+//                spawnPos += data.spawnOffsets[i];
 
-    private void FollowCursor()
-    {
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(r, out RaycastHit hit, 100f))
-        {
-            transform.position = hit.point + Vector3.up * 0.3f;
-        }
-    }
-
-    private void SpawnUnit(Vector3 pos)
-    {
-        for (int i = 0; i < data.prefabs.Length; i++)
-        {
-            Vector3 spawnPos = pos;
-
-            if (data.spawnOffsets != null && i < data.spawnOffsets.Length)
-                spawnPos += data.spawnOffsets[i];
-
-            Instantiate(data.prefabs[i], spawnPos, Quaternion.identity);
-        }
-
-        FindObjectOfType<CardCycleManager>().OnCardUsed(this);
-    }
+//            Instantiate(data.prefabs[i], spawnPos, Quaternion.identity);
+//        }
+//        FindObjectOfType<CardCycleManager>().OnCardUsed(this);
+//    }
 
 
-    private void ReturnCard()
-    {
-        transform.position = slotPoint.position;
-        transform.rotation = slotPoint.rotation;
-    }
-}
+//    private void ReturnCard()
+//    {
+//        transform.position = slotPoint.position;
+//        transform.rotation = slotPoint.rotation;
+//    }
+//}

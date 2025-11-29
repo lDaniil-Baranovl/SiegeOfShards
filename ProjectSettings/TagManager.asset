@@ -8,6 +8,7 @@ TagManager:
   - EnemyUnit
   - PeacefulUnit
   - Animal
+  - RightController
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,190 @@
+/// <summary>
+/// public InputActionProperty LeftGrip;
+/// в Awake: LeftGrip.action.Enable();
+/// LeftGrip.action.ReadValue<float>
+/// <XRController>{RightHand}/{Grip}
+/// </summary>
+/// 
+using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections;
+
+public class CardDragXR : MonoBehaviour
+{
+    [Header("XR")]
+    public Transform rightController;       // Контроллер, откуда бросаем луч
+    public InputActionProperty gripAction;  // Значение грипа
+
+    [Header("Battlefield")]
+    public LayerMask battlefieldMask;
+    public GameObject summonCirclePrefab;
+
+    private GameObject summonCircleInstance;
+    private bool isHeld = false;
+
+    public UnitCost data;
+    public Transform homeSlot;
+
+    private bool isReturning = false;
+    private Coroutine returnRoutine;
+    void Start()
+    {
+        rightController = XRPlayer.Instance.rightController;
+    }
+
+    void Awake()
+    {
+        gripAction.action.Enable();
+    }
+    public void Init(UnitCost cardData)
+    {
+        data = cardData;
+    }
+
+    void Update()
+    {
+        float grip = gripAction.action.ReadValue<float>();
+
+        // Взяли карту
+        if (!isHeld && grip > 0.7f)
+        {
+            StartHolding();
+        }
+        // Отпустили
+        else if (isHeld && grip < 0.2f)
+        {
+            Release();
+        }
+
+        // Пока держим карту — обновляем круг
+        if (isHeld)
+            UpdateSummonCircle();
+    }
+
+    private void StartHolding()
+    {
+        isHeld = true;
+        Debug.Log("Карта взята XR");
+    }
+
+    private void Release()
+    {
+        isHeld = false;
+
+        if (summonCircleInstance != null)
+            summonCircleInstance.SetActive(false);
+
+        bool used = false;
+
+        // Проверка попадания на поле
+        if (Physics.Raycast(rightController.position, Vector3.down,
+            out RaycastHit hit, 5f, battlefieldMask))
+        {
+            // Проверка эликсира
+            if (ElixirManager.Instance.TrySpend(data.elixirCost))
+            {
+                used = true;
+                SpawnUnit(hit.point);
+                FindObjectOfType<CardCycleManager>().OnCardUsed(this);
+            }
+        }
+
+        if (!used)
+        {
+            ReturnToHome();
+            return;
+        }
+    }
+    public void ReturnToHome()
+    {
+        if (isReturning)
+            return;
+
+        if (homeSlot == null)
+        {
+            Debug.LogError("homeSlot не назначен!");
+            return;
+        }
+
+        isReturning = true;
+
+        if (returnRoutine != null)
+            StopCoroutine(returnRoutine);
+
+        returnRoutine = StartCoroutine(ReturnAnimation());
+    }
+
+    private IEnumerator ReturnAnimation()
+    {
+        Vector3 startPos = transform.position;
+        Quaternion startRot = transform.rotation;
+
+        Vector3 endPos = homeSlot.position;
+        Quaternion endRot = homeSlot.rotation;
+
+        float duration = 0.25f;
+        float t = 0f;
+
+        // ВАЖНО! Перед возвратом — отвязываем от контроллера
+        transform.SetParent(null);
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            float smooth = Mathf.SmoothStep(0, 1, t);
+
+            // ДВИГАЕТ ТОЛЬКО ЭТУ КОНКРЕТНУЮ КАРТУ
+            transform.position = Vector3.Lerp(startPos, endPos, smooth);
+
+            // КРУТИТ ТОЛЬКО ЭТУ КОНКРЕТНУЮ КАРТУ
+            transform.Rotate(0, 900f * Time.deltaTime, 0, Space.Self);
+
+            yield return null;
+        }
+
+        transform.position = endPos;
+        transform.rotation = endRot;
+
+        // Делает карту дочерним объектом слота
+        transform.SetParent(homeSlot.parent);
+
+        isReturning = false;
+        returnRoutine = null;
+    }
+    private void UpdateSummonCircle()
+    {
+        if (!isHeld) return;
+
+        Debug.DrawRay(rightController.position, Vector3.down * 5f, Color.green);
+
+        if (Physics.Raycast(rightController.position, Vector3.down,
+            out RaycastHit hit, 5f, battlefieldMask))
+        {
+            if (summonCircleInstance == null)
+                summonCircleInstance = Instantiate(summonCirclePrefab);
+
+            summonCircleInstance.SetActive(true);
+            summonCircleInstance.transform.position = hit.point + Vector3.up * 0.05f;
+        }
+        else
+        {
+            if (summonCircleInstance != null)
+                summonCircleInstance.SetActive(false);
+        }
+    }
+
+    private void SpawnUnit(Vector3 pos)
+    {
+        for (int i = 0; i < data.prefabs.Length; i++)
+        {
+            Vector3 spawnPos = pos;
+
+            if (data.spawnOffsets != null && i < data.spawnOffsets.Length)
+                spawnPos += data.spawnOffsets[i];
+
+            Instantiate(data.prefabs[i], spawnPos, Quaternion.identity);
+        }
+    }
+
+}
+
