@@ -27,6 +27,10 @@ public class CardDragXR : MonoBehaviour
 
     private bool isReturning = false;
     private Coroutine returnRoutine;
+
+    private bool isHovered = false;
+    public static CardDragXR currentHeldCard = null;
+
     void Start()
     {
         rightController = XRPlayer.Instance.rightController;
@@ -45,8 +49,12 @@ public class CardDragXR : MonoBehaviour
     {
         float grip = gripAction.action.ReadValue<float>();
 
-        // Взяли карту
-        if (!isHeld && grip > 0.7f)
+        // Если уже держим другую карту — выходим
+        if (currentHeldCard != null && currentHeldCard != this)
+            return;
+
+        // Взяли
+        if (!isHeld && isHovered && grip > 0.7f)
         {
             StartHolding();
         }
@@ -56,31 +64,51 @@ public class CardDragXR : MonoBehaviour
             Release();
         }
 
-        // Пока держим карту — обновляем круг
+        // Пока держим карточку — обновляем круг
         if (isHeld)
             UpdateSummonCircle();
+    }
+    public void OnHoverEntered()
+    {
+        if (currentHeldCard != null) return; // если уже держим карту — игнорировать hover
+        isHovered = true;
+    }
+
+    public void OnHoverExited()
+    {
+        if (currentHeldCard != null) return;
+        isHovered = false;
     }
 
     private void StartHolding()
     {
+        // Если уже держим другую карту — эту игнорируем
+        if (currentHeldCard != null && currentHeldCard != this)
+            return;
+
+        currentHeldCard = this;
         isHeld = true;
-        Debug.Log("Карта взята XR");
+
+        Debug.Log("Карта взята XR: " + name);
     }
+
 
     private void Release()
     {
+        if (currentHeldCard != this)
+            return; // не наша карта – не отпускать
+
         isHeld = false;
+        currentHeldCard = null;
 
         if (summonCircleInstance != null)
             summonCircleInstance.SetActive(false);
 
         bool used = false;
 
-        // Проверка попадания на поле
-        if (Physics.Raycast(rightController.position, Vector3.down,
-            out RaycastHit hit, 5f, battlefieldMask))
+        // Проверка поля
+        if (Physics.Raycast(rightController.position, Vector3.down, out RaycastHit hit, 5f, battlefieldMask))
         {
-            // Проверка эликсира
             if (ElixirManager.Instance.TrySpend(data.elixirCost))
             {
                 used = true;
@@ -92,9 +120,9 @@ public class CardDragXR : MonoBehaviour
         if (!used)
         {
             ReturnToHome();
-            return;
         }
     }
+
     public void ReturnToHome()
     {
         if (isReturning)

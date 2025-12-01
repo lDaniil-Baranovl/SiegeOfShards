@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HealthTower : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class HealthTower : MonoBehaviour
             effectBroken1.SetActive(true);
             effectBroken2.SetActive(true);
         }
+
+        BattleManager.Instance.TowerDestroyed(teamID);
     }
     public void Tower_Destroy()
     {
@@ -72,5 +75,10 @@ public class HealthTower : MonoBehaviour
     public void SetTeam(int id)
     {
         teamID = id;
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

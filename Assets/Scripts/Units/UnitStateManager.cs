@@ -36,6 +36,7 @@ public abstract class UnitStateManager : MonoBehaviour
     protected virtual void Update()
     {
         enemyTowers.RemoveAll(tower => tower == null);
+        if (GamePause.paused) return;
     }
     // ================= FREEZE SYSTEM =================
     private float savedSpeed;
