@@ -30,16 +30,24 @@ public class DeckManager : MonoBehaviour
             return false;
 
         selectedDeck.Add(card);
+
+        DeckUI.Instance.RefreshUI();
+
         return true;
     }
 
     public void RemoveFromDeck(UnitCost card)
     {
         selectedDeck.Remove(card);
+
+        DeckUI.Instance.RefreshUI();
     }
 
     public void ClearDeck()
     {
         selectedDeck.Clear();
+
+        DeckUI.Instance.RefreshUI();
     }
+
 }

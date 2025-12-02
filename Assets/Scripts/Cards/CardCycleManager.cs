@@ -44,6 +44,10 @@ public class CardCycleManager : MonoBehaviour
         // Делаем её дочерней левой руки, но С СОХРАНЕНИЕМ мировой позиции
         cardObj.transform.SetParent(XRPlayer.Instance.leftController, true);
 
+        CardVisual visual = cardObj.GetComponent<CardVisual>();
+        if (visual != null)
+            visual.SetIcon(data.icon);
+
         CardDragXR card = cardObj.GetComponent<CardDragXR>();
         card.data = data;
         card.rightController = XRPlayer.Instance.rightController;

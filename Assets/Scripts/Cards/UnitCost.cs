@@ -4,6 +4,7 @@ using UnityEngine;
 public class UnitCost : ScriptableObject
 {
     public string unitName;
+    public Sprite icon;
 
     [Header("Multiple unit prefabs")]
     public GameObject[] prefabs;

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Centaur
   m_EditorClassIdentifier: 
   unitName: Centaur
+  icon: {fileID: 21300000, guid: 209f980f3ede55e4c96946fd0c745789, type: 3}
   prefabs:
   - {fileID: 8660280716068717265, guid: cc9358c2ea10c2f4a81a754f72892d19, type: 3}
-  elixirCost: 6
+  elixirCost: 5
   spawnOffsets:
   - {x: 0, y: 0, z: 0}

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Heal
   m_EditorClassIdentifier: 
   unitName: Heal
+  icon: {fileID: 21300000, guid: 342d12d5a25aca743ad7a0583e9b18d3, type: 3}
   prefabs:
   - {fileID: 413606237440644276, guid: d76ddcc2fad43bd47885503f271e2a53, type: 3}
-  elixirCost: 4
+  elixirCost: 3
   spawnOffsets:
   - {x: 0, y: 0, z: 0}

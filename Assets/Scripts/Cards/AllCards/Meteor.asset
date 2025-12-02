@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Meteor
   m_EditorClassIdentifier: 
   unitName: Meteor
+  icon: {fileID: 21300000, guid: 6726a0ec8c670cc4bbe81f1546f2fa5e, type: 3}
   prefabs:
   - {fileID: 4655073612229518959, guid: 00bbb7a2ed779dd43b8f69197dde4ff0, type: 3}
   elixirCost: 4

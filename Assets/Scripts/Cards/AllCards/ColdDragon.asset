@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ColdDragon
   m_EditorClassIdentifier: 
   unitName: Cold Dragon
+  icon: {fileID: 21300000, guid: a64be8feb95ea1a449ec3bcf934ed229, type: 3}
   prefabs:
   - {fileID: 2816889944905915190, guid: 16a8e4685946d3d49b277cc23ba7cba7, type: 3}
   elixirCost: 5
