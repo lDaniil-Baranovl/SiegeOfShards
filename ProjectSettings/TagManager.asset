@@ -9,6 +9,8 @@ TagManager:
   - PeacefulUnit
   - Animal
   - RightController
+  - DeckSlot
+  - DeckRemove
   layers:
   - Default
   - TransparentFX

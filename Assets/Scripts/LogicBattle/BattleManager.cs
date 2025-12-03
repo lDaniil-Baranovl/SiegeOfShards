@@ -124,6 +124,13 @@ public class BattleManager : MonoBehaviour
         else
             drawText.SetActive(true);
 
+        if (result == "win")
+            GoldManager.Instance.AddGold(40);
+        else if (result == "draw")
+            GoldManager.Instance.AddGold(20);
+        else
+            GoldManager.Instance.AddGold(10);
+
         // ставим игру на паузу
         GamePause.paused = true;
         Time.timeScale = 0f;

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,22 @@ public class DeckUI : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        deckSlots = Resources.FindObjectsOfTypeAll<Image>()
+            .Where(img => img.CompareTag("DeckSlot"))
+            .OrderBy(img => img.name)
+            .ToArray();
+
+        removeButtons = Resources.FindObjectsOfTypeAll<Button>()
+            .Where(btn => btn.CompareTag("DeckRemove"))
+            .OrderBy(btn => btn.name)
+            .ToArray();
+
+        for (int i = 0; i < removeButtons.Length; i++)
+        {
+            int index = i;
+            removeButtons[i].onClick.AddListener(() => RemoveCardAtIndex(index));
+        }
     }
 
     public void RefreshUI()
