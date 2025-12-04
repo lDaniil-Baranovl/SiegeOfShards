@@ -138,6 +138,8 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
+        Time.timeScale = 1f;
+        GamePause.paused = false;
         SceneManager.LoadScene("MainMenu");
     }
 }

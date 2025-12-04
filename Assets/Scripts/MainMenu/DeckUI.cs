@@ -6,57 +6,98 @@ public class DeckUI : MonoBehaviour
 {
     public static DeckUI Instance;
 
+    public GameObject[] buttonsEdit;
+    private bool editMode = false;
+
+    private UnitCost[] slotCards = new UnitCost[8];
+    
+
     [Header("8 UI слотов под карты игрока")]
-    public Image[] deckSlots;
+    public Button[] deckSlots;
     [Header(" нопки-крестики дл€ удалени€ карт (по одному на слот)")]
-    public Button[] removeButtons;
+    public Image[] removeButtons;
     private void Awake()
     {
         Instance = this;
 
-        deckSlots = Resources.FindObjectsOfTypeAll<Image>()
+        deckSlots = Resources.FindObjectsOfTypeAll<Button>()
             .Where(img => img.CompareTag("DeckSlot"))
             .OrderBy(img => img.name)
             .ToArray();
 
-        removeButtons = Resources.FindObjectsOfTypeAll<Button>()
+        removeButtons = Resources.FindObjectsOfTypeAll<Image>()
             .Where(btn => btn.CompareTag("DeckRemove"))
             .OrderBy(btn => btn.name)
             .ToArray();
-
-        for (int i = 0; i < removeButtons.Length; i++)
+        foreach (var slot in deckSlots)
         {
-            int index = i;
-            removeButtons[i].onClick.AddListener(() => RemoveCardAtIndex(index));
+            slot.transition = Selectable.Transition.None;
+            slot.interactable = false;
         }
     }
+    private void OnEnable() { if (DeckManager.Instance != null) RefreshUI(); }
 
     public void RefreshUI()
     {
-        int count = DeckManager.Instance.selectedDeck.Count;
+        var deck = DeckManager.Instance.selectedDeck;
 
         for (int i = 0; i < deckSlots.Length; i++)
         {
-            if (i < count)
+            Image img = deckSlots[i].GetComponent<Image>();
+
+            if (i < deck.Count)
             {
-                var card = DeckManager.Instance.selectedDeck[i];
-                deckSlots[i].sprite = card.icon;
-                deckSlots[i].color = Color.white;
+                var card = deck[i];
+                slotCards[i] = card; // сохран€ем!
+
+                img.sprite = card.icon;
+                img.color = Color.white;
             }
             else
             {
-                deckSlots[i].sprite = null;
-                deckSlots[i].color = new Color(1, 1, 1, 0);
+                slotCards[i] = null; // слот пустой
+
+                img.sprite = null;
+                img.color = new Color(1, 1, 1, 0);
             }
         }
     }
-    public void RemoveCardAtIndex(int index)
+
+    public void OnEdit()
     {
-        if (index < 0 || index >= DeckManager.Instance.selectedDeck.Count)
+        editMode = !editMode;
+
+        foreach (var button in buttonsEdit)
+            button.gameObject.SetActive(editMode);
+
+        for (int i = 0; i < deckSlots.Length; i++)
+        {
+            var slot = deckSlots[i];
+
+            slot.onClick.RemoveAllListeners();
+
+            if (editMode)
+            {
+                int index = i;
+                slot.onClick.AddListener(() => RemoveCard(index));
+                slot.interactable = true;
+            }
+            else
+            {
+                slot.interactable = false;
+            }
+        }
+    }
+
+
+    public void RemoveCard(int slotIndex)
+    {
+        UnitCost card = slotCards[slotIndex];
+
+        if (card == null)
             return;
 
-        DeckManager.Instance.selectedDeck.RemoveAt(index);
-        RefreshUI();
+        DeckManager.Instance.RemoveFromDeck(card);
     }
 
 }
