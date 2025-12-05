@@ -8,12 +8,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class CardDragXR : MonoBehaviour
 {
     [Header("XR")]
-    public Transform rightController;       // Контроллер, откуда бросаем луч
-    public InputActionProperty gripAction;  // Значение грипа
+    public Transform rightController;
+    public InputActionProperty gripAction;
 
     [Header("Battlefield")]
     public LayerMask battlefieldMask;
@@ -31,15 +33,41 @@ public class CardDragXR : MonoBehaviour
     private bool isHovered = false;
     public static CardDragXR currentHeldCard = null;
 
+    private XRGrabInteractable grab;
+
+    void Awake()
+    {
+        gripAction.action.Enable();
+        grab = GetComponent<XRGrabInteractable>();
+        if (grab != null)
+        {
+            // Подписываемся, чтобы реагировать также на select (если XR toolkit захватывает объект напрямую)
+            grab.selectEntered.AddListener(OnSelectEntered);
+            grab.selectExited.AddListener(OnSelectExited);
+        }
+    }
+
     void Start()
     {
         rightController = XRPlayer.Instance.rightController;
     }
 
-    void Awake()
+    // Если XR toolkit захватил объект — помечаем как взятый
+    private void OnSelectEntered(SelectEnterEventArgs args)
     {
-        gripAction.action.Enable();
+        // Если уже держим другую карту — сбрасываем (не даём второму контроллеру взять)
+        if (currentHeldCard != null && currentHeldCard != this)
+            return;
+
+        StartHolding();
     }
+
+    // Если XR toolkit отпустил — вызываем нашу логику релиза
+    private void OnSelectExited(SelectExitEventArgs args)
+    {
+        Release();
+    }
+
     public void Init(UnitCost cardData)
     {
         data = cardData;
@@ -53,24 +81,27 @@ public class CardDragXR : MonoBehaviour
         if (currentHeldCard != null && currentHeldCard != this)
             return;
 
-        // Взяли
+        // Взяли через grip + hover (на случай, если toolkit не сработал)
         if (!isHeld && isHovered && grip > 0.7f)
         {
+            if (!IsActuallyUnderControllerRay()) return;
+            if (grab != null) grab.enabled = false;
             StartHolding();
         }
-        // Отпустили
+        // Отпустили через grip
         else if (isHeld && grip < 0.2f)
         {
             Release();
+            // снова включаем grab (оно будет готово для следующего спавна)
+            if (grab != null) grab.enabled = true;
         }
 
-        // Пока держим карточку — обновляем круг
         if (isHeld)
             UpdateSummonCircle();
     }
     public void OnHoverEntered()
     {
-        if (currentHeldCard != null) return; // если уже держим карту — игнорировать hover
+        if (currentHeldCard != null) return;
         isHovered = true;
     }
 
@@ -82,21 +113,24 @@ public class CardDragXR : MonoBehaviour
 
     private void StartHolding()
     {
-        // Если уже держим другую карту — эту игнорируем
         if (currentHeldCard != null && currentHeldCard != this)
             return;
 
         currentHeldCard = this;
         isHeld = true;
 
+        // Привяжем картe позицию под контроллер (иногда полезно сделать parent)
+        transform.SetParent(rightController, true); 
+
         Debug.Log("Карта взята XR: " + name);
     }
-
 
     private void Release()
     {
         if (currentHeldCard != this)
-            return; // не наша карта – не отпускать
+            return;
+
+        transform.SetParent(null, true);
 
         isHeld = false;
         currentHeldCard = null;
@@ -106,7 +140,6 @@ public class CardDragXR : MonoBehaviour
 
         bool used = false;
 
-        // Проверка поля
         if (Physics.Raycast(rightController.position, Vector3.down, out RaycastHit hit, 5f, battlefieldMask))
         {
             if (ElixirManager.Instance.TrySpend(data.elixirCost))
@@ -119,7 +152,16 @@ public class CardDragXR : MonoBehaviour
 
         if (!used)
         {
+            // Прежде чем анимировать возврат — убедимся, что XRGrab не мешает.
+            if (grab != null)
+            {
+                // временно отключаем компонент — это заставит interactor отпустить объект
+                grab.enabled = false;
+            }
+
             ReturnToHome();
+
+            // В конце ReturnAnimation мы снова включим grab (см. ReturnAnimation)
         }
     }
 
@@ -139,6 +181,9 @@ public class CardDragXR : MonoBehaviour
         if (returnRoutine != null)
             StopCoroutine(returnRoutine);
 
+        // Гарантированно отвязываем до анимации
+        transform.SetParent(null);
+
         returnRoutine = StartCoroutine(ReturnAnimation());
     }
 
@@ -153,18 +198,12 @@ public class CardDragXR : MonoBehaviour
         float duration = 0.25f;
         float t = 0f;
 
-        // ВАЖНО! Перед возвратом — отвязываем от контроллера
-        transform.SetParent(null);
-
         while (t < 1f)
         {
             t += Time.deltaTime / duration;
             float smooth = Mathf.SmoothStep(0, 1, t);
 
-            // ДВИГАЕТ ТОЛЬКО ЭТУ КОНКРЕТНУЮ КАРТУ
             transform.position = Vector3.Lerp(startPos, endPos, smooth);
-
-            // КРУТИТ ТОЛЬКО ЭТУ КОНКРЕТНУЮ КАРТУ
             transform.Rotate(0, 900f * Time.deltaTime, 0, Space.Self);
 
             yield return null;
@@ -173,12 +212,17 @@ public class CardDragXR : MonoBehaviour
         transform.position = endPos;
         transform.rotation = endRot;
 
-        // Делает карту дочерним объектом слота
-        transform.SetParent(homeSlot.parent);
+        // Делаем карту дочерним объектом слота (чтобы следующее чтение позиции было корректным)
+        transform.SetParent(homeSlot, true);
+
+        // Возврат завершён — снова можно включить grab
+        if (grab != null)
+            grab.enabled = true;
 
         isReturning = false;
         returnRoutine = null;
     }
+
     private void UpdateSummonCircle()
     {
         if (!isHeld) return;
@@ -214,5 +258,23 @@ public class CardDragXR : MonoBehaviour
         }
     }
 
+    private bool IsActuallyUnderControllerRay()
+    {
+        if (rightController == null) return false;
+
+        if (Physics.Raycast(
+                rightController.position,
+                rightController.forward,
+                out RaycastHit hit,
+                10f))
+        {
+            CardDragXR card = hit.collider.GetComponentInParent<CardDragXR>();
+            return card == this;
+        }
+
+        return false;
+    }
+
 }
+
 
