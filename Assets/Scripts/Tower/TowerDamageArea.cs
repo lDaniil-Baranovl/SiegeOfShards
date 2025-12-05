@@ -118,19 +118,20 @@ public class TowerSingleTargetDamage : MonoBehaviour
 
         return closest;
     }
-
     private IEnumerator AttackRoutine()
     {
         while (true)
         {
             if (currentTarget == null || currentTarget.IsDead)
             {
+                attackRoutine = null;
                 TryAcquireTarget();
                 yield break;
             }
 
             currentTarget.ApplyDamage(Mathf.RoundToInt(damagePerTick), "Tower");
             yield return new WaitForSeconds(tickRate);
+            //fixx
         }
     }
 }
