@@ -649,7 +649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b213d3e3c7f3109449eb46a4c8ee42f0, type: 3}
   m_Name: XrPerformanceSettingsFeature Android
   m_EditorClassIdentifier: 
-  m_enabled: 0
+  m_enabled: 1
   nameUi: XR Performance Settings
   version: 1.0.0
   featureIdInternal: com.unity.openxr.feature.extension.performance_settings
@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b213d3e3c7f3109449eb46a4c8ee42f0, type: 3}
   m_Name: XrPerformanceSettingsFeature Standalone
   m_EditorClassIdentifier: 
-  m_enabled: 0
+  m_enabled: 1
   nameUi: XR Performance Settings
   version: 1.0.0
   featureIdInternal: com.unity.openxr.feature.extension.performance_settings
@@ -1120,7 +1120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3aced3429e5911458f4da2dac9d0f29, type: 3}
   m_Name: MetaHandTrackingAim Standalone
   m_EditorClassIdentifier: 
-  m_enabled: 0
+  m_enabled: 1
   nameUi: Meta Hand Tracking Aim
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.metahandtrackingaim
@@ -1200,7 +1200,7 @@ MonoBehaviour:
     m_List: 00000000
   m_depthSubmissionMode: 0
   m_spacewarpMotionVectorTextureFormat: 0
-  m_optimizeBufferDiscards: 0
+  m_optimizeBufferDiscards: 1
   m_symmetricProjection: 0
   m_foveatedRenderingApi: 0
 --- !u!114 &4555064770824716571
@@ -1215,7 +1215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3aced3429e5911458f4da2dac9d0f29, type: 3}
   m_Name: MetaHandTrackingAim Android
   m_EditorClassIdentifier: 
-  m_enabled: 0
+  m_enabled: 1
   nameUi: Meta Hand Tracking Aim
   version: 0.0.1
   featureIdInternal: com.unity.openxr.feature.input.metahandtrackingaim
