@@ -146,6 +146,11 @@ public class CardDragXR : MonoBehaviour
             {
                 used = true;
                 SpawnUnit(hit.point);
+                if (summonCircleInstance != null)
+                {
+                    Destroy(summonCircleInstance);
+                    summonCircleInstance = null;
+                }
                 FindObjectOfType<CardCycleManager>().OnCardUsed(this);
             }
         }
@@ -169,6 +174,12 @@ public class CardDragXR : MonoBehaviour
     {
         if (isReturning)
             return;
+
+        if (summonCircleInstance != null)
+        {
+            Destroy(summonCircleInstance);
+            summonCircleInstance = null;
+        }
 
         if (homeSlot == null)
         {
