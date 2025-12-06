@@ -26,13 +26,6 @@ public class HealthTower : MonoBehaviour
         tower_currentHealth = tower_maxHealth;
         tower_ruines.SetActive(false);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Tower_Destroy();
-        }
-    }
     public void Tower_ApplyDamage(int damageAmount)
     {
         tower_currentHealth -= damageAmount;
