@@ -7,7 +7,7 @@ public class NavMeshBuildOnline : MonoBehaviour
     {
         navMeshhSur = GetComponent<NavMeshSurface>();
     }
-    void Update()
+    public void BuildNavMeshOnce()
     {
         navMeshhSur.BuildNavMesh();
     }

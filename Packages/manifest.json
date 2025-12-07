@@ -35,6 +35,7 @@
     "com.unity.xr.hands": "1.5.1",
     "com.unity.xr.interaction.toolkit": "3.0.9",
     "com.unity.xr.meta-openxr": "2.3.0",
+    "com.unity.xr.oculus": "4.3.0",
     "com.unity.xr.openxr": "1.13.2",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",

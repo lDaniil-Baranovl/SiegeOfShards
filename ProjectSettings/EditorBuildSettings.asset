@@ -12,6 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/testMechanic.unity
     guid: a3284fb7de17f124db76972652c41e55
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: b1d046c1ff7bd774484bcecf17f88583, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: c3bce5b7143af2f4b8f6d4dc6a654a1a, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 2f7485057d11f30468a645c2004b4f61, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

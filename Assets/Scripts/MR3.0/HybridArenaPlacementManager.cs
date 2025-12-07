@@ -338,7 +338,7 @@ public class HybridArenaPlacementManager : MonoBehaviour
         var navMeshBuilder = FindObjectOfType<NavMeshBuildOnline>();
         if (navMeshBuilder != null)
         {
-            // navMeshBuilder.BuildNavMeshOnce();
+            navMeshBuilder.BuildNavMeshOnce();
             Debug.Log("[HybridPlacement] NavMesh rebuild triggered");
         }
 
