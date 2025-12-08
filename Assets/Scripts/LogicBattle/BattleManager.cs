@@ -18,6 +18,12 @@ public class BattleManager : MonoBehaviour
     public GameObject defeatText;
     public GameObject drawText;
 
+    [Header("Тип награды")]
+    public GameObject get_gold40;
+    public GameObject get_gold20;
+    public GameObject get_gold10;
+    public GameObject get_case;
+
     private int blueDestroyed = 0;
     private int redDestroyed = 0;
 
@@ -39,6 +45,10 @@ public class BattleManager : MonoBehaviour
         victoryText.SetActive(false);
         defeatText.SetActive(false);
         drawText.SetActive(false);
+        get_gold10.SetActive(false);
+        get_gold20.SetActive(false);
+        get_gold40.SetActive(false);
+        get_case.SetActive(false);
     }
 
     private void Update()
@@ -115,14 +125,29 @@ public class BattleManager : MonoBehaviour
         victoryText.SetActive(false);
         defeatText.SetActive(false);
         drawText.SetActive(false);
+        get_gold10.SetActive(false);
+        get_gold20.SetActive(false);
+        get_gold40.SetActive(false);
+        get_case.SetActive(false);
 
         // включаем нужное
-        if (result == "win")
+        if (result == "win") 
+        {
+            TryOpenCaseManager.Instance.AddCaseAttempt(1);
             victoryText.SetActive(true);
+            get_gold40.SetActive(true);
+            get_case.SetActive(true);
+        }
         else if (result == "lose")
+        {
             defeatText.SetActive(true);
+            get_gold10.SetActive(true);
+        }
         else
+        {
             drawText.SetActive(true);
+            get_gold20.SetActive(true);
+        }
 
         if (result == "win")
             GoldManager.Instance.AddGold(40);

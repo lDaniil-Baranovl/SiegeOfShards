@@ -2,28 +2,41 @@ using UnityEngine;
 
 public class SpawnInHand : MonoBehaviour
 {
-    [Header("Префаб, который появится в руке")]
     public GameObject itemPrefab;
-
-    [Header("Точка, где будет появляться предмет (кость руки)")]
     public Transform handPoint;
+    public int casePrice = 150;
 
     private GameObject currentItem;
 
-    // Вызывайте этот метод через кнопку Unity (OnClick)
     public void SpawnItem()
     {
-        // Если в руке уже есть предмет — удаляем
-        if (currentItem != null)
+        // 1. Проверяем есть ли попытки
+        bool canUse = TryOpenCaseManager.Instance.UseCaseAttempt();
+
+        if (!canUse)
         {
-            Destroy(currentItem);
+            Debug.Log("Нет попыток! Попробую купить...");
+
+            // 2. Если попытки закончились — пытаемся купить кейс
+            bool bought = TryOpenCaseManager.Instance.BuyCase(casePrice);
+
+            if (!bought)
+            {
+                Debug.Log("Не хватает золота для покупки кейса!");
+                return;
+            }
+
+            Debug.Log("Кейс куплен за золото!");
         }
 
-        // Создаём объект
-        currentItem = Instantiate(itemPrefab, handPoint);
+        // 3. Спавним предмет
+        if (currentItem != null)
+            Destroy(currentItem);
 
-        // Выравниваем позицию и поворот относительно руки
+        currentItem = Instantiate(itemPrefab, handPoint);
         currentItem.transform.localPosition = Vector3.zero;
         currentItem.transform.localRotation = Quaternion.identity;
+
+        Debug.Log("Кейс открыт, предмет выдан!");
     }
 }
