@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Skeletons
   icon: {fileID: 21300000, guid: 87e98f84fd4194a4482f8ad85011cbf7, type: 3}
+  cardType: 0
+  spellType: 0
   prefabs:
   - {fileID: 1523308016286564832, guid: 77a86f1537f52a144a1fc702ed736193, type: 3}
   - {fileID: 1427721808480448209, guid: 0bad6b89d873fcb4d8b0fa21f60eec04, type: 3}

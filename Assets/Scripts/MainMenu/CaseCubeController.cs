@@ -29,7 +29,7 @@ public class CaseCubeController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        while (rb.velocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f)
+        while (rb.linearVelocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f)
             yield return null;
 
         GiveRandomReward();

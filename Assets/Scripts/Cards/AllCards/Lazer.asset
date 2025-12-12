@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Lazer
   icon: {fileID: 21300000, guid: 439a97327dcd7b44886574ae1fd007b4, type: 3}
+  cardType: 1
+  spellType: 1
   prefabs:
   - {fileID: 8660585078121705017, guid: 619f75b476e6d6f47805575e317bdd36, type: 3}
   elixirCost: 5
