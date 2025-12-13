@@ -9,7 +9,7 @@ public class CaseCubeController : MonoBehaviour
     public UnitCost[] possibleCards;
 
     [Header("UI награды (4 картинки)")]
-    public Image[] rewardIcons; // ← 4 Image в инспекторе
+    public Image rewardIcon; // ← 4 Image в инспекторе
     public TextMeshProUGUI rewardText;
     public Transform rewardFace;
 
@@ -52,11 +52,8 @@ public class CaseCubeController : MonoBehaviour
         CardUpgradeManager.Instance.AddFragments(card, amount);
 
         // 3. Показываем спрайт героя во всех 4 Image
-        foreach (Image img in rewardIcons)
-        {
-            img.sprite = card.icon;
-            img.enabled = true;
-        }
+        rewardIcon.sprite = card.icon;
+        rewardIcon.enabled = true;
 
         // 4. Текст награды
         rewardText.text = $"+{amount}";

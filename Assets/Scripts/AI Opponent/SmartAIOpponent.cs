@@ -28,9 +28,8 @@ public class SmartAIOpponent : MonoBehaviour
     [Header("Card Cycle System (like Clash Royale)")]
     [SerializeField] private int handSize = 4;
 
-    [Header("Spawn Zone (like RandomSpawner)")]
-    [SerializeField] private Vector3 spawnAreaCenter = Vector3.zero;
-    [SerializeField] private Vector3 spawnAreaSize = new Vector3(10f, 0f, 10f);
+    [Header("Spawn Zone")]
+    [SerializeField] private BoxCollider spawnZone;
     [SerializeField] private bool useSpawnArea = true;
 
     private int currentElixir;
@@ -301,22 +300,16 @@ public class SmartAIOpponent : MonoBehaviour
 
     private Vector3 ClampToSpawnArea(Vector3 position)
     {
-        Vector3 clamped = position;
+        if (spawnZone == null)
+            return position;
 
-        float halfSizeX = spawnAreaSize.x / 2f;
-        float halfSizeZ = spawnAreaSize.z / 2f;
+        Bounds bounds = spawnZone.bounds;
 
-        clamped.x = Mathf.Clamp(position.x,
-            spawnAreaCenter.x - halfSizeX,
-            spawnAreaCenter.x + halfSizeX);
-
-        clamped.z = Mathf.Clamp(position.z,
-            spawnAreaCenter.z - halfSizeZ,
-            spawnAreaCenter.z + halfSizeZ);
-
-        clamped.y = spawnAreaCenter.y;
-
-        return clamped;
+        return new Vector3(
+            Mathf.Clamp(position.x, bounds.min.x, bounds.max.x),
+            bounds.center.y,
+            Mathf.Clamp(position.z, bounds.min.z, bounds.max.z)
+        );
     }
 
     private void SetupSpawnedObject(GameObject obj)
@@ -441,13 +434,14 @@ public class SmartAIOpponent : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (useSpawnArea)
+        if (spawnZone != null)
         {
-            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
-            Gizmos.DrawCube(spawnAreaCenter, spawnAreaSize);
+            Gizmos.color = new Color(0f, 1f, 0f, 0.25f);
+            Gizmos.DrawCube(spawnZone.bounds.center, spawnZone.bounds.size);
 
             Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(spawnAreaCenter, spawnAreaSize);
+            Gizmos.DrawWireCube(spawnZone.bounds.center, spawnZone.bounds.size);
         }
     }
+
 }
