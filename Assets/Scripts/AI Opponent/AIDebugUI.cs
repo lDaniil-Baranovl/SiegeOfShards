@@ -74,6 +74,17 @@ public class AIDebugUI : MonoBehaviour
         debugInfo += $"<color=yellow>Elixir:</color> {aiOpponent.GetCurrentElixir()}/10\n";
         debugInfo += $"<color=cyan>Strategy:</color> {aiOpponent.GetCurrentStrategy()}\n";
         debugInfo += $"<color=red>Threat:</color> {state.threatLevel}\n";
+
+        debugInfo += $"\n<b>Hand ({aiOpponent.GetCurrentHand().Count}/{aiOpponent.GetHandSize()}):</b>\n";
+        foreach (var card in aiOpponent.GetCurrentHand())
+        {
+            if (card != null)
+            {
+                string cardColor = card.elixirCost <= aiOpponent.GetCurrentElixir() ? "lime" : "gray";
+                debugInfo += $"  <color={cardColor}>{card.unitName}({card.elixirCost})</color>\n";
+            }
+        }
+
         debugInfo += $"\n<b>Units:</b>\n";
         debugInfo += $"  Player: {state.playerUnitsCount}\n";
         debugInfo += $"  - Flying: <color=cyan>{state.playerFlyingCount}</color>\n";

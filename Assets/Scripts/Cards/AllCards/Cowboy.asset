@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Cowboy
   icon: {fileID: 21300000, guid: fb04a7a2c8271e24eaf9732b9e20cf72, type: 3}
+  cardType: 0
+  spellType: 0
+  isFlying: 0
+  canTargetAir: 1
   prefabs:
   - {fileID: 6150165414868209971, guid: 0dfb14fe4115fef469f2ed61c836e85d, type: 3}
   elixirCost: 4

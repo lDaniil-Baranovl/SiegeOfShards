@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Fire Dragon
   icon: {fileID: 21300000, guid: 04a7b68ca66fb204aad01cad75f0433a, type: 3}
+  cardType: 0
+  spellType: 0
+  isFlying: 0
+  canTargetAir: 1
   prefabs:
   - {fileID: 6325779436469287731, guid: efe5789d25f66164b9b5aaf187d219aa, type: 3}
   elixirCost: 4

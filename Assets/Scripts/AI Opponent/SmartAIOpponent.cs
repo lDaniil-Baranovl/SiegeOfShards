@@ -22,12 +22,23 @@ public class SmartAIOpponent : MonoBehaviour
     [SerializeField] private int elixirReserve = 3;
     [SerializeField] private float passivityThreshold = 8f;
 
-    [Header("AI Deck")]
+    [Header("AI Deck (8 cards total)")]
     [SerializeField] private List<UnitCost> aiDeck = new List<UnitCost>();
+
+    [Header("Card Cycle System (like Clash Royale)")]
+    [SerializeField] private int handSize = 4;
+
+    [Header("Spawn Zone (like RandomSpawner)")]
+    [SerializeField] private Vector3 spawnAreaCenter = Vector3.zero;
+    [SerializeField] private Vector3 spawnAreaSize = new Vector3(10f, 0f, 10f);
+    [SerializeField] private bool useSpawnArea = true;
 
     private int currentElixir;
     private bool isRunning = true;
     private AICardSelector.AIStrategy currentStrategy;
+
+    private Queue<UnitCost> deckQueue = new Queue<UnitCost>();
+    private List<UnitCost> currentHand = new List<UnitCost>();
 
     private void Start()
     {
@@ -49,12 +60,84 @@ public class SmartAIOpponent : MonoBehaviour
         }
 
         cardSelector.Initialize(battlefieldAnalyzer);
-        cardSelector.SetDeck(aiDeck);
+
+        InitializeDeck();
 
         currentElixir = startingElixir;
 
         StartCoroutine(ElixirRegeneration());
         StartCoroutine(AIThinkLoop());
+    }
+
+    private void InitializeDeck()
+    {
+        if (aiDeck == null || aiDeck.Count == 0)
+        {
+            Debug.LogError("SmartAIOpponent: AI Deck is empty!");
+            return;
+        }
+
+        deckQueue.Clear();
+        currentHand.Clear();
+
+        HashSet<string> usedNames = new HashSet<string>();
+        foreach (var card in aiDeck)
+        {
+            if (card == null) continue;
+
+            if (!usedNames.Contains(card.unitName))
+            {
+                usedNames.Add(card.unitName);
+                deckQueue.Enqueue(card);
+            }
+        }
+
+        for (int i = 0; i < handSize && deckQueue.Count > 0; i++)
+        {
+            DrawCard();
+        }
+
+        Debug.Log($"[AI] Deck initialized: {currentHand.Count} cards in hand, {deckQueue.Count} in queue");
+        LogCurrentHand();
+    }
+
+    private void DrawCard()
+    {
+        if (deckQueue.Count == 0)
+        {
+            foreach (var card in aiDeck)
+            {
+                if (card != null)
+                    deckQueue.Enqueue(card);
+            }
+        }
+
+        if (deckQueue.Count > 0)
+        {
+            UnitCost drawnCard = deckQueue.Dequeue();
+            currentHand.Add(drawnCard);
+            Debug.Log($"[AI] Drew card: {drawnCard.unitName} (Hand: {currentHand.Count}/{handSize})");
+        }
+    }
+
+    private void OnCardPlayed(UnitCost playedCard)
+    {
+        currentHand.Remove(playedCard);
+        deckQueue.Enqueue(playedCard);
+        DrawCard();
+
+        Debug.Log($"[AI] Played: {playedCard.unitName}, Drew next card");
+        LogCurrentHand();
+    }
+
+    private void LogCurrentHand()
+    {
+        string handInfo = "[AI Hand] ";
+        foreach (var card in currentHand)
+        {
+            handInfo += $"{card.unitName}({card.elixirCost}), ";
+        }
+        Debug.Log(handInfo);
     }
 
     private IEnumerator ElixirRegeneration()
@@ -141,6 +224,12 @@ public class SmartAIOpponent : MonoBehaviour
 
     private AICardSelector.CardChoice SelectAndPlayCard(BattlefieldAnalyzer.BattlefieldState state)
     {
+        if (currentHand.Count == 0)
+        {
+            Debug.LogWarning("[AI] Hand is empty! Cannot play card.");
+            return null;
+        }
+
         int availableElixir = currentElixir;
 
         if (currentStrategy != AICardSelector.AIStrategy.Defend &&
@@ -154,12 +243,13 @@ public class SmartAIOpponent : MonoBehaviour
 
         cardSelector.SetElixir(availableElixir);
 
-        AICardSelector.CardChoice choice = cardSelector.SelectBestCard(state, currentStrategy);
+        AICardSelector.CardChoice choice = cardSelector.SelectBestCard(state, currentStrategy, currentHand);
 
         if (choice != null && choice.card.elixirCost <= currentElixir)
         {
             SpendElixir(choice.card.elixirCost);
             SpawnCard(choice.card, choice.spawnPosition);
+            OnCardPlayed(choice.card);
             return choice;
         }
 
@@ -174,12 +264,19 @@ public class SmartAIOpponent : MonoBehaviour
             return;
         }
 
+        Vector3 finalPosition = position;
+
+        if (useSpawnArea)
+        {
+            finalPosition = ClampToSpawnArea(position);
+        }
+
         for (int i = 0; i < card.prefabs.Length; i++)
         {
             if (card.prefabs[i] == null)
                 continue;
 
-            Vector3 spawnPos = position;
+            Vector3 spawnPos = finalPosition;
 
             if (card.spawnOffsets != null && i < card.spawnOffsets.Length)
             {
@@ -191,10 +288,35 @@ public class SmartAIOpponent : MonoBehaviour
                 spawnPos += new Vector3(randomOffset.x, 0, randomOffset.y);
             }
 
+            if (useSpawnArea)
+            {
+                spawnPos = ClampToSpawnArea(spawnPos);
+            }
+
             GameObject spawnedObject = Instantiate(card.prefabs[i], spawnPos, Quaternion.identity);
 
             SetupSpawnedObject(spawnedObject);
         }
+    }
+
+    private Vector3 ClampToSpawnArea(Vector3 position)
+    {
+        Vector3 clamped = position;
+
+        float halfSizeX = spawnAreaSize.x / 2f;
+        float halfSizeZ = spawnAreaSize.z / 2f;
+
+        clamped.x = Mathf.Clamp(position.x,
+            spawnAreaCenter.x - halfSizeX,
+            spawnAreaCenter.x + halfSizeX);
+
+        clamped.z = Mathf.Clamp(position.z,
+            spawnAreaCenter.z - halfSizeZ,
+            spawnAreaCenter.z + halfSizeZ);
+
+        clamped.y = spawnAreaCenter.y;
+
+        return clamped;
     }
 
     private void SetupSpawnedObject(GameObject obj)
@@ -300,6 +422,10 @@ public class SmartAIOpponent : MonoBehaviour
 
     public AICardSelector.AIStrategy GetCurrentStrategy() => currentStrategy;
 
+    public List<UnitCost> GetCurrentHand() => currentHand;
+
+    public int GetHandSize() => handSize;
+
     private void OnDestroy()
     {
         isRunning = false;
@@ -310,6 +436,18 @@ public class SmartAIOpponent : MonoBehaviour
         if (aiDeck.Count == 0)
         {
             Debug.LogWarning("SmartAIOpponent: AI Deck is empty! Add cards to the deck.");
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (useSpawnArea)
+        {
+            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+            Gizmos.DrawCube(spawnAreaCenter, spawnAreaSize);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(spawnAreaCenter, spawnAreaSize);
         }
     }
 }

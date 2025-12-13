@@ -5,15 +5,19 @@ using UnityEngine;
 public class BattlefieldAnalyzer : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private List<Transform> aiTowers = new List<Transform>();
-    [SerializeField] private List<Transform> playerTowers = new List<Transform>();
     [SerializeField] private int aiTeamID = 1;
     [SerializeField] private int playerTeamID = 0;
+
+    [Header("Auto-Find Towers by Layer")]
+    [SerializeField] private string playerTowerLayerName = "TowerPlayer";
+    [SerializeField] private string aiTowerLayerName = "TowerEnemy";
 
     [Header("Zone Settings")]
     [SerializeField] private float dangerZoneRadius = 15f;
     [SerializeField] private float midFieldRadius = 25f;
 
+    private List<Transform> aiTowers = new List<Transform>();
+    private List<Transform> playerTowers = new List<Transform>();
     private List<Health> playerUnits = new List<Health>();
     private List<Health> aiUnits = new List<Health>();
     private List<Health> playerFlyingUnits = new List<Health>();
@@ -49,12 +53,57 @@ public class BattlefieldAnalyzer : MonoBehaviour
 
     private void Start()
     {
-        if (aiTowers.Count == 0 || playerTowers.Count == 0)
+        FindTowersByLayer();
+        lastPlayerActionTime = Time.time;
+    }
+
+    private void FindTowersByLayer()
+    {
+        aiTowers.Clear();
+        playerTowers.Clear();
+
+        int playerLayer = LayerMask.NameToLayer(playerTowerLayerName);
+        int aiLayer = LayerMask.NameToLayer(aiTowerLayerName);
+
+        if (playerLayer == -1)
         {
-            Debug.LogError("BattlefieldAnalyzer: Towers not assigned!");
+            Debug.LogError($"BattlefieldAnalyzer: Layer '{playerTowerLayerName}' not found! Create it in Unity.");
+            return;
         }
 
-        lastPlayerActionTime = Time.time;
+        if (aiLayer == -1)
+        {
+            Debug.LogError($"BattlefieldAnalyzer: Layer '{aiTowerLayerName}' not found! Create it in Unity.");
+            return;
+        }
+
+        HealthTower[] allTowers = FindObjectsByType<HealthTower>(FindObjectsSortMode.None);
+
+        foreach (var tower in allTowers)
+        {
+            if (tower.gameObject.layer == playerLayer)
+            {
+                playerTowers.Add(tower.transform);
+                Debug.Log($"[BattlefieldAnalyzer] Found Player Tower: {tower.name}");
+            }
+            else if (tower.gameObject.layer == aiLayer)
+            {
+                aiTowers.Add(tower.transform);
+                Debug.Log($"[BattlefieldAnalyzer] Found AI Tower: {tower.name}");
+            }
+        }
+
+        if (aiTowers.Count == 0)
+        {
+            Debug.LogWarning($"BattlefieldAnalyzer: No AI towers found on layer '{aiTowerLayerName}'!");
+        }
+
+        if (playerTowers.Count == 0)
+        {
+            Debug.LogWarning($"BattlefieldAnalyzer: No player towers found on layer '{playerTowerLayerName}'!");
+        }
+
+        Debug.Log($"[BattlefieldAnalyzer] Total: {aiTowers.Count} AI towers, {playerTowers.Count} Player towers");
     }
 
     public BattlefieldState AnalyzeBattlefield()

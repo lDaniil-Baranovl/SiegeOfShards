@@ -41,12 +41,16 @@ public class AICardSelector : MonoBehaviour
         public string reason;
     }
 
-    public CardChoice SelectBestCard(BattlefieldAnalyzer.BattlefieldState battleState, AIStrategy strategy)
+    public CardChoice SelectBestCard(BattlefieldAnalyzer.BattlefieldState battleState, AIStrategy strategy, List<UnitCost> availableCards)
     {
         List<CardChoice> availableChoices = new List<CardChoice>();
 
-        foreach (var card in aiDeck)
+        List<UnitCost> cardsToEvaluate = availableCards != null && availableCards.Count > 0 ? availableCards : aiDeck;
+
+        foreach (var card in cardsToEvaluate)
         {
+            if (card == null) continue;
+
             if (card.elixirCost > currentElixir)
                 continue;
 
@@ -63,6 +67,11 @@ public class AICardSelector : MonoBehaviour
         availableChoices = availableChoices.OrderByDescending(c => c.priority).ToList();
 
         return availableChoices[0];
+    }
+
+    public CardChoice SelectBestCard(BattlefieldAnalyzer.BattlefieldState battleState, AIStrategy strategy)
+    {
+        return SelectBestCard(battleState, strategy, null);
     }
 
     private CardChoice EvaluateCard(UnitCost card, BattlefieldAnalyzer.BattlefieldState state, AIStrategy strategy)

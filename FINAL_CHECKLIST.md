@@ -91,28 +91,35 @@ Can Target Air: ☐
 
 ---
 
-### Шаг 3: Настройте BattlefieldAnalyzer ⚠️
+### Шаг 3: Создайте слои для башен ⚠️
+
+1. **Edit → Project Settings → Tags and Layers**
+2. Добавьте два слоя:
+   - `TowerPlayer`
+   - `TowerEnemy`
+3. Назначьте слои башням:
+   - Все башни игрока → Layer: `TowerPlayer`
+   - Все башни AI → Layer: `TowerEnemy`
+
+### Шаг 4: Настройте BattlefieldAnalyzer
 
 ```
-AI Towers: [Размер 3]
-  Element 0: [Ваша AI башня 1]
-  Element 1: [Ваша AI башня 2]
-  Element 2: [Ваша AI башня 3]
-
-Player Towers: [Размер 3]
-  Element 0: [Башня игрока 1]
-  Element 1: [Башня игрока 2]
-  Element 2: [Башня игрока 3]
-
 AI Team ID: 1
 Player Team ID: 0
+
+Auto-Find Towers by Layer:
+  Player Tower Layer Name: TowerPlayer
+  AI Tower Layer Name: TowerEnemy
+
 Danger Zone Radius: 15
 Mid Field Radius: 25
 ```
 
+**Башни находятся автоматически!** Не нужно назначать вручную.
+
 ---
 
-### Шаг 4: Настройте SmartAIOpponent
+### Шаг 5: Настройте SmartAIOpponent
 
 ```
 AI Team ID: 1
@@ -129,11 +136,18 @@ Passivity Threshold: 8
 
 AI Deck: [Размер 6-8]
   ⚠️ ОБЯЗАТЕЛЬНО минимум 2 анти-воздушных юнита!
+
+Spawn Zone (NEW):
+  Use Spawn Area: ☑
+  Spawn Area Center: [X, Y, Z]  (настройте в Scene View)
+  Spawn Area Size: [10, 0, 10]  (ширина и глубина зоны)
 ```
+
+**Зелёный куб в Scene View** показывает зону спавна AI юнитов!
 
 ---
 
-### Шаг 5: Настройте AICardSelector (автоматически)
+### Шаг 6: Настройте AICardSelector (автоматически)
 
 Параметры по умолчанию должны подойти:
 ```
@@ -144,7 +158,7 @@ Anti Air Priority Bonus: 30
 
 ---
 
-### Шаг 6: Настройте AIDebugUI (опционально)
+### Шаг 7: Настройте AIDebugUI (опционально)
 
 ```
 AI Opponent: [SmartAIOpponent]
@@ -155,7 +169,7 @@ Top Left: ☑
 
 ---
 
-### Шаг 7: Отключите старый RandomSpawner
+### Шаг 8: Отключите старый RandomSpawner
 
 Найдите GameObject со старым `RandomSpawner` (AISpawnUnit) и:
 - Отключите GameObject, или
@@ -281,15 +295,19 @@ Threat: High
 
 - [ ] Все карты юнитов настроены (`isFlying`, `canTargetAir`)
 - [ ] Все карты зелий настроены (`Card Type: Spell`, `Spell Type`)
-- [ ] 3 башни AI добавлены в `aiTowers`
-- [ ] 3 башни игрока добавлены в `playerTowers`
+- [ ] Созданы слои `TowerPlayer` и `TowerEnemy`
+- [ ] Все башни игрока имеют Layer = `TowerPlayer`
+- [ ] Все башни AI имеют Layer = `TowerEnemy`
+- [ ] Зона спавна настроена (`Spawn Area Center`, `Spawn Area Size`)
+- [ ] `Use Spawn Area = true` включено
 - [ ] Колода AI содержит 6-8 карт
 - [ ] Колода AI содержит минимум 2 анти-воздушных юнита
 - [ ] Старый RandomSpawner отключён
 - [ ] AI размещает юнитов в игре
 - [ ] AI реагирует на летающих юнитов
+- [ ] Юниты AI спавнятся только в зелёной зоне
 - [ ] Debug UI работает (если включён)
-- [ ] Console показывает логи AI
+- [ ] Console показывает логи AI и найденные башни
 
 ---
 

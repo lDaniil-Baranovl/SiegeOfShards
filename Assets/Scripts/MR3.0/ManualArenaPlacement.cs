@@ -102,11 +102,26 @@ public class ManualArenaPlacement : MonoBehaviour
         {
             foreach (var mat in renderer.materials)
             {
-                mat.SetFloat("_Surface", 1); // Transparent
-                mat.SetFloat("_Blend", 0);   // Alpha
-                Color color = mat.color;
-                color.a = 0.5f;
-                mat.color = color;
+                // Try to set transparent mode if supported
+                if (mat.HasProperty("_Surface"))
+                    mat.SetFloat("_Surface", 1); // Transparent
+
+                if (mat.HasProperty("_Blend"))
+                    mat.SetFloat("_Blend", 0);   // Alpha
+
+                // Try different color properties (different shaders use different names)
+                if (mat.HasProperty("_Color"))
+                {
+                    Color color = mat.color;
+                    color.a = 0.5f;
+                    mat.color = color;
+                }
+                else if (mat.HasProperty("_BaseColor"))
+                {
+                    Color color = mat.GetColor("_BaseColor");
+                    color.a = 0.5f;
+                    mat.SetColor("_BaseColor", color);
+                }
             }
         }
     }
@@ -172,11 +187,23 @@ public class ManualArenaPlacement : MonoBehaviour
         {
             foreach (var mat in renderer.materials)
             {
-                Color currentColor = mat.color;
-                currentColor.r = targetColor.r;
-                currentColor.g = targetColor.g;
-                currentColor.b = targetColor.b;
-                mat.color = currentColor;
+                // Try different color properties (different shaders use different names)
+                if (mat.HasProperty("_Color"))
+                {
+                    Color currentColor = mat.color;
+                    currentColor.r = targetColor.r;
+                    currentColor.g = targetColor.g;
+                    currentColor.b = targetColor.b;
+                    mat.color = currentColor;
+                }
+                else if (mat.HasProperty("_BaseColor"))
+                {
+                    Color currentColor = mat.GetColor("_BaseColor");
+                    currentColor.r = targetColor.r;
+                    currentColor.g = targetColor.g;
+                    currentColor.b = targetColor.b;
+                    mat.SetColor("_BaseColor", currentColor);
+                }
             }
         }
     }
