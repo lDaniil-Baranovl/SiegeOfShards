@@ -2,13 +2,14 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.UI;
+
 public class CaseCubeController : MonoBehaviour
 {
     [Header("Возможные карты для выпадения")]
     public UnitCost[] possibleCards;
 
-    [Header("Отображение награды")]
-    public Image rewardIcon;
+    [Header("UI награды (4 картинки)")]
+    public Image[] rewardIcons; // ← 4 Image в инспекторе
     public TextMeshProUGUI rewardText;
     public Transform rewardFace;
 
@@ -29,8 +30,11 @@ public class CaseCubeController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        while (rb.linearVelocity.magnitude > 0.1f || rb.angularVelocity.magnitude > 0.1f)
+        while (rb.linearVelocity.magnitude > 0.1f ||
+               rb.angularVelocity.magnitude > 0.1f)
+        {
             yield return null;
+        }
 
         GiveRandomReward();
     }
@@ -40,14 +44,25 @@ public class CaseCubeController : MonoBehaviour
         if (rewardGiven) return;
         rewardGiven = true;
 
+        // 1. Выбираем героя
         UnitCost card = possibleCards[Random.Range(0, possibleCards.Length)];
         int amount = Random.Range(minFragments, maxFragments + 1);
 
+        // 2. Начисляем фрагменты
         CardUpgradeManager.Instance.AddFragments(card, amount);
 
-        rewardIcon.sprite = card.icon;
+        // 3. Показываем спрайт героя во всех 4 Image
+        foreach (Image img in rewardIcons)
+        {
+            img.sprite = card.icon;
+            img.enabled = true;
+        }
+
+        // 4. Текст награды
         rewardText.text = $"+{amount}";
 
-        rewardFace.LookAt(Camera.main.transform);
+        // 5. Поворачиваем UI к камере (если это 3D)
+        if (rewardFace != null)
+            rewardFace.LookAt(Camera.main.transform);
     }
 }

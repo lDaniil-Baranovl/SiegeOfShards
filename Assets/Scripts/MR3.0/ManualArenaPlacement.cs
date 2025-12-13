@@ -12,6 +12,7 @@ public class ManualArenaPlacement : MonoBehaviour
     [SerializeField] private GameObject arenaPrefab;
     [SerializeField] private float raycastDistance = 5f;
     [SerializeField] private LayerMask placementLayers; // Слои для размещения (например, Spatial Mesh)
+    [SerializeField] private float arenaHeightOffset = 0.05f; // Смещение вверх над поверхностью
 
     [Header("XR Input")]
     [SerializeField] private Transform rightController;
@@ -141,8 +142,10 @@ public class ManualArenaPlacement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, raycastDistance, placementLayers))
         {
             // Нашли поверхность
-            targetPosition = hit.point;
-            targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+            // Добавляем смещение вверх над поверхностью
+            targetPosition = hit.point + Vector3.up * arenaHeightOffset;
+            // Используем стандартную ориентацию без поворота
+            targetRotation = Quaternion.identity;
 
             // Проверяем валидность размещения
             isValidPlacement = IsValidPlacement(hit);
@@ -223,8 +226,16 @@ public class ManualArenaPlacement : MonoBehaviour
             return;
         }
 
+        // Проверяем, не создана ли уже арена
+        if (arenaInstance != null)
+        {
+            Debug.LogWarning("[ManualArenaPlacement] Arena already placed!");
+            return;
+        }
+
         // Создаем арену сначала
         arenaInstance = Instantiate(arenaPrefab, targetPosition, targetRotation);
+        arenaInstance.name = "Arena (Manual Placement)";
 
         // Создаем AR Anchor на позиции арены
         if (anchorManager != null && arenaInstance != null)

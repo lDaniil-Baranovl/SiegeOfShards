@@ -6,10 +6,12 @@ public class ClashRoyaleArenaPlacement : MonoBehaviour
     [SerializeField] private GameObject arenaPrefab;
     [SerializeField] private float minTableSize = 0.8f; // ������� 80�� x 80��
     [SerializeField] private Material previewMaterial;
+    [SerializeField] private float arenaHeightOffset = 0.05f; // ��������, ����� ����� ���� ���� ����� �����������
 
     private GameObject arenaPreview;
     private MRUKAnchor selectedSurface;
     private bool isPlaced = false;
+    private bool autoPlacementEnabled = false; // ���� ��� ���������� ��������������� ����������
 
     void Start()
     {
@@ -18,6 +20,13 @@ public class ClashRoyaleArenaPlacement : MonoBehaviour
 
     void OnSceneLoaded()
     {
+        // �������������� ���������� ��������� ������ ���� ������� ����
+        if (!autoPlacementEnabled)
+        {
+            Debug.Log("�������������� ���������� ��������� - ����������� ������ ����������");
+            return;
+        }
+
         // ����� ������ ����/�����������
         var bestSurface = FindBestPlaySurface();
 
@@ -74,7 +83,12 @@ public class ClashRoyaleArenaPlacement : MonoBehaviour
 
         // ������� ������ �����
         arenaPreview = Instantiate(arenaPrefab);
-        arenaPreview.transform.position = surface.transform.position;
+
+        // ������������� ������� � ������ �������� �����
+        Vector3 surfacePosition = surface.transform.position;
+        surfacePosition.y += arenaHeightOffset; // ��������� �������� �����
+
+        arenaPreview.transform.position = surfacePosition;
         arenaPreview.transform.rotation = Quaternion.identity;
 
         // ���������� feedback (��������������)
@@ -158,8 +172,13 @@ public class ClashRoyaleArenaPlacement : MonoBehaviour
                     // ��������� ��� ����������� ��������������
                     if (Vector3.Dot(hit.normal, Vector3.up) > 0.8f)
                     {
-                        arenaPreview.transform.position = hit.point;
-                        arenaPreview.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                        // ��������� �������� ����� ��� ���������� �����
+                        Vector3 position = hit.point;
+                        position.y += arenaHeightOffset;
+
+                        arenaPreview.transform.position = position;
+                        // ������ ���������� ������� - ��������� ������ �� ���������
+                        arenaPreview.transform.rotation = Quaternion.identity;
                     }
                 }
             }
