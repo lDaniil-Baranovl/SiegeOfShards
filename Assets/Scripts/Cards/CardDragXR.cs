@@ -20,6 +20,8 @@ public class CardDragXR : MonoBehaviour
     [Header("Battlefield")]
     public LayerMask battlefieldMask;
     public GameObject summonCirclePrefab;
+    [Tooltip("Максимальная дистанция raycast для размещения карт")]
+    public float maxRaycastDistance = 25f;
 
     private GameObject summonCircleInstance;
     private bool isHeld = false;
@@ -141,7 +143,7 @@ public class CardDragXR : MonoBehaviour
         bool used = false;
 
         // Используем raycast в направлении контроллера (куда указывает)
-        if (Physics.Raycast(rightController.position, rightController.forward, out RaycastHit hit, 10f, battlefieldMask))
+        if (Physics.Raycast(rightController.position, rightController.forward, out RaycastHit hit, maxRaycastDistance, battlefieldMask))
         {
             if (ElixirManager.Instance.TrySpend(data.elixirCost))
             {
@@ -240,10 +242,10 @@ public class CardDragXR : MonoBehaviour
         if (!isHeld) return;
 
         // Используем raycast в направлении, куда указывает контроллер (как указка)
-        Debug.DrawRay(rightController.position, rightController.forward * 10f, Color.green);
+        Debug.DrawRay(rightController.position, rightController.forward * maxRaycastDistance, Color.green);
 
         if (Physics.Raycast(rightController.position, rightController.forward,
-            out RaycastHit hit, 10f, battlefieldMask))
+            out RaycastHit hit, maxRaycastDistance, battlefieldMask))
         {
             if (summonCircleInstance == null)
                 summonCircleInstance = Instantiate(summonCirclePrefab);
@@ -279,7 +281,7 @@ public class CardDragXR : MonoBehaviour
                 rightController.position,
                 rightController.forward,
                 out RaycastHit hit,
-                10f))
+                maxRaycastDistance))
         {
             CardDragXR card = hit.collider.GetComponentInParent<CardDragXR>();
             return card == this;

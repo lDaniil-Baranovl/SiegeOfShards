@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,15 +58,33 @@ public class SmartAIOpponent : MonoBehaviour
             return;
         }
 
+        StartCoroutine(DelayedInit());
+    }
+    private IEnumerator DelayedInit()
+    {
+        // 1️ ждём подтверждения арены игроком
+        yield return StartCoroutine(WaitForArenaConfirmation());
+
+        // 2️ ждём, пока появится spawn-зона
+        if (useSpawnArea)
+        {
+            yield return StartCoroutine(WaitForSpawnZone());
+        }
+
+        // 3️ инициализируем анализ поля
+        battlefieldAnalyzer.Initialize();
         cardSelector.Initialize(battlefieldAnalyzer);
 
+        // 4️ запускаем AI
         InitializeDeck();
-
         currentElixir = startingElixir;
 
         StartCoroutine(ElixirRegeneration());
         StartCoroutine(AIThinkLoop());
+
+        Debug.Log("[AI] Fully initialized (arena confirmed + spawn zone ready)");
     }
+
 
     private void InitializeDeck()
     {
@@ -277,6 +295,10 @@ public class SmartAIOpponent : MonoBehaviour
 
             Vector3 spawnPos = finalPosition;
 
+            // Для летающих юнитов добавляем вертикальное смещение вверх
+            if (card.isFlying)
+                spawnPos += Vector3.up * 3f;
+
             if (card.spawnOffsets != null && i < card.spawnOffsets.Length)
             {
                 spawnPos += card.spawnOffsets[i];
@@ -300,7 +322,7 @@ public class SmartAIOpponent : MonoBehaviour
 
     private Vector3 ClampToSpawnArea(Vector3 position)
     {
-        if (spawnZone == null)
+        if (!useSpawnArea || spawnZone == null)
             return position;
 
         Bounds bounds = spawnZone.bounds;
@@ -311,6 +333,7 @@ public class SmartAIOpponent : MonoBehaviour
             Mathf.Clamp(position.z, bounds.min.z, bounds.max.z)
         );
     }
+
 
     private void SetupSpawnedObject(GameObject obj)
     {
@@ -441,6 +464,80 @@ public class SmartAIOpponent : MonoBehaviour
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(spawnZone.bounds.center, spawnZone.bounds.size);
+        }
+    }
+    private IEnumerator WaitForArenaConfirmation()
+    {
+        Debug.Log("[AI] Waiting for arena confirmation...");
+
+        // Ждём, пока игрок не подтвердит размещение арены
+        while (!ArenaPlacementEvents.IsArenaPlaced)
+        {
+            yield return null;
+        }
+
+        Debug.Log("[AI] Arena confirmed by player!");
+    }
+
+    private IEnumerator WaitForSpawnZone()
+    {
+        Debug.Log("[AI] Waiting for spawn zone...");
+
+        // Даём арене время на полную активацию после подтверждения
+        yield return new WaitForSeconds(0.5f);
+
+        int attempts = 0;
+        const int maxAttempts = 100; // ~5 секунд при 20 FPS
+
+        while (spawnZone == null && attempts < maxAttempts)
+        {
+            attempts++;
+
+            GameObject zoneObj = GameObject.FindWithTag("AISpawnZone");
+
+            if (zoneObj != null)
+            {
+                Debug.Log($"[AI] AISpawnZone object found: {zoneObj.name}, active: {zoneObj.activeInHierarchy}");
+
+                // Пробуем найти коллайдер разными способами
+                spawnZone = zoneObj.GetComponent<BoxCollider>();
+                if (spawnZone == null)
+                {
+                    spawnZone = zoneObj.GetComponentInChildren<BoxCollider>(true); // включаем неактивные
+                }
+
+                if (spawnZone != null)
+                {
+                    Debug.Log($"[AI] Spawn zone collider found: {spawnZone.name}, enabled: {spawnZone.enabled}, bounds: {spawnZone.bounds}");
+
+                    // Убеждаемся, что коллайдер активен
+                    if (!spawnZone.enabled)
+                    {
+                        Debug.LogWarning("[AI] Spawn zone collider was disabled, enabling it");
+                        spawnZone.enabled = true;
+                    }
+
+                    yield break;
+                }
+                else
+                {
+                    Debug.LogWarning($"[AI] AISpawnZone object found but no BoxCollider detected (attempt {attempts}/{maxAttempts})");
+                }
+            }
+            else
+            {
+                if (attempts % 10 == 0) // Логируем каждую 10-ю попытку
+                {
+                    Debug.LogWarning($"[AI] AISpawnZone not found (attempt {attempts}/{maxAttempts})");
+                }
+            }
+
+            yield return new WaitForSeconds(0.05f); // Небольшая задержка между попытками
+        }
+
+        if (spawnZone == null)
+        {
+            Debug.LogError("[AI] Failed to find spawn zone after maximum attempts! AI may not work correctly.");
         }
     }
 

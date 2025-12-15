@@ -53,6 +53,10 @@ public class BattlefieldAnalyzer : MonoBehaviour
 
     private void Start()
     {
+        lastPlayerActionTime = Time.time;
+    }
+    public void Initialize()
+    {
         FindTowersByLayer();
         lastPlayerActionTime = Time.time;
     }

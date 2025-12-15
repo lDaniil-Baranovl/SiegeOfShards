@@ -124,6 +124,9 @@ public class ClashRoyaleArenaPlacement : MonoBehaviour
         isPlaced = true;
         SetPreviewMode(arenaPreview, false);
 
+        // Уведомляем другие системы о размещении арены
+        ArenaPlacementEvents.InvokeArenaConfirmed();
+
         // ������� Spatial Anchor ��� ���������� �������
         CreateSpatialAnchor(arenaPreview.transform);
 
@@ -238,6 +241,7 @@ public class ClashRoyaleArenaPlacement : MonoBehaviour
         }
         selectedSurface = null;
         isPlaced = false;
+        ArenaPlacementEvents.Reset();
     }
 
     #endregion

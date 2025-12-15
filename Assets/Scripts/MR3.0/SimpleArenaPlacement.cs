@@ -103,37 +103,53 @@ public class SimpleArenaPlacement : MonoBehaviour
         {
             if (previewMaterial != null)
             {
-                // Используем заданный материал
-                renderer.material = previewMaterial;
+                // Создаем МАССИВ материалов для всех слотов рендерера
+                Material[] materials = new Material[renderer.sharedMaterials.Length];
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    materials[i] = previewMaterial;
+                }
+                renderer.sharedMaterials = materials;
             }
             else
             {
-                // Делаем полупрозрачным с зеленым цветом
-                foreach (var mat in renderer.materials)
+                // Создаем копии материалов чтобы не изменять оригиналы
+                Material[] originalMaterials = renderer.sharedMaterials;
+                Material[] newMaterials = new Material[originalMaterials.Length];
+
+                for (int i = 0; i < originalMaterials.Length; i++)
                 {
-                    // Пытаемся настроить прозрачность для URP
-                    if (mat.HasProperty("_Surface"))
+                    if (originalMaterials[i] != null)
                     {
-                        mat.SetFloat("_Surface", 1); // Transparent
-                    }
-                    if (mat.HasProperty("_Blend"))
-                    {
-                        mat.SetFloat("_Blend", 0); // Alpha
-                    }
+                        // Создаем инстанс материала
+                        newMaterials[i] = new Material(originalMaterials[i]);
 
-                    // Устанавливаем цвет
-                    if (mat.HasProperty("_BaseColor"))
-                    {
-                        mat.SetColor("_BaseColor", previewColor);
-                    }
-                    else if (mat.HasProperty("_Color"))
-                    {
-                        mat.color = previewColor;
-                    }
+                        // Пытаемся настроить прозрачность для URP
+                        if (newMaterials[i].HasProperty("_Surface"))
+                        {
+                            newMaterials[i].SetFloat("_Surface", 1); // Transparent
+                        }
+                        if (newMaterials[i].HasProperty("_Blend"))
+                        {
+                            newMaterials[i].SetFloat("_Blend", 0); // Alpha
+                        }
 
-                    // Включаем прозрачность
-                    mat.renderQueue = 3000;
+                        // Устанавливаем цвет
+                        if (newMaterials[i].HasProperty("_BaseColor"))
+                        {
+                            newMaterials[i].SetColor("_BaseColor", previewColor);
+                        }
+                        else if (newMaterials[i].HasProperty("_Color"))
+                        {
+                            newMaterials[i].SetColor("_Color", previewColor);
+                        }
+
+                        // Включаем прозрачность
+                        newMaterials[i].renderQueue = 3000;
+                    }
                 }
+
+                renderer.sharedMaterials = newMaterials;
             }
         }
 
@@ -232,13 +248,27 @@ public class SimpleArenaPlacement : MonoBehaviour
         Destroy(previewInstance);
         previewInstance = null;
 
-        // Создаем настоящую арену
+        // Создаем настоящую арену из оригинального префаба
         arenaInstance = Instantiate(arenaPrefab, finalPosition, finalRotation);
         arenaInstance.name = "Arena (Placed)";
+
+        // Убеждаемся что все объекты активны (включая Terrain)
+        // Это важно для объектов которые могли быть выключены в префабе
+        foreach (Transform child in arenaInstance.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name == "Terrain" || child.name.Contains("Water") || child.name.Contains("water"))
+            {
+                child.gameObject.SetActive(true);
+                Debug.Log($"[SimpleArenaPlacement] Activated {child.name}");
+            }
+        }
 
         isArenaPlaced = true;
 
         Debug.Log($"[SimpleArenaPlacement] Arena placed at {finalPosition}");
+
+        // Уведомляем другие системы о размещении арены
+        ArenaPlacementEvents.InvokeArenaConfirmed();
 
         // Можно добавить создание Spatial Anchor
         CreateSpatialAnchor();
@@ -284,6 +314,9 @@ public class SimpleArenaPlacement : MonoBehaviour
 
         isArenaPlaced = false;
         isDragging = false;
+
+        // Сбрасываем глобальное состояние
+        ArenaPlacementEvents.Reset();
 
         SpawnPreview();
     }
