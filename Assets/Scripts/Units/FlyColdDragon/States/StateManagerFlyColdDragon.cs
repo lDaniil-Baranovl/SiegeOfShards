@@ -19,7 +19,13 @@ public class StateManagerFlyColdDragon : UnitStateManager
     protected override void Start()
     {
         base.Start();
-        StartCoroutine(EnableNavMeshAfterDeath());
+
+        // Отключаем NavMeshAgent для летающего юнита
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.enabled = false;
+        }
+
         attackEffect.SetActive(false);
         SwitchState(dragFlyColdRunState);
 
@@ -51,19 +57,12 @@ public class StateManagerFlyColdDragon : UnitStateManager
         if (damageCollider != null) damageCollider.enabled = false;
         if (attackEffect != null) attackEffect.SetActive(false);
 
-        if (navMeshAgent != null) navMeshAgent.isStopped = true;
         if (unitAnimator != null)
         {
             unitAnimator.SetBool("IsAttacking", false);
             unitAnimator.SetBool("IsRunning", false);
         }
         SwitchState(deathState);
-    }
-    public IEnumerator EnableNavMeshAfterDeath()
-    {
-        yield return new WaitForSeconds(1.2f);
-        if (navMeshAgent != null)
-            navMeshAgent.enabled = true;
     }
 
     // Animation Events:

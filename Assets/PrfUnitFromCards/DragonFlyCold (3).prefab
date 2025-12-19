@@ -5557,12 +5557,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2816889944905915190}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f90ca2808bd1f47418c652c8a6d925d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flightHeight: 0.64
+  flightHeight: 1
   heightSmooth: 2
   rotationSmooth: 5
 --- !u!195 &6240376345955519688
@@ -5572,7 +5572,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2816889944905915190}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.35
   m_Speed: 3.5

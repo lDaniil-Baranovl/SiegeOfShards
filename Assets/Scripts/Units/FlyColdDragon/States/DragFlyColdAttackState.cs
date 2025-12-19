@@ -4,8 +4,6 @@ public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
     public DamageFDC attackScript;
     public override void EnterState(StateManagerFlyColdDragon manager)
     {
-        manager.navMeshAgent.isStopped = true;
-
         attackScript = manager.damageCollider.GetComponent<DamageFDC>();
 
         manager.unitAnimator.SetBool("IsAttacking", true);
@@ -13,7 +11,6 @@ public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
 
     public override void ExitState(StateManagerFlyColdDragon manager)
     {
-        manager.navMeshAgent.isStopped = false;
         manager.unitAnimator.SetBool("IsAttacking", false);
         if (manager.damageCollider != null)
             manager.damageCollider.enabled = false;
@@ -32,7 +29,7 @@ public class DragFlyColdAttackState : UnitBaseState<StateManagerFlyColdDragon>
             return;
         }
         Vector3 direction = (manager.target.position - manager.transform.position).normalized;
-        direction.y = 0; // чтобы не наклонялся вверх/вниз
+        direction.y = 0; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅ
 
         if (direction != Vector3.zero)
         {

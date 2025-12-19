@@ -135,6 +135,7 @@ Material:
     - _AlphaToMaskInspectorValue: 0
     - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _CastShadows: 1
     - _ColorContrast: 0.5
     - _ColorDepth: 260
