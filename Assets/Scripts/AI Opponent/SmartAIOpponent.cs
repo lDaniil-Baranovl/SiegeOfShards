@@ -295,9 +295,6 @@ public class SmartAIOpponent : MonoBehaviour
 
             Vector3 spawnPos = finalPosition;
 
-            // Для летающих юнитов добавляем вертикальное смещение вверх
-            if (card.isFlying)
-                spawnPos += Vector3.up * 3f;
 
             if (card.spawnOffsets != null && i < card.spawnOffsets.Length)
             {

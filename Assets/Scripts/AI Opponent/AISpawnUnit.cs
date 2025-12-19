@@ -63,10 +63,6 @@ public class RandomSpawner : MonoBehaviour
 
                 Vector3 spawnPos = groupCenter + offset;
 
-                // Для летающих юнитов добавляем вертикальное смещение вверх
-                if (unitData.isFlying)
-                    spawnPos += Vector3.up * 3f;
-
                 GameObject newUnit = Instantiate(prefab, spawnPos, Quaternion.identity);
 
                 SetupNewUnit(newUnit);
