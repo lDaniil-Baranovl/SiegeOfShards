@@ -38,7 +38,7 @@ public abstract class UnitStateManager : MonoBehaviour
         enemyTowers.RemoveAll(tower => tower == null);
         if (GamePause.paused) return;
     }
-    // ================= FREEZE SYSTEM =================
+    // FREEZE  
     private float savedSpeed;
     private float savedAnimatorSpeed;
 
@@ -80,7 +80,6 @@ public abstract class UnitStateManager : MonoBehaviour
         if (unitAnimator != null)
             unitAnimator.speed = savedAnimatorSpeed;
     }
-    // ========== COMMON METHODS ==========
     public virtual void SetSpeed(float newSpeed)
     {
         if (navMeshAgent != null)
@@ -91,7 +90,6 @@ public abstract class UnitStateManager : MonoBehaviour
         if (navMeshAgent == null || newDestination == null) return;
         target = newDestination;
 
-        // »спользуем умную точку дл€ движени€ Ч ближайша€ поверхность цели
         Vector3 targetPoint = GetAttackPosition(newDestination);
         navMeshAgent.SetDestination(targetPoint);
     }

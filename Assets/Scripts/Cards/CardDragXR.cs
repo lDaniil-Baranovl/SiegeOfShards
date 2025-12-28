@@ -1,6 +1,6 @@
 /// <summary>
 /// public InputActionProperty LeftGrip;
-/// � Awake: LeftGrip.action.Enable();
+/// Awake: LeftGrip.action.Enable();
 /// LeftGrip.action.ReadValue<float>
 /// <XRController>{RightHand}/{Grip}
 /// </summary>
@@ -43,7 +43,6 @@ public class CardDragXR : MonoBehaviour
         grab = GetComponent<XRGrabInteractable>();
         if (grab != null)
         {
-            // �������������, ����� ����������� ����� �� select (���� XR toolkit ����������� ������ ��������)
             grab.selectEntered.AddListener(OnSelectEntered);
             grab.selectExited.AddListener(OnSelectExited);
         }
@@ -54,17 +53,13 @@ public class CardDragXR : MonoBehaviour
         rightController = XRPlayer.Instance.rightController;
     }
 
-    // ���� XR toolkit �������� ������ � �������� ��� ������
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
-        // ���� ��� ������ ������ ����� � ���������� (�� ��� ������� ����������� �����)
         if (currentHeldCard != null && currentHeldCard != this)
             return;
 
         StartHolding();
     }
-
-    // ���� XR toolkit �������� � �������� ���� ������ ������
     private void OnSelectExited(SelectExitEventArgs args)
     {
         Release();
@@ -79,22 +74,18 @@ public class CardDragXR : MonoBehaviour
     {
         float grip = gripAction.action.ReadValue<float>();
 
-        // ���� ��� ������ ������ ����� � �������
         if (currentHeldCard != null && currentHeldCard != this)
             return;
 
-        // ����� ����� grip + hover (�� ������, ���� toolkit �� ��������)
         if (!isHeld && isHovered && grip > 0.7f)
         {
             if (!IsActuallyUnderControllerRay()) return;
             if (grab != null) grab.enabled = false;
             StartHolding();
         }
-        // ��������� ����� grip
         else if (isHeld && grip < 0.2f)
         {
             Release();
-            // ����� �������� grab (��� ����� ������ ��� ���������� ������)
             if (grab != null) grab.enabled = true;
         }
 
@@ -121,10 +112,8 @@ public class CardDragXR : MonoBehaviour
         currentHeldCard = this;
         isHeld = true;
 
-        // �������� ����e ������� ��� ���������� (������ ������� ������� parent)
         transform.SetParent(rightController, true); 
 
-        Debug.Log("����� ����� XR: " + name);
     }
 
     private void Release()
@@ -142,7 +131,6 @@ public class CardDragXR : MonoBehaviour
 
         bool used = false;
 
-        // Используем raycast в направлении контроллера (куда указывает)
         if (Physics.Raycast(rightController.position, rightController.forward, out RaycastHit hit, maxRaycastDistance, battlefieldMask))
         {
             if (ElixirManager.Instance.TrySpend(data.elixirCost))
@@ -160,16 +148,13 @@ public class CardDragXR : MonoBehaviour
 
         if (!used)
         {
-            // ������ ��� ����������� ������� � ��������, ��� XRGrab �� ������.
             if (grab != null)
             {
-                // �������� ��������� ��������� � ��� �������� interactor ��������� ������
                 grab.enabled = false;
             }
 
             ReturnToHome();
 
-            // � ����� ReturnAnimation �� ����� ������� grab (��. ReturnAnimation)
         }
     }
 
@@ -195,7 +180,6 @@ public class CardDragXR : MonoBehaviour
         if (returnRoutine != null)
             StopCoroutine(returnRoutine);
 
-        // �������������� ���������� �� ��������
         transform.SetParent(null);
 
         returnRoutine = StartCoroutine(ReturnAnimation());
@@ -226,10 +210,8 @@ public class CardDragXR : MonoBehaviour
         transform.position = endPos;
         transform.rotation = endRot;
 
-        // ������ ����� �������� �������� ����� (����� ��������� ������ ������� ���� ����������)
         transform.SetParent(homeSlot, true);
 
-        // ������� �������� � ����� ����� �������� grab
         if (grab != null)
             grab.enabled = true;
 
@@ -241,7 +223,7 @@ public class CardDragXR : MonoBehaviour
     {
         if (!isHeld) return;
 
-        // Используем raycast в направлении, куда указывает контроллер (как указка)
+        // raycast (указка)
         Debug.DrawRay(rightController.position, rightController.forward * maxRaycastDistance, Color.green);
 
         if (Physics.Raycast(rightController.position, rightController.forward,
