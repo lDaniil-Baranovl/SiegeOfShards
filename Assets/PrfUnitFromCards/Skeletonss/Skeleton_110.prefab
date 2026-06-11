@@ -5410,8 +5410,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.009, y: -0.17033622, z: 0.248}
-  m_LocalScale: {x: 0.2534118, y: 0.2534118, z: 0.2534118}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.17, y: 0.17, z: 0.17}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 76447145526365529}
   - {fileID: 2504259424174577113}
@@ -5526,9 +5526,9 @@ MonoBehaviour:
   unitAnimator: {fileID: 4117181572013258518}
   navMeshAgent: {fileID: 5840486990255440905}
   damageCollider: {fileID: 9214765347204408946}
-  walkSpeed: 1
-  agroDistance: 5
-  attackDistance: 0.85
+  walkSpeed: 0.54
+  agroDistance: 1.42
+  attackDistance: 0.002
   enemyTowers: []
   deathEffect: {fileID: 5356173065665505}
   teamID: 0
@@ -5551,7 +5551,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: d3b11b80263d8a145ad7641f5e978ff4, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: d3b11b80263d8a145ad7641f5e978ff4, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -5671,7 +5671,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 02f98902d77f7431cb0c64b9fe4744fc, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 02f98902d77f7431cb0c64b9fe4744fc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.269

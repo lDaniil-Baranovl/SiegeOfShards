@@ -5468,7 +5468,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.9099998, y: 0.55073, z: 0.34000015}
-  m_LocalScale: {x: 0.71253395, y: 0.71253395, z: 0.71253395}
+  m_LocalScale: {x: 0.39, y: 0.39, z: 0.39}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8717192415043201139}
@@ -5624,7 +5624,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 24448205873db1e498d94515ee2fabd0, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 24448205873db1e498d94515ee2fabd0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -5744,7 +5744,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 02f98902d77f7431cb0c64b9fe4744fc, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 02f98902d77f7431cb0c64b9fe4744fc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.269
