@@ -10,6 +10,8 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Filtering;
 
 public class CardDragXR : MonoBehaviour
 {
@@ -51,10 +53,16 @@ public class CardDragXR : MonoBehaviour
     void Start()
     {
         rightController = XRPlayer.Instance.rightController;
+
+        if (grab != null)
+            grab.selectFilters.Add(new XRSelectFilterDelegate((interactor, interactable) => IsRightControllerInteractor(interactor)));
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
+        if (!IsRightControllerInteractor(args.interactorObject))
+            return;
+
         if (currentHeldCard != null && currentHeldCard != this)
             return;
 
@@ -62,7 +70,15 @@ public class CardDragXR : MonoBehaviour
     }
     private void OnSelectExited(SelectExitEventArgs args)
     {
+        if (!IsRightControllerInteractor(args.interactorObject))
+            return;
+
         Release();
+    }
+
+    private bool IsRightControllerInteractor(IXRInteractor interactor)
+    {
+        return rightController != null && interactor != null && interactor.transform.IsChildOf(rightController);
     }
 
     public void Init(UnitCost cardData)
