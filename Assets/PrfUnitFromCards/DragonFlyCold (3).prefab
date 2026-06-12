@@ -301,7 +301,6 @@ MonoBehaviour:
   healthSlider: {fileID: 8717356229547239015}
   healthComponent: {fileID: 2302792946268655429}
   healthCanvas: {fileID: 5677395144295716315}
-  alwaysVisible: 0
 --- !u!1 &1046890803979267687
 GameObject:
   m_ObjectHideFlags: 0
@@ -15336,7 +15335,7 @@ Transform:
   m_GameObject: {fileID: 2816889944905915190}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.825428, y: -26.323864, z: 12.064838}
+  m_LocalPosition: {x: -7.682167, y: -3.2533288, z: 12.107571}
   m_LocalScale: {x: 0.39, y: 0.39, z: 0.39}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -51314,7 +51313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.2, g: 0.19215687, b: 0.49019608, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

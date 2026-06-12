@@ -6,19 +6,19 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
 
-    [Header("Настройки боя")]
-    public float matchDuration = 180f; // 3 минуты
+    [Header("Main settings")]
+    public float matchDuration = 180f;
     private float timer;
 
-    [Header("UI Конец боя")]
+    [Header("UI")]
     public GameObject endBattleCanvas;
 
-    [Header("Тексты результата")]
+    [Header("text")]
     public GameObject victoryText;
     public GameObject defeatText;
     public GameObject drawText;
 
-    [Header("Тип награды")]
+    [Header("Gold conditions")]
     public GameObject get_gold40;
     public GameObject get_gold20;
     public GameObject get_gold10;
@@ -28,6 +28,7 @@ public class BattleManager : MonoBehaviour
     private int redDestroyed = 0;
 
     private bool battleEnded = false;
+    private bool battleStarted = false;
     public TextMeshProUGUI timerText;
 
 
@@ -36,12 +37,21 @@ public class BattleManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        ArenaPlacementEvents.OnArenaConfirmed += OnArenaConfirmed;
+    }
+
+    private void OnDisable()
+    {
+        ArenaPlacementEvents.OnArenaConfirmed -= OnArenaConfirmed;
+    }
+
     private void Start()
     {
         timer = matchDuration;
         endBattleCanvas.SetActive(false);
 
-        // всё выключаем
         victoryText.SetActive(false);
         defeatText.SetActive(false);
         drawText.SetActive(false);
@@ -51,9 +61,15 @@ public class BattleManager : MonoBehaviour
         get_case.SetActive(false);
     }
 
+    // РРіСЂРѕРІРѕРµ РїРѕР»Рµ РїРѕСЏРІРёР»РѕСЃСЊ вЂ” РјРѕР¶РЅРѕ Р·Р°РїСѓСЃРєР°С‚СЊ РѕС‚СЃС‡С‘С‚ РІСЂРµРјРµРЅРё
+    private void OnArenaConfirmed()
+    {
+        battleStarted = true;
+    }
+
     private void Update()
     {
-        if (battleEnded) return;
+        if (battleEnded || !battleStarted) return;
 
         timer -= Time.deltaTime;
 
@@ -63,6 +79,14 @@ public class BattleManager : MonoBehaviour
         {
             EndBattleByTime();
         }
+    }
+
+    // Р’С‹Р·С‹РІР°РµС‚СЃСЏ С‚Р°Р№РјРµСЂРѕРј РёР· РґРёРЅР°РјРёС‡РµСЃРєРё СЃРѕР·РґР°РІР°РµРјРѕР№ Р»РѕРєР°С†РёРё,
+    // РєРѕРіРґР° РѕРЅ РїРѕСЏРІР»СЏРµС‚СЃСЏ РІ СЃС†РµРЅРµ
+    public void SetTimerText(TextMeshProUGUI text)
+    {
+        timerText = text;
+        UpdateTimerUI();
     }
 
     private void UpdateTimerUI()
@@ -75,7 +99,6 @@ public class BattleManager : MonoBehaviour
         timerText.text = $"{minutes:00}:{seconds:00}";
     }
 
-    // Башня сообщает о разрушении
     public void TowerDestroyed(int teamID)
     {
         if (battleEnded) return;
@@ -92,11 +115,11 @@ public class BattleManager : MonoBehaviour
     {
         if (blueDestroyed >= 3)
         {
-            ShowResult("lose"); // все синие башни уничтожены синие проиграли
+            ShowResult("lose");
         }
         else if (redDestroyed >= 3)
         {
-            ShowResult("win"); // все красные башни уничтожены синие победили
+            ShowResult("win");
         }
     }
 
@@ -121,7 +144,6 @@ public class BattleManager : MonoBehaviour
 
         endBattleCanvas.SetActive(true);
 
-        // выключаем все
         victoryText.SetActive(false);
         defeatText.SetActive(false);
         drawText.SetActive(false);
@@ -130,7 +152,6 @@ public class BattleManager : MonoBehaviour
         get_gold40.SetActive(false);
         get_case.SetActive(false);
 
-        // включаем нужное
         if (result == "win") 
         {
             TryOpenCaseManager.Instance.AddCaseAttempt(1);
@@ -156,7 +177,6 @@ public class BattleManager : MonoBehaviour
         else
             GoldManager.Instance.AddGold(10);
 
-        // ставим игру на паузу
         GamePause.paused = true;
         Time.timeScale = 0f;
     }

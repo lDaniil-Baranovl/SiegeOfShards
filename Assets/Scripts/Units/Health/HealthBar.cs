@@ -6,10 +6,8 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Health healthComponent;
     [SerializeField] private Canvas healthCanvas;
-    [SerializeField] private bool alwaysVisible = false;
 
-    private bool hasTakenDamage = false;
-    private bool isDead = false;
+    private Transform cameraTransform;
 
     private void Start()
     {
@@ -25,8 +23,23 @@ public class HealthBar : MonoBehaviour
             healthSlider.value = healthComponent.CurrentHealth;
         }
 
-        if (!alwaysVisible && healthCanvas != null)
-            healthCanvas.enabled = false;
+        if (healthCanvas != null)
+            healthCanvas.enabled = true;
+
+        if (Camera.main != null)
+            cameraTransform = Camera.main.transform;
+    }
+
+    private void Update()
+    {
+        if (cameraTransform == null || healthCanvas == null)
+            return;
+
+        Vector3 directionToCamera = healthCanvas.transform.position - cameraTransform.position;
+        directionToCamera.y = 0f;
+
+        if (directionToCamera.sqrMagnitude > 0.0001f)
+            healthCanvas.transform.rotation = Quaternion.LookRotation(directionToCamera);
     }
 
     public void UpdateHealthBar()
@@ -35,24 +48,13 @@ public class HealthBar : MonoBehaviour
         {
             healthSlider.value = healthComponent.CurrentHealth;
 
-            if (!hasTakenDamage && healthComponent.CurrentHealth < healthSlider.maxValue)
-                hasTakenDamage = true;
-
-            if (hasTakenDamage && !isDead && healthCanvas != null)
-                healthCanvas.enabled = true;
-
-            if (healthComponent.CurrentHealth <= 0)
-            {
-                isDead = true;
-                if (healthCanvas != null)
-                    healthCanvas.enabled = false;
-            }
+            if (healthComponent.CurrentHealth <= 0 && healthCanvas != null)
+                healthCanvas.enabled = false;
         }
     }
 
     public void OnUnitDeath()
     {
-        isDead = true;
         if (healthCanvas != null)
             healthCanvas.enabled = false;
     }

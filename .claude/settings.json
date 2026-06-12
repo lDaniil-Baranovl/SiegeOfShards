@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(awk '/NavMeshAgent:/,/^---/' \"Assets/Scripts/Cards/AllCards/enemy/SkullsInSombreros2.0 Variant 1.prefab\")"
+      "Bash(awk '/NavMeshAgent:/,/^---/' \"Assets/Scripts/Cards/AllCards/enemy/SkullsInSombreros2.0 Variant 1.prefab\")",
+      "Bash(grep -n \"^--- !u!1 &8027921414389829505\\\\|^--- !u!114 &2497350214142398161\\\\|^--- !u!1 &.*$\" \"Assets/Scenes/testMechanic.unity\")"
     ]
   }
 }
