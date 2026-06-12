@@ -24,6 +24,16 @@ public class SimpleArenaPlacement : MonoBehaviour
     private bool isDragging = false;
     private Transform cameraTransform;
 
+    void Awake()
+    {
+        // Сбрасываем глобальное состояние подтверждения арены на случай,
+        // если оно осталось от предыдущего запуска сцены (статическое поле
+        // не сбрасывается автоматически при перезагрузке сцены).
+        // Делаем это в Awake, чтобы успеть до Start() у SmartAIOpponent,
+        // который проверяет ArenaPlacementEvents.IsArenaPlaced.
+        ArenaPlacementEvents.Reset();
+    }
+
     void Start()
     {
         cameraTransform = Camera.main.transform;

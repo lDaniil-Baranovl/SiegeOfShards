@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(awk '/NavMeshAgent:/,/^---/' \"Assets/Scripts/Cards/AllCards/enemy/SkullsInSombreros2.0 Variant 1.prefab\")",
-      "Bash(grep -n \"^--- !u!1 &8027921414389829505\\\\|^--- !u!114 &2497350214142398161\\\\|^--- !u!1 &.*$\" \"Assets/Scenes/testMechanic.unity\")"
+      "Bash(grep -n \"^--- !u!1 &8027921414389829505\\\\|^--- !u!114 &2497350214142398161\\\\|^--- !u!1 &.*$\" \"Assets/Scenes/testMechanic.unity\")",
+      "Bash(awk '/^&64101$/{f=1} f{print; if\\(/^---/ && NR>1 && f==2\\) exit; if\\(/m_Component/ && f==1\\) f=2} /m_GameObject: \\\\{fileID: 64101\\\\}/{print FILENAME\": \"$0}' \"d:\\\\Git\\\\ArGame\\\\Assets\\\\Scenes\\\\testMechanic.unity\")"
     ]
   }
 }
