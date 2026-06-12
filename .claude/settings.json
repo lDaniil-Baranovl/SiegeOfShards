@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '/NavMeshAgent:/,/^---/' \"Assets/Scripts/Cards/AllCards/enemy/SkullsInSombreros2.0 Variant 1.prefab\")"
+    ]
+  }
+}

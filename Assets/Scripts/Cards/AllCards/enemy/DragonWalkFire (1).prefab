@@ -10883,7 +10883,7 @@ MonoBehaviour:
   damageCollider: {fileID: 9193633856969064661}
   walkSpeed: 0.69
   agroDistance: 2.12
-  attackDistance: 1.58
+  attackDistance: 0.86
   enemyTowers:
   - {fileID: 0}
   - {fileID: 0}

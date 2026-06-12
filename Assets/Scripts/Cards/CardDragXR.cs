@@ -204,10 +204,6 @@ public class CardDragXR : MonoBehaviour
     private IEnumerator ReturnAnimation()
     {
         Vector3 startPos = transform.position;
-        Quaternion startRot = transform.rotation;
-
-        Vector3 endPos = homeSlot.position;
-        Quaternion endRot = homeSlot.rotation;
 
         float duration = 0.25f;
         float t = 0f;
@@ -217,14 +213,19 @@ public class CardDragXR : MonoBehaviour
             t += Time.deltaTime / duration;
             float smooth = Mathf.SmoothStep(0, 1, t);
 
-            transform.position = Vector3.Lerp(startPos, endPos, smooth);
+            // homeSlot закреплён на руке игрока и постоянно двигается,
+            // поэтому цель берём "вживую" каждый кадр, а не один раз.
+            transform.position = Vector3.Lerp(startPos, homeSlot.position, smooth);
             transform.Rotate(0, 900f * Time.deltaTime, 0, Space.Self);
 
             yield return null;
         }
 
-        transform.position = endPos;
-        transform.rotation = endRot;
+        // Снэп делаем по актуальным координатам слота, и только потом
+        // репарентим — в этот момент относительный поворот нулевой,
+        // поэтому SetParent не ломает localScale (без этого был stretch).
+        transform.position = homeSlot.position;
+        transform.rotation = homeSlot.rotation;
 
         transform.SetParent(homeSlot, true);
 

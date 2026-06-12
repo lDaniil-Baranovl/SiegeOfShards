@@ -9949,7 +9949,7 @@ Transform:
   m_GameObject: {fileID: 1185112421268959228}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -0.121, z: 2.506}
+  m_LocalPosition: {x: 0.03, y: -0.9, z: 2.506}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10027,8 +10027,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.4867573, y: 2.5243716, z: 2.0209167}
+  m_Center: {x: 0.011260731, y: 0.762186, z: -0.14023781}
 --- !u!114 &816270602636153101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15313,7 +15313,7 @@ Transform:
   m_GameObject: {fileID: 1993341412219393486}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.46, y: 0, z: 5.16}
+  m_LocalPosition: {x: -18.348772, y: -31.030659, z: 8.083109}
   m_LocalScale: {x: 0.39, y: 0.39, z: 0.39}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -15362,9 +15362,9 @@ MonoBehaviour:
   unitAnimator: {fileID: 8019375651511776360}
   navMeshAgent: {fileID: 8673444583630215518}
   damageCollider: {fileID: 5519081916352232878}
-  walkSpeed: 1.5
-  agroDistance: 5
-  attackDistance: 2.3
+  walkSpeed: 0.81
+  agroDistance: 1.98
+  attackDistance: 1.31
   enemyTowers:
   - {fileID: 0}
   - {fileID: 0}
@@ -15481,7 +15481,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.49214295
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -15601,7 +15601,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.4886862
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -20657,7 +20657,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 876.8, y: 1, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 3.9e-44, y: 4e-44, z: 4.2e-44, w: 4.5e-44}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -35995,7 +35995,7 @@ Transform:
   m_GameObject: {fileID: 4602756609320961376}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: -0.121, z: 2.506}
+  m_LocalPosition: {x: 0.03, y: -1.2599982, z: 2.506}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children:

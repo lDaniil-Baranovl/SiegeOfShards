@@ -5528,7 +5528,7 @@ MonoBehaviour:
   damageCollider: {fileID: 9214765347204408946}
   walkSpeed: 0.54
   agroDistance: 1.42
-  attackDistance: 0.002
+  attackDistance: 0.6
   enemyTowers: []
   deathEffect: {fileID: 5356173065665505}
   teamID: 0
