@@ -20467,7 +20467,7 @@ Transform:
   m_GameObject: {fileID: 4198649553291344073}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.06, y: 0, z: 7.14}
+  m_LocalPosition: {x: -6.373207, y: -5.1517057, z: 6.6793413}
   m_LocalScale: {x: 0.19, y: 0.19, z: 0.19}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -21104,7 +21104,6 @@ MonoBehaviour:
   healthSlider: {fileID: 3944608168612033481}
   healthComponent: {fileID: 7056854638532869309}
   healthCanvas: {fileID: 572623643544477007}
-  alwaysVisible: 0
 --- !u!1 &6054485374713308336
 GameObject:
   m_ObjectHideFlags: 0
@@ -21691,7 +21690,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000064691994, y: -0.004531082, z: 0.0000029020803, w: 0.99998975}
   m_LocalPosition: {x: 0.033, y: 0.993, z: 0.077}
-  m_LocalScale: {x: 2.7156281, y: 2.7156281, z: 2.7156281}
+  m_LocalScale: {x: 1.0249314, y: 0.837037, z: 1.0249314}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1048014476810654577}
