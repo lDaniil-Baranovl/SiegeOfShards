@@ -2,22 +2,20 @@ using UnityEngine;
 
 public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
 {
-    private float delayTimer = 0f;
-    private float delayBeforeRun = 0.5f;
-    private bool hasStartedRunning = false;
+    private bool hasEnteredFly = false;
 
     // Параметры полёта
     private float flightHeightOffset = 0.64f; // Высота над полем боя
     private float moveSpeed = 3f;
     private float rotationSpeed = 5f;
     private float heightSmoothSpeed = 5f; // Скорость сглаживания высоты полёта
+    private float flightHeightReachedThreshold = 0.05f; // Допустимая погрешность для "набрал высоту"
     private int battleFieldLayer;
     private float lastGroundHeight; // Последняя известная высота поля боя
 
     public override void EnterState(StateManagerFlyColdDragon manager)
     {
-        delayTimer = 0f;
-        hasStartedRunning = false;
+        hasEnteredFly = false;
 
         // Сохраняем скорость из настроек юнита
         moveSpeed = manager.walkSpeed;
@@ -33,7 +31,6 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
             lastGroundHeight = manager.transform.position.y - flightHeightOffset;
 
         manager.unitAnimator.SetBool("IsRunningdragFlyCold", false);
-        manager.unitAnimator.SetBool("IsAttackingdragFlyCold", false);
     }
 
     public override void ExitState(StateManagerFlyColdDragon manager)
@@ -45,23 +42,35 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
     {
         if (!manager.canMove) return;
 
-        if (!hasStartedRunning)
+        if (!hasEnteredFly)
         {
-            delayTimer += Time.deltaTime;
+            // Пока аниматор не вышел из FirstState (дракон сидит на земле),
+            // не двигаемся и не набираем высоту - ждём перехода в Fly по Has Exit Time
+            if (manager.unitAnimator.GetCurrentAnimatorStateInfo(0).IsName("FirstState"))
+                return;
 
-            if (delayTimer >= delayBeforeRun)
-            {
-                hasStartedRunning = true;
-
-                Transform target = manager.GetTarget();
-                if (target != null)
-                {
-                    manager.target = target;
-                    manager.unitAnimator.SetBool("IsRunningdragFlyCold", true);
-                }
-            }
-            return;
+            hasEnteredFly = true;
+            manager.unitAnimator.SetBool("IsRunningdragFlyCold", true);
         }
+
+        // Определяем высоту поля боя под драконом с помощью Raycast.
+        // Если луч не попал в поле боя (край арены, дыра в коллайдере и т.п.),
+        // используем последнюю известную высоту, чтобы не накапливать ошибку
+        // и не "улетать" в небо.
+        float groundHeight;
+        if (TryGetGroundHeight(manager.transform.position, out groundHeight))
+            lastGroundHeight = groundHeight;
+        else
+            groundHeight = lastGroundHeight;
+
+        float targetY = groundHeight + flightHeightOffset;
+
+        // Плавно набираем/теряем высоту полёта. Делается всегда (а не только во время
+        // движения к цели), чтобы дракон, заспавнившийся прямо рядом с противником,
+        // тоже успел подняться на высоту полёта перед атакой.
+        Vector3 position = manager.transform.position;
+        position.y = Mathf.Lerp(position.y, targetY, Time.deltaTime * heightSmoothSpeed);
+        manager.transform.position = position;
 
         // Постоянно обновляем цель
         Transform newTarget = manager.GetTarget();
@@ -80,22 +89,7 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
             if (direction.sqrMagnitude > 0.01f)
             {
                 // Перемещаем дракона
-                Vector3 newPosition = manager.transform.position + direction * moveSpeed * Time.deltaTime;
-
-                // Определяем высоту поля боя под драконом с помощью Raycast.
-                // Если луч не попал в поле боя (край арены, дыра в коллайдере и т.п.),
-                // используем последнюю известную высоту, чтобы не накапливать ошибку
-                // и не "улетать" в небо.
-                float groundHeight;
-                if (TryGetGroundHeight(newPosition, out groundHeight))
-                    lastGroundHeight = groundHeight;
-                else
-                    groundHeight = lastGroundHeight;
-
-                float targetY = groundHeight + flightHeightOffset;
-                newPosition.y = Mathf.Lerp(manager.transform.position.y, targetY, Time.deltaTime * heightSmoothSpeed);
-
-                manager.transform.position = newPosition;
+                manager.transform.position += direction * moveSpeed * Time.deltaTime;
 
                 // Поворачиваем дракона к цели
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
@@ -106,8 +100,10 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
                 );
             }
 
-            // Проверяем достижение цели
-            if (manager.HasReachedTarget())
+            // Переходим в атаку только когда долетели до цели и набрали высоту полёта,
+            // иначе дракон, заспавнившийся вплотную к противнику, атаковал бы стоя на земле
+            bool reachedFlightHeight = Mathf.Abs(manager.transform.position.y - targetY) <= flightHeightReachedThreshold;
+            if (manager.HasReachedTarget() && reachedFlightHeight)
             {
                 manager.SwitchState(manager.dragFlyColdAttackState);
             }
