@@ -21,6 +21,10 @@ public class CardDragXR : MonoBehaviour
 
     [Header("Battlefield")]
     public LayerMask battlefieldMask;
+
+    [Tooltip("Дополнительные слои, на которых можно разместить карту, только если CardType = Spell (например, BattleField)")]
+    public LayerMask spellOnlyMask;
+
     public GameObject summonCirclePrefab;
     [Tooltip("Максимальная дистанция raycast для размещения карт")]
     public float maxRaycastDistance = 25f;
@@ -147,7 +151,7 @@ public class CardDragXR : MonoBehaviour
 
         bool used = false;
 
-        if (Physics.Raycast(rightController.position, rightController.forward, out RaycastHit hit, maxRaycastDistance, battlefieldMask))
+        if (Physics.Raycast(rightController.position, rightController.forward, out RaycastHit hit, maxRaycastDistance, GetPlacementMask()))
         {
             if (ElixirManager.Instance.TrySpend(data.elixirCost))
             {
@@ -244,7 +248,7 @@ public class CardDragXR : MonoBehaviour
         Debug.DrawRay(rightController.position, rightController.forward * maxRaycastDistance, Color.green);
 
         if (Physics.Raycast(rightController.position, rightController.forward,
-            out RaycastHit hit, maxRaycastDistance, battlefieldMask))
+            out RaycastHit hit, maxRaycastDistance, GetPlacementMask()))
         {
             if (summonCircleInstance == null)
                 summonCircleInstance = Instantiate(summonCirclePrefab);
@@ -270,6 +274,14 @@ public class CardDragXR : MonoBehaviour
 
             Instantiate(data.prefabs[i], spawnPos, Quaternion.identity);
         }
+    }
+
+    private LayerMask GetPlacementMask()
+    {
+        if (data != null && data.IsSpell())
+            return battlefieldMask | spellOnlyMask;
+
+        return battlefieldMask;
     }
 
     private bool IsActuallyUnderControllerRay()

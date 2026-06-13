@@ -10,7 +10,9 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
     private float flightHeightOffset = 0.64f; // Высота над полем боя
     private float moveSpeed = 3f;
     private float rotationSpeed = 5f;
+    private float heightSmoothSpeed = 5f; // Скорость сглаживания высоты полёта
     private int battleFieldLayer;
+    private float lastGroundHeight; // Последняя известная высота поля боя
 
     public override void EnterState(StateManagerFlyColdDragon manager)
     {
@@ -22,6 +24,13 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
 
         // Получаем LayerMask для поля боя
         battleFieldLayer = LayerMask.GetMask("BattleField");
+
+        // Инициализируем высоту поля боя по текущей позиции дракона
+        float initialGroundHeight;
+        if (TryGetGroundHeight(manager.transform.position, out initialGroundHeight))
+            lastGroundHeight = initialGroundHeight;
+        else
+            lastGroundHeight = manager.transform.position.y - flightHeightOffset;
 
         manager.unitAnimator.SetBool("IsRunningdragFlyCold", false);
         manager.unitAnimator.SetBool("IsAttackingdragFlyCold", false);
@@ -73,9 +82,18 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
                 // Перемещаем дракона
                 Vector3 newPosition = manager.transform.position + direction * moveSpeed * Time.deltaTime;
 
-                // Определяем высоту поля боя под драконом с помощью Raycast
-                float groundHeight = GetGroundHeight(newPosition);
-                newPosition.y = groundHeight + flightHeightOffset;
+                // Определяем высоту поля боя под драконом с помощью Raycast.
+                // Если луч не попал в поле боя (край арены, дыра в коллайдере и т.п.),
+                // используем последнюю известную высоту, чтобы не накапливать ошибку
+                // и не "улетать" в небо.
+                float groundHeight;
+                if (TryGetGroundHeight(newPosition, out groundHeight))
+                    lastGroundHeight = groundHeight;
+                else
+                    groundHeight = lastGroundHeight;
+
+                float targetY = groundHeight + flightHeightOffset;
+                newPosition.y = Mathf.Lerp(manager.transform.position.y, targetY, Time.deltaTime * heightSmoothSpeed);
 
                 manager.transform.position = newPosition;
 
@@ -100,8 +118,9 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
         }
     }
 
-    // Определяет высоту поля боя под заданной позицией
-    private float GetGroundHeight(Vector3 position)
+    // Определяет высоту поля боя под заданной позицией.
+    // Возвращает false, если луч не попал в коллайдер поля боя.
+    private bool TryGetGroundHeight(Vector3 position, out float groundHeight)
     {
         RaycastHit hit;
         // Пускаем луч вниз с большой высоты
@@ -109,10 +128,11 @@ public class DragFlyColdRunState : UnitBaseState<StateManagerFlyColdDragon>
 
         if (Physics.Raycast(rayStart, Vector3.down, out hit, 100f, battleFieldLayer))
         {
-            return hit.point.y;
+            groundHeight = hit.point.y;
+            return true;
         }
 
-        // Если не нашли поле боя, возвращаем текущую высоту
-        return position.y;
+        groundHeight = 0f;
+        return false;
     }
 }

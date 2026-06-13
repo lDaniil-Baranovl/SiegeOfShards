@@ -374,6 +374,9 @@ MonoBehaviour:
   battlefieldMask:
     serializedVersion: 2
     m_Bits: 1024
+  spellOnlyMask:
+    serializedVersion: 2
+    m_Bits: 128
   summonCirclePrefab: {fileID: 4956431730115371327, guid: 54d9948a7d746504b840473be0c7ef2b, type: 3}
   data: {fileID: 11400000, guid: 520cdaebd598efe439f644c3756e3620, type: 2}
   homeSlot: {fileID: 0}
