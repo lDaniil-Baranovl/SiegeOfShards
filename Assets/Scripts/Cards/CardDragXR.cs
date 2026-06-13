@@ -8,9 +8,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Filtering;
 
 public class CardDragXR : MonoBehaviour
@@ -18,6 +16,9 @@ public class CardDragXR : MonoBehaviour
     [Header("XR")]
     public Transform rightController;
     public InputActionProperty gripAction;
+
+    [Tooltip("Время анимации подлёта карты к контроллеру при подхвате")]
+    public float pickupDuration = 0.15f;
 
     [Header("Battlefield")]
     public LayerMask battlefieldMask;
@@ -41,48 +42,26 @@ public class CardDragXR : MonoBehaviour
     private bool isHovered = false;
     public static CardDragXR currentHeldCard = null;
 
+    private Coroutine pickupRoutine;
+
     private XRGrabInteractable grab;
 
     void Awake()
     {
         gripAction.action.Enable();
         grab = GetComponent<XRGrabInteractable>();
-        if (grab != null)
-        {
-            grab.selectEntered.AddListener(OnSelectEntered);
-            grab.selectExited.AddListener(OnSelectExited);
-        }
     }
 
     void Start()
     {
         rightController = XRPlayer.Instance.rightController;
 
+        // Подхват карты целиком управляется через Update() (isHovered + grip + IsActuallyUnderControllerRay),
+        // поэтому нативный select XRGrabInteractable отключаем полностью — иначе при зажатом grip без
+        // наведения луча XRI сам вызывает selectEntered раньше нашей проверки, grab.enabled остаётся
+        // включённым, и собственный dynamic/far attach карты тащит её на дистанцию вместо руки.
         if (grab != null)
-            grab.selectFilters.Add(new XRSelectFilterDelegate((interactor, interactable) => IsRightControllerInteractor(interactor)));
-    }
-
-    private void OnSelectEntered(SelectEnterEventArgs args)
-    {
-        if (!IsRightControllerInteractor(args.interactorObject))
-            return;
-
-        if (currentHeldCard != null && currentHeldCard != this)
-            return;
-
-        StartHolding();
-    }
-    private void OnSelectExited(SelectExitEventArgs args)
-    {
-        if (!IsRightControllerInteractor(args.interactorObject))
-            return;
-
-        Release();
-    }
-
-    private bool IsRightControllerInteractor(IXRInteractor interactor)
-    {
-        return rightController != null && interactor != null && interactor.transform.IsChildOf(rightController);
+            grab.selectFilters.Add(new XRSelectFilterDelegate((interactor, interactable) => false));
     }
 
     public void Init(UnitCost cardData)
@@ -132,14 +111,59 @@ public class CardDragXR : MonoBehaviour
         currentHeldCard = this;
         isHeld = true;
 
-        transform.SetParent(rightController, true); 
+        if (isReturning)
+        {
+            isReturning = false;
+            if (returnRoutine != null)
+            {
+                StopCoroutine(returnRoutine);
+                returnRoutine = null;
+            }
+        }
 
+        transform.SetParent(null, true);
+
+        if (pickupRoutine != null)
+            StopCoroutine(pickupRoutine);
+        pickupRoutine = StartCoroutine(PickupAnimation());
+    }
+
+    private IEnumerator PickupAnimation()
+    {
+        Vector3 startPos = transform.position;
+        Quaternion startRot = transform.rotation;
+
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / pickupDuration;
+            float smooth = Mathf.SmoothStep(0, 1, t);
+
+            transform.position = Vector3.Lerp(startPos, rightController.position, smooth);
+            transform.rotation = Quaternion.Slerp(startRot, rightController.rotation, smooth);
+
+            yield return null;
+        }
+
+        transform.position = rightController.position;
+        transform.rotation = rightController.rotation;
+
+        transform.SetParent(rightController, true);
+
+        pickupRoutine = null;
     }
 
     private void Release()
     {
         if (currentHeldCard != this)
             return;
+
+        if (pickupRoutine != null)
+        {
+            StopCoroutine(pickupRoutine);
+            pickupRoutine = null;
+        }
 
         transform.SetParent(null, true);
 
