@@ -12,14 +12,14 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: BaranovProject
+  companyName: D.Baranov Universe
   productName: SiegeOfShards
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
-  m_ShowUnitySplashLogo: 1
-  m_SplashScreenOverlayOpacity: 1
+  m_ShowUnitySplashLogo: 0
+  m_SplashScreenOverlayOpacity: 0.208
   m_SplashScreenAnimation: 1
   m_SplashScreenLogoStyle: 1
   m_SplashScreenDrawMode: 0
@@ -31,7 +31,7 @@ PlayerSettings:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
+    width: 0.99999994
     height: 1
   m_SplashScreenBackgroundPortraitUvs:
     serializedVersion: 2
@@ -39,8 +39,12 @@ PlayerSettings:
     y: 0
     width: 1
     height: 1
-  m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 0}
+  m_SplashScreenLogos:
+  - logo: {fileID: 21300000, guid: e2f9a292acdd05d478db314b92b69c1a, type: 3}
+    duration: 2
+  - logo: {fileID: 21300000, guid: ba1b55d14b192394c8c80ccf8301563f, type: 3}
+    duration: 2
+  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: e2f9a292acdd05d478db314b92b69c1a, type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
@@ -141,7 +145,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.1.0
+  bundleVersion: 1.0.0
   preloadedAssets:
   - {fileID: 11400000, guid: 0d8216a680fea364c8be7a78d4698bdd, type: 2}
   metroInputSource: 0
@@ -267,7 +271,7 @@ PlayerSettings:
   useCustomProguardFile: 0
   AndroidTargetArchitectures: 2
   AndroidSplashScreenScale: 0
-  androidSplashScreen: {fileID: 0}
+  androidSplashScreen: {fileID: 2800000, guid: 186bbc13cb83cd44095f0c900a2bc0e6, type: 3}
   AndroidKeystoreName: 
   AndroidKeyaliasName: 
   AndroidEnableArmv9SecurityFeatures: 0
@@ -454,7 +458,9 @@ PlayerSettings:
       m_Height: 36
       m_Kind: 0
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: 186bbc13cb83cd44095f0c900a2bc0e6, type: 3}
+      - {fileID: 2800000, guid: 186bbc13cb83cd44095f0c900a2bc0e6, type: 3}
       m_Width: 432
       m_Height: 432
       m_Kind: 2
@@ -800,9 +806,9 @@ PlayerSettings:
   ps4IncludedModules: []
   ps4attribVROutputEnabled: 0
   monoEnv: 
-  splashScreenBackgroundSourceLandscape: {fileID: 0}
-  splashScreenBackgroundSourcePortrait: {fileID: 0}
-  blurSplashScreenBackground: 1
+  splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: b8125de0542d1ef44b164a14e48d7a7e, type: 3}
+  splashScreenBackgroundSourcePortrait: {fileID: 21300000, guid: ba1b55d14b192394c8c80ccf8301563f, type: 3}
+  blurSplashScreenBackground: 0
   spritePackerPolicy: 
   webGLMemorySize: 32
   webGLExceptionSupport: 1
