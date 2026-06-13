@@ -671,7 +671,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0418\u0433\u0440\u0430\u0442\u044C"
+  m_text: Play
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -920,8 +920,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &140175768
 GameObject:
   m_ObjectHideFlags: 0
@@ -1801,8 +1801,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &247858186
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,8 +1973,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &260535155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,7 +2779,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C"
+  m_text: Edit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3643,8 +3643,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &587786010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4040,8 +4040,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &644155738
 GameObject:
   m_ObjectHideFlags: 0
@@ -4212,8 +4212,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &653626699
 GameObject:
   m_ObjectHideFlags: 0
@@ -4384,8 +4384,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &686995056
 GameObject:
   m_ObjectHideFlags: 0
@@ -4911,8 +4911,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 808006764}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 0.75251, y: 0.75251, z: 0.75251}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1403653210}
@@ -4920,7 +4920,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1.0999985, y: 28.9}
   m_SizeDelta: {x: 20, y: -17.0336}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &808006766
@@ -4979,7 +4979,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 808006764}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -4992,8 +4992,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -8052,7 +8052,7 @@ RectTransform:
   m_GameObject: {fileID: 1403653209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.86447, y: 0.86447, z: 0.86447}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2083814011}
@@ -8967,8 +8967,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!4 &1699057315 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -9520,8 +9520,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &1776385917
 GameObject:
   m_ObjectHideFlags: 0
@@ -10604,8 +10604,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &1972734629
 GameObject:
   m_ObjectHideFlags: 0
@@ -10851,8 +10851,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   targetImage: {fileID: 0}
-  infoSprite: {fileID: 21300000, guid: 74dbd76cedd7d4449a6205a17acf5c5a, type: 3}
-  flipDuration: 0.3
+  infoSprite: {fileID: 21300000, guid: 61afba1b1f0aea44eb1488185a3611ea, type: 3}
+  flipDuration: 0.15
 --- !u!1 &1982747152
 GameObject:
   m_ObjectHideFlags: 0

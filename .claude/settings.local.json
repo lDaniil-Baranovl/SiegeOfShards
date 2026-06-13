@@ -8,7 +8,10 @@
       "Bash(mkdir:*)",
       "Bash(git mv:*)",
       "Bash(mv:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(python3 -c \"import uuid; print\\(uuid.uuid4\\(\\).hex\\)\")",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(16\\).toString\\('hex'\\)\\)\")",
+      "PowerShell([guid]::NewGuid\\(\\).ToString\\(\"N\"\\))"
     ],
     "deny": [],
     "ask": []

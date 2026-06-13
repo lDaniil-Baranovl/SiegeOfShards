@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -99,8 +100,13 @@ public class BattleManager : MonoBehaviour
         timerText.text = $"{minutes:00}:{seconds:00}";
     }
 
+    // Подписывайтесь, чтобы реагировать на разрушение башни конкретной команды
+    public static event Action<int> OnTowerDestroyed;
+
     public void TowerDestroyed(int teamID)
     {
+        OnTowerDestroyed?.Invoke(teamID);
+
         if (battleEnded) return;
 
         if (teamID == 0)
