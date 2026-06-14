@@ -1,42 +1,61 @@
+using TMPro;
 using UnityEngine;
 
 public class SpawnInHand : MonoBehaviour
 {
     public GameObject itemPrefab;
-    public Transform handPoint;
+    public TextMeshProUGUI priceText;
     public int casePrice = 150;
+
+    [Header("РџРѕСЏРІР»РµРЅРёРµ СЃСѓРЅРґСѓРєР° РїРµСЂРµРґ РёРіСЂРѕРєРѕРј")]
+    public float spawnDistance = 0.8f;
+    public float spawnHeightOffset = -0.3f;
 
     private GameObject currentItem;
 
+    private void Start()
+    {
+        UpdatePriceUI();
+    }
+
+    private void UpdatePriceUI()
+    {
+        if (priceText != null)
+            priceText.text = casePrice.ToString();
+    }
+
     public void SpawnItem()
     {
-        // 1. Проверяем есть ли попытки
+        // 1. РїСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё Р±РµСЃРїР»Р°С‚РЅР°СЏ РїРѕРїС‹С‚РєР°
         bool canUse = TryOpenCaseManager.Instance.UseCaseAttempt();
 
         if (!canUse)
         {
-            Debug.Log("Нет попыток! Попробую купить...");
-
-            // 2. Если попытки закончились — пытаемся купить кейс
+            // 2. РµСЃР»Рё РїРѕРїС‹С‚РѕРє РЅРµС‚ вЂ” РїРѕРєСѓРїР°РµРј Р·Р° Р·РѕР»РѕС‚Рѕ
             bool bought = TryOpenCaseManager.Instance.BuyCase(casePrice);
 
             if (!bought)
             {
-                Debug.Log("Не хватает золота для покупки кейса!");
+                Debug.Log("РќРµ С…РІР°С‚Р°РµС‚ Р·РѕР»РѕС‚Р° РґР»СЏ РїРѕРєСѓРїРєРё СЃСѓРЅРґСѓРєР°!");
                 return;
             }
 
-            Debug.Log("Кейс куплен за золото!");
+            Debug.Log("РЎСѓРЅРґСѓРє РєСѓРїР»РµРЅ Р·Р° Р·РѕР»РѕС‚Рѕ!");
         }
 
-        // 3. Спавним предмет
+        // 3. СѓР±РёСЂР°РµРј РїСЂРµРґС‹РґСѓС‰РёР№ СЃСѓРЅРґСѓРє, РµСЃР»Рё РѕРЅ РµС‰С‘ РІР°Р»СЏРµС‚СЃСЏ
         if (currentItem != null)
             Destroy(currentItem);
 
-        currentItem = Instantiate(itemPrefab, handPoint);
-        currentItem.transform.localPosition = Vector3.zero;
-        currentItem.transform.localRotation = Quaternion.identity;
+        // 4. СЃРїР°РІРЅРёРј СЃСѓРЅРґСѓРє РїРµСЂРµРґ РёРіСЂРѕРєРѕРј
+        Transform head = Camera.main.transform;
+        Vector3 spawnPos = head.position + head.forward * spawnDistance;
+        spawnPos.y += spawnHeightOffset;
 
-        Debug.Log("Кейс открыт, предмет выдан!");
+        Quaternion spawnRot = Quaternion.LookRotation(head.forward, Vector3.up);
+
+        currentItem = Instantiate(itemPrefab, spawnPos, spawnRot);
+
+        Debug.Log("РЎСѓРЅРґСѓРє РїРѕСЏРІРёР»СЃСЏ РїРµСЂРµРґ РёРіСЂРѕРєРѕРј, РјРѕР¶РЅРѕ Р±СЂРѕСЃР°С‚СЊ!");
     }
 }

@@ -44,6 +44,12 @@ public class CaseCubeController : MonoBehaviour
         if (rewardGiven) return;
         rewardGiven = true;
 
+        if (possibleCards == null || possibleCards.Length == 0)
+        {
+            Debug.Log("Сундук открыт! (награды пока не настроены)");
+            return;
+        }
+
         // 1. Выбираем героя
         UnitCost card = possibleCards[Random.Range(0, possibleCards.Length)];
         int amount = Random.Range(minFragments, maxFragments + 1);
@@ -51,15 +57,19 @@ public class CaseCubeController : MonoBehaviour
         // 2. Начисляем фрагменты
         CardUpgradeManager.Instance.AddFragments(card, amount);
 
-        // 3. Показываем спрайт героя во всех 4 Image
-        rewardIcon.sprite = card.icon;
-        rewardIcon.enabled = true;
+        // 3. Показываем спрайт героя в UI награды (если оно назначено)
+        if (rewardIcon != null)
+        {
+            rewardIcon.sprite = card.icon;
+            rewardIcon.enabled = true;
+        }
 
         // 4. Текст награды
-        rewardText.text = $"+{amount}";
+        if (rewardText != null)
+            rewardText.text = $"+{amount}";
 
         // 5. Поворачиваем UI к камере (если это 3D)
-        if (rewardFace != null)
+        if (rewardFace != null && Camera.main != null)
             rewardFace.LookAt(Camera.main.transform);
     }
 }

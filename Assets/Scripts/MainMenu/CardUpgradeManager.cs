@@ -27,9 +27,6 @@ public class CardUpgradeManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            // загрузка всех карт
-            LoadAllCards();
         }
         else
         {
@@ -41,7 +38,10 @@ public class CardUpgradeManager : MonoBehaviour
     {
         if (!cards.ContainsKey(unit))
         {
-            cards[unit] = new CardData(1, 0);
+            int level = PlayerPrefs.GetInt($"card_{unit.unitName}_level", 1);
+            int frags = PlayerPrefs.GetInt($"card_{unit.unitName}_frags", 0);
+
+            cards[unit] = new CardData(level, frags);
         }
 
         return cards[unit];
@@ -57,7 +57,7 @@ public class CardUpgradeManager : MonoBehaviour
         if (GoldManager.Instance.Gold < cost)
             return false;
 
-        // списываем
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         card.fragments -= FragRequired;
         card.level++;
         GoldManager.Instance.AddGold(-cost);
@@ -87,20 +87,5 @@ public class CardUpgradeManager : MonoBehaviour
         }
 
         PlayerPrefs.Save();
-    }
-
-    private void LoadAllCards()
-    {
-        UnitCost[] allUnits = Resources.LoadAll<UnitCost>("");
-
-        foreach (UnitCost unit in allUnits)
-        {
-            string id = unit.unitName;
-
-            int level = PlayerPrefs.GetInt($"card_{id}_level", 1);
-            int frags = PlayerPrefs.GetInt($"card_{id}_frags", 0);
-
-            cards[unit] = new CardData(level, frags);
-        }
     }
 }

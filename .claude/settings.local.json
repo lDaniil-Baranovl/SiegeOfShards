@@ -11,9 +11,20 @@
       "Bash(cat:*)",
       "Bash(python3 -c \"import uuid; print\\(uuid.uuid4\\(\\).hex\\)\")",
       "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(16\\).toString\\('hex'\\)\\)\")",
-      "PowerShell([guid]::NewGuid\\(\\).ToString\\(\"N\"\\))"
+      "PowerShell([guid]::NewGuid\\(\\).ToString\\(\"N\"\\))",
+      "Bash(git checkout *)",
+      "Bash(du -sh Library/Bee/Android)",
+      "Bash(ls Library/Bee)",
+      "Bash(cd d:/Git/ArGame && rm -rf Library/Bee/Android)",
+      "PowerShell(Get-Content -Path \"Assets/Scripts/MainMenu/CardUpgradeUI.cs\" -Encoding GetEncoding\\('Windows-1251'\\) -ErrorAction SilentlyContinue; [System.IO.File]::ReadAllText\\(\"Assets/Scripts/MainMenu/CardUpgradeUI.cs\", [System.Text.Encoding]::GetEncoding\\(1251\\)\\))",
+      "Bash(xargs grep -l \"CaseCubeController\")",
+      "Bash(xargs grep -l \"7580418140840389383\")",
+      "Bash(grep -r \"^guid: f52eeaf9f7672f845a2b38dd79e060cf$\" \"d:\\\\Git\\\\ArGame\\\\Assets\")"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "d:\\Git\\ArGame\\Library\\Bee\\Android"
+    ]
   }
 }
