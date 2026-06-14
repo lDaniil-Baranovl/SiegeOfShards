@@ -27,7 +27,8 @@
       "Bash(grep -n -B12 \"m_Name: TryOpenCase$\" Assets/Scenes/MainMenu.unity)",
       "Bash(grep -n -A30 \"^--- !u!114 &737682120$\" Assets/Scenes/MainMenu.unity)",
       "Bash(grep -n -A10 \"^--- !u!222 &737682121$\" Assets/Scenes/MainMenu.unity)",
-      "Bash(grep -n -A18 \"^--- !u!114 &737682122$\" Assets/Scenes/MainMenu.unity)"
+      "Bash(grep -n -A18 \"^--- !u!114 &737682122$\" Assets/Scenes/MainMenu.unity)",
+      "Bash(grep -iE '\\\\.\\(shader|shadergraph|cginc|hlsl|compute\\)$')"
     ],
     "deny": [],
     "ask": [],
