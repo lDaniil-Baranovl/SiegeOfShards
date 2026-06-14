@@ -19,7 +19,15 @@
       "PowerShell(Get-Content -Path \"Assets/Scripts/MainMenu/CardUpgradeUI.cs\" -Encoding GetEncoding\\('Windows-1251'\\) -ErrorAction SilentlyContinue; [System.IO.File]::ReadAllText\\(\"Assets/Scripts/MainMenu/CardUpgradeUI.cs\", [System.Text.Encoding]::GetEncoding\\(1251\\)\\))",
       "Bash(xargs grep -l \"CaseCubeController\")",
       "Bash(xargs grep -l \"7580418140840389383\")",
-      "Bash(grep -r \"^guid: f52eeaf9f7672f845a2b38dd79e060cf$\" \"d:\\\\Git\\\\ArGame\\\\Assets\")"
+      "Bash(grep -r \"^guid: f52eeaf9f7672f845a2b38dd79e060cf$\" \"d:\\\\Git\\\\ArGame\\\\Assets\")",
+      "PowerShell(Get-Content -Path \"d:\\\\Git\\\\ArGame\\\\Assets\\\\Scripts\\\\MainMenu\\\\CardUpgradeUI.cs\" -Encoding GetEncoding\\(\"windows-1251\"\\) -ErrorAction SilentlyContinue; [System.IO.File]::ReadAllText\\(\"d:\\\\Git\\\\ArGame\\\\Assets\\\\Scripts\\\\MainMenu\\\\CardUpgradeUI.cs\", [System.Text.Encoding]::GetEncoding\\(1251\\)\\))",
+      "Bash(grep -n -B12 \"&587786010$\" Assets/Scenes/MainMenu.unity)",
+      "Bash(grep -n -A20 \"^--- !u!114 &587786013$\" Assets/Scenes/MainMenu.unity)",
+      "Bash(grep -n -B15 \"&587786010$\")",
+      "Bash(grep -n -B12 \"m_Name: TryOpenCase$\" Assets/Scenes/MainMenu.unity)",
+      "Bash(grep -n -A30 \"^--- !u!114 &737682120$\" Assets/Scenes/MainMenu.unity)",
+      "Bash(grep -n -A10 \"^--- !u!222 &737682121$\" Assets/Scenes/MainMenu.unity)",
+      "Bash(grep -n -A18 \"^--- !u!114 &737682122$\" Assets/Scenes/MainMenu.unity)"
     ],
     "deny": [],
     "ask": [],

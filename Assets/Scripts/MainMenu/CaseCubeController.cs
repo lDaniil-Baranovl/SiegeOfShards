@@ -1,75 +1,86 @@
 using UnityEngine;
-using TMPro;
-using System.Collections;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class CaseCubeController : MonoBehaviour
 {
     [Header("Возможные карты для выпадения")]
     public UnitCost[] possibleCards;
 
-    [Header("UI награды (4 картинки)")]
-    public Image rewardIcon; // ← 4 Image в инспекторе
-    public TextMeshProUGUI rewardText;
-    public Transform rewardFace;
+    [Header("Награда (всплывающая карточка)")]
+    public CardRewardPopupController rewardPopupPrefab;
+    public float popupDuration = 2f;
+    public float rewardSpawnDistance = 0.1f;
 
     [Header("Настройки выпадения")]
     public int minFragments = 3;
     public int maxFragments = 10;
 
+    [Header("Открытие сундука (триггер контроллера)")]
+    public InputActionProperty leftTriggerAction;
+    public InputActionProperty rightTriggerAction;
+
     private bool rewardGiven = false;
 
-    public void OnCubeThrown()
+    private void Awake()
     {
-        StartCoroutine(WaitForSettle());
+        leftTriggerAction.action.Enable();
+        rightTriggerAction.action.Enable();
     }
 
-    private IEnumerator WaitForSettle()
+    private void OnDestroy()
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
-
-        yield return new WaitForSeconds(1f);
-
-        while (rb.linearVelocity.magnitude > 0.1f ||
-               rb.angularVelocity.magnitude > 0.1f)
-        {
-            yield return null;
-        }
-
-        GiveRandomReward();
+        DisableActions();
     }
 
-    private void GiveRandomReward()
+    public void DisableActions()
+    {
+        leftTriggerAction.action.Disable();
+        rightTriggerAction.action.Disable();
+    }
+
+    private void Update()
+    {
+        if (rewardGiven)
+            return;
+
+        if (leftTriggerAction.action.WasPressedThisFrame() || rightTriggerAction.action.WasPressedThisFrame())
+            OpenCase();
+    }
+
+    private void OpenCase()
     {
         if (rewardGiven) return;
         rewardGiven = true;
 
-        if (possibleCards == null || possibleCards.Length == 0)
+        if (possibleCards != null && possibleCards.Length > 0)
+        {
+            UnitCost card = possibleCards[Random.Range(0, possibleCards.Length)];
+            int amount = Random.Range(minFragments, maxFragments + 1);
+
+            CardUpgradeManager.Instance.AddFragments(card, amount);
+
+            if (rewardPopupPrefab != null)
+            {
+                Vector3 spawnPos = transform.position;
+
+                GameObject rightControllerObj = GameObject.FindWithTag("RightController");
+                if (rightControllerObj != null)
+                {
+                    Transform rightController = rightControllerObj.transform;
+                    spawnPos = rightController.position + rightController.forward * rewardSpawnDistance;
+                }
+
+                CardRewardPopupController popup = Instantiate(rewardPopupPrefab, spawnPos, transform.rotation);
+                popup.Show(card.icon, amount, popupDuration);
+            }
+
+            Debug.Log($"Сундук открыт! +{amount} осколков {card.unitName}");
+        }
+        else
         {
             Debug.Log("Сундук открыт! (награды пока не настроены)");
-            return;
         }
 
-        // 1. Выбираем героя
-        UnitCost card = possibleCards[Random.Range(0, possibleCards.Length)];
-        int amount = Random.Range(minFragments, maxFragments + 1);
-
-        // 2. Начисляем фрагменты
-        CardUpgradeManager.Instance.AddFragments(card, amount);
-
-        // 3. Показываем спрайт героя в UI награды (если оно назначено)
-        if (rewardIcon != null)
-        {
-            rewardIcon.sprite = card.icon;
-            rewardIcon.enabled = true;
-        }
-
-        // 4. Текст награды
-        if (rewardText != null)
-            rewardText.text = $"+{amount}";
-
-        // 5. Поворачиваем UI к камере (если это 3D)
-        if (rewardFace != null && Camera.main != null)
-            rewardFace.LookAt(Camera.main.transform);
+        Destroy(gameObject);
     }
 }

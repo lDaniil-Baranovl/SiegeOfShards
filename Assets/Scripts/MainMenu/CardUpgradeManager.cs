@@ -17,6 +17,8 @@ public class CardData
 public class CardUpgradeManager : MonoBehaviour
 {
     public static CardUpgradeManager Instance;
+    public static event System.Action<UnitCost> OnCardChanged;
+
     private Dictionary<UnitCost, CardData> cards = new Dictionary<UnitCost, CardData>();
 
     private const int FragRequired = 10;
@@ -63,6 +65,7 @@ public class CardUpgradeManager : MonoBehaviour
         GoldManager.Instance.AddGold(-cost);
 
         SaveAllCards();
+        OnCardChanged?.Invoke(unit);
         return true;
     }
 
@@ -71,6 +74,7 @@ public class CardUpgradeManager : MonoBehaviour
         CardData card = GetCard(unit);
         card.fragments += amount;
         SaveAllCards();
+        OnCardChanged?.Invoke(unit);
     }
 
     private void SaveAllCards()

@@ -397,9 +397,6 @@ PrefabInstance:
     - {fileID: 5944131804917401860, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
     - {fileID: 6501755809687671949, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1767192434, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1855824534}
     - targetCorrespondingSourceObject: {fileID: 1670256625, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1953746373}
@@ -869,18 +866,18 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855824533}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 888}
-  m_LocalScale: {x: 0.66409, y: 0.66409, z: 0.66409}
+  m_LocalPosition: {x: 0, y: 0, z: 167.756}
+  m_LocalScale: {x: 0.07216878, y: 0.07216878, z: 0.07216878}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 948501864}
   - {fileID: 643940665}
   - {fileID: 1730000208}
-  m_Father: {fileID: 2136464705}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.000014782, y: 0.00000023842}
+  m_AnchoredPosition: {x: 12, y: 10}
   m_SizeDelta: {x: 2560, y: 1600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1855824535
@@ -933,7 +930,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 2136464708}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1145,9 +1142,9 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2148104583303863551, guid: 91402e7aa005d52449cdcffff5b5eb91, type: 3}
   m_PrefabInstance: {fileID: 1953746371}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2136464705 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1767192434, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+--- !u!20 &2136464708 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
   m_PrefabInstance: {fileID: 866467334}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
@@ -1157,3 +1154,4 @@ SceneRoots:
   - {fileID: 866467334}
   - {fileID: 874269675}
   - {fileID: 1393143774}
+  - {fileID: 1855824534}

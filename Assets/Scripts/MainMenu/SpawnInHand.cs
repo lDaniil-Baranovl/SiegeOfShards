@@ -45,7 +45,13 @@ public class SpawnInHand : MonoBehaviour
 
         // 3. убираем предыдущий сундук, если он ещё валяется
         if (currentItem != null)
+        {
+            var oldCase = currentItem.GetComponent<CaseCubeController>();
+            if (oldCase != null)
+                oldCase.DisableActions();
+
             Destroy(currentItem);
+        }
 
         // 4. спавним сундук перед игроком
         Transform head = Camera.main.transform;

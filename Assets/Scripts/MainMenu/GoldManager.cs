@@ -13,8 +13,8 @@ public class GoldManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // Загружаем золото из PlayerPrefs
-            Gold = PlayerPrefs.GetInt("Gold", 0);
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ PlayerPrefs
+            Gold = PlayerPrefs.GetInt("Gold", 150);
         }
         else
         {
@@ -26,7 +26,7 @@ public class GoldManager : MonoBehaviour
     {
         Gold += amount;
 
-        // Сохраняем
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         PlayerPrefs.SetInt("Gold", Gold);
         PlayerPrefs.Save();
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -8,29 +9,62 @@ public class CardUpgradeUI : MonoBehaviour
 
     public TextMeshProUGUI textUI;
 
+    private Coroutine feedbackCoroutine;
+
     private void Start()
     {
         UpdateUI();
     }
 
+    private void OnEnable()
+    {
+        CardUpgradeManager.OnCardChanged += HandleCardChanged;
+    }
+
+    private void OnDisable()
+    {
+        CardUpgradeManager.OnCardChanged -= HandleCardChanged;
+    }
+
+    private void HandleCardChanged(UnitCost changedUnit)
+    {
+        if (changedUnit == unit)
+            UpdateUI();
+    }
+
     public void UpdateUI()
     {
         var data = CardUpgradeManager.Instance.GetCard(unit);
-        textUI.text = $"{data.level}ур {data.fragments}/10";
+        textUI.text = $"РЈСЂ.{data.level} {data.fragments}/10\nРЈР»СѓС‡С€РёС‚СЊ: {upgradeCost}";
     }
+
     public void TryUpgrade()
     {
         bool ok = CardUpgradeManager.Instance.TryUpgrade(unit, upgradeCost);
 
         if (!ok)
         {
-            Debug.Log("Недостаточно карт или золота!");
+            Debug.Log("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РѕСЃРєРѕР»РєРѕРІ РёР»Рё Р·РѕР»РѕС‚Р° РґР»СЏ СѓР»СѓС‡С€РµРЅРёСЏ!");
         }
         else
         {
-            Debug.Log($"Карта {unit.unitName} улучшена!");
+            Debug.Log($"РљР°СЂС‚Р° {unit.unitName} СѓР»СѓС‡С€РµРЅР°!");
         }
 
         UpdateUI();
+
+        if (feedbackCoroutine != null)
+            StopCoroutine(feedbackCoroutine);
+
+        feedbackCoroutine = StartCoroutine(FlashColor(ok ? Color.green : Color.red));
+    }
+
+    private IEnumerator FlashColor(Color color)
+    {
+        textUI.color = color;
+
+        yield return new WaitForSeconds(1.5f);
+
+        textUI.color = Color.white;
     }
 }
